@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity 0.6.12;
+pragma solidity >=0.6.12;
 
 // For interacting with our own strategy
 interface IStrategy {
@@ -21,4 +21,5 @@ interface IStrategy {
 
     // Transfer want tokens strategy -> vaultChef
     function withdraw(address _userAddress, uint256 _wantAmt) external returns (uint256);
+    
 }

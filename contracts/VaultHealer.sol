@@ -1,17 +1,12 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity 0.6.12;
+pragma solidity ^0.8.4;
 
-import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
-import "@openzeppelin/contracts/utils/EnumerableSet.sol";
-import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
-
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "./Operators8.sol";
 import "./libs/IStrategy.sol";
-import "./Operators.sol";
 
-contract VaultHealer is Ownable, ReentrancyGuard, Operators {
-    using SafeMath for uint256;
+contract VaultHealer is ReentrancyGuard, Operators8 {
     using SafeERC20 for IERC20;
 
     // Info of each user.
@@ -26,12 +21,15 @@ contract VaultHealer is Ownable, ReentrancyGuard, Operators {
 
     PoolInfo[] public poolInfo;
     mapping(uint256 => mapping(address => UserInfo)) public userInfo;
-    mapping(address => bool) private strats;
+    mapping(address => bool) internal strats;
+    mapping(address => uint256) internal pidLookup;
 
     // Compounding Variables
     // 0: compound by anyone; 1: EOA only; 2: restricted to operators
     uint public compoundMode = 1;
     bool public autocompoundOn = true;
+
+    address public maxiToken; //Unused/zero unless this is a maximizer VaultHealer
 
     event AddPool(address indexed strat);
     event Deposit(address indexed user, uint256 indexed pid, uint256 amount);
@@ -56,7 +54,8 @@ contract VaultHealer is Ownable, ReentrancyGuard, Operators {
             })
         );
         strats[_strat] = true;
-        resetSingleAllowance(poolInfo.length.sub(1));
+        pidLookup[_strat] = poolInfo.length - 1;
+        resetSingleAllowance(poolInfo.length - 1);
         emit AddPool(_strat);
     }
 
@@ -69,7 +68,7 @@ contract VaultHealer is Ownable, ReentrancyGuard, Operators {
         if (sharesTotal == 0) {
             return 0;
         }
-        return user.shares.mul(wantLockedTotal).div(sharesTotal);
+        return user.shares * wantLockedTotal / sharesTotal;
     }
 
     function deposit(uint256 _pid, uint256 _wantAmt) external nonReentrant autoCompound {
@@ -89,12 +88,12 @@ contract VaultHealer is Ownable, ReentrancyGuard, Operators {
             pool.want.safeTransferFrom(msg.sender, address(this), _wantAmt);
 
             uint256 sharesAdded = IStrategy(poolInfo[_pid].strat).deposit(_to, _wantAmt);
-            user.shares = user.shares.add(sharesAdded);
+            user.shares += sharesAdded;
         }
         emit Deposit(_to, _pid, _wantAmt);
     }
 
-    function withdraw(uint256 _pid, uint256 _wantAmt) external nonReentrant autoCompound {
+    function withdraw(uint256 _pid, uint256 _wantAmt) externalyus nonReentrant autoCompound {
         _withdraw(_pid, _wantAmt, msg.sender);
     }
 
@@ -113,7 +112,7 @@ contract VaultHealer is Ownable, ReentrancyGuard, Operators {
         require(user.shares > 0, "user.shares is 0");
         require(sharesTotal > 0, "sharesTotal is 0");
 
-        uint256 amount = user.shares.mul(wantLockedTotal).div(sharesTotal);
+        uint256 amount = user.shares * wantLockedTotal / sharesTotal;
         if (_wantAmt > amount) {
             _wantAmt = amount;
         }
@@ -123,7 +122,7 @@ contract VaultHealer is Ownable, ReentrancyGuard, Operators {
             if (sharesRemoved > user.shares) {
                 user.shares = 0;
             } else {
-                user.shares = user.shares.sub(sharesRemoved);
+                user.shares = user.shares - sharesRemoved;
             }
 
             uint256 wantBal = IERC20(pool.want).balanceOf(address(this));
@@ -136,21 +135,21 @@ contract VaultHealer is Ownable, ReentrancyGuard, Operators {
     }
 
     function withdrawAll(uint256 _pid) external autoCompound {
-        _withdraw(_pid, uint256(-1), msg.sender);
+        _withdraw(_pid, type(uint256).max, msg.sender);
     }
 
     function resetAllowances() external onlyOwner {
         for (uint256 i=0; i<poolInfo.length; i++) {
             PoolInfo storage pool = poolInfo[i];
             pool.want.safeApprove(pool.strat, uint256(0));
-            pool.want.safeIncreaseAllowance(pool.strat, uint256(-1));
+            pool.want.safeIncreaseAllowance(pool.strat, type(uint256).max);
         }
     }
 
     function resetSingleAllowance(uint256 _pid) public onlyOwner {
         PoolInfo storage pool = poolInfo[_pid];
         pool.want.safeApprove(pool.strat, uint256(0));
-        pool.want.safeIncreaseAllowance(pool.strat, uint256(-1));
+        pool.want.safeIncreaseAllowance(pool.strat, type(uint256).max);
     }
     
     // Compounding Functionality
@@ -174,7 +173,7 @@ contract VaultHealer is Ownable, ReentrancyGuard, Operators {
     
     function _compoundAll() internal {
         uint numPools = poolInfo.length;
-        for (uint i = 0; i < numPools; i++) {
+        for (uint i; i < numPools; i++) {
             try IStrategy(poolInfo[i].strat).earn() {}
             catch (bytes memory reason) {
                 emit CompoundError(i, reason);

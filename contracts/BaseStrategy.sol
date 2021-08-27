@@ -2,17 +2,19 @@
 
 pragma solidity 0.6.12;
 
-import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/utils/Pausable.sol";
-import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
-import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+import "@openzeppelin/contracts@3.4.0/access/Ownable.sol";
+import "@openzeppelin/contracts@3.4.0/utils/Pausable.sol";
+import "@openzeppelin/contracts@3.4.0/token/ERC20/SafeERC20.sol";
+import "@openzeppelin/contracts@3.4.0/utils/ReentrancyGuard.sol";
 
 import "./libs/IStrategyFish.sol";
 import "./libs/IUniPair.sol";
 import "./libs/IUniRouter02.sol";
+import "./libs/CeilDiv.sol";
 
 abstract contract BaseStrategy is Ownable, ReentrancyGuard, Pausable {
     using SafeMath for uint256;
+    using CeilDiv for uint256;
     using SafeERC20 for IERC20;
 
     address public wantAddress;
@@ -57,6 +59,11 @@ abstract contract BaseStrategy is Ownable, ReentrancyGuard, Pausable {
     address[] public earnedToToken1Path;
     address[] public token0ToEarnedPath;
     address[] public token1ToEarnedPath;
+    address[] public earnedToMaxiPath;
+    
+    address public maxiAddress; // zero and unused except for maximizer vaults. This is the maximized want token
+    enum StratType { BASIC, MASTER_HEALER, MAXIMIZER, MAXIMIZER_CORE }
+    StratType public stratType;
     
     event SetSettings(
         uint256 _controllerFee,
@@ -131,7 +138,7 @@ abstract contract BaseStrategy is Ownable, ReentrancyGuard, Pausable {
             _wantAmt = wantLockedTotal();
         }
 
-        uint256 sharesRemoved = _wantAmt.mul(sharesTotal).div(wantLockedTotal());
+        uint256 sharesRemoved = _wantAmt.mul(sharesTotal).ceilDiv(wantLockedTotal());
         if (sharesRemoved > sharesTotal) {
             sharesRemoved = sharesTotal;
         }

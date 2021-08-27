@@ -4,9 +4,10 @@ pragma solidity 0.6.12;
 
 import "./libs/IMasterchef.sol";
 
-import "./BaseStrategyLPSingle.sol";
+import "./BaseStrategyMaxiSingle.sol";
 
-contract StrategyMasterHealer is BaseStrategyLPSingle {
+//Can be used for both single-stake and LP want tokens
+contract StrategyMaxiMasterHealer is BaseStrategyMaxiSingle {
     using SafeMath for uint256;
     using SafeERC20 for IERC20;
 
@@ -20,14 +21,13 @@ contract StrategyMasterHealer is BaseStrategyLPSingle {
         uint256 _pid,
         address _wantAddress,
         address _earnedAddress,
+        address _maxiAddress,
         uint256 _tolerance,
         address[] memory _earnedToWmaticPath,
         address[] memory _earnedToUsdcPath,
         address[] memory _earnedToFishPath,
-        address[] memory _earnedToToken0Path,
-        address[] memory _earnedToToken1Path,
-        address[] memory _token0ToEarnedPath,
-        address[] memory _token1ToEarnedPath
+        address[] memory _earnedToMaxiPath
+        
     ) public {
         govAddress = msg.sender;
         vaultChefAddress = _vaultChefAddress;
@@ -35,25 +35,27 @@ contract StrategyMasterHealer is BaseStrategyLPSingle {
         uniRouterAddress = _uniRouterAddress;
 
         wantAddress = _wantAddress;
-        token0Address = IUniPair(wantAddress).token0();
-        token1Address = IUniPair(wantAddress).token1();
+        
+        //We don't actually need the token0 and 1 addresses but we might as well try
+        try IUniPair(wantAddress).token0() returns (address _token0) {
+            token0Address = _token0;
+            token1Address = IUniPair(wantAddress).token1();
+        } catch {}
 
         pid = _pid;
         earnedAddress = _earnedAddress;
+        maxiAddress = _maxiAddress;
         tolerance = _tolerance;
 
         earnedToWmaticPath = _earnedToWmaticPath;
         earnedToUsdcPath = _earnedToUsdcPath;
         earnedToFishPath = _earnedToFishPath;
-        earnedToToken0Path = _earnedToToken0Path;
-        earnedToToken1Path = _earnedToToken1Path;
-        token0ToEarnedPath = _token0ToEarnedPath;
-        token1ToEarnedPath = _token1ToEarnedPath;
+        earnedToMaxiPath = _earnedToMaxiPath;
 
         transferOwnership(vaultChefAddress);
         
         _resetAllowances();
-        stratType = StratType.MASTER_HEALER;
+        stratType = StratType.MAXIMIZER;
     }
 
     function _vaultDeposit(uint256 _amount) internal override {
@@ -87,18 +89,6 @@ contract StrategyMasterHealer is BaseStrategyLPSingle {
 
         IERC20(earnedAddress).safeApprove(uniRouterAddress, uint256(0));
         IERC20(earnedAddress).safeIncreaseAllowance(
-            uniRouterAddress,
-            uint256(-1)
-        );
-
-        IERC20(token0Address).safeApprove(uniRouterAddress, uint256(0));
-        IERC20(token0Address).safeIncreaseAllowance(
-            uniRouterAddress,
-            uint256(-1)
-        );
-
-        IERC20(token1Address).safeApprove(uniRouterAddress, uint256(0));
-        IERC20(token1Address).safeIncreaseAllowance(
             uniRouterAddress,
             uint256(-1)
         );
