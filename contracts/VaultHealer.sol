@@ -22,7 +22,6 @@ contract VaultHealer is ReentrancyGuard, Operators8 {
     PoolInfo[] public poolInfo;
     mapping(uint256 => mapping(address => UserInfo)) public userInfo;
     mapping(address => bool) internal strats;
-    mapping(address => uint256) internal pidLookup;
 
     // Compounding Variables
     // 0: compound by anyone; 1: EOA only; 2: restricted to operators
@@ -54,7 +53,6 @@ contract VaultHealer is ReentrancyGuard, Operators8 {
             })
         );
         strats[_strat] = true;
-        pidLookup[_strat] = poolInfo.length - 1;
         resetSingleAllowance(poolInfo.length - 1);
         emit AddPool(_strat);
     }
@@ -80,20 +78,20 @@ contract VaultHealer is ReentrancyGuard, Operators8 {
         _deposit(_pid, _wantAmt, _to);
     }
     
-    function _deposit(uint256 _pid, uint256 _wantAmt, address _to) internal {
+    function _deposit(uint256 _pid, uint256 _wantAmt, address _to) internal virtual returns (uint sharesAdded) {
         PoolInfo storage pool = poolInfo[_pid];
         UserInfo storage user = userInfo[_pid][_to];
 
         if (_wantAmt > 0) {
             pool.want.safeTransferFrom(msg.sender, address(this), _wantAmt);
 
-            uint256 sharesAdded = IStrategy(poolInfo[_pid].strat).deposit(_to, _wantAmt);
+            sharesAdded = IStrategy(poolInfo[_pid].strat).deposit(_to, _wantAmt);
             user.shares += sharesAdded;
         }
         emit Deposit(_to, _pid, _wantAmt);
     }
 
-    function withdraw(uint256 _pid, uint256 _wantAmt) externalyus nonReentrant autoCompound {
+    function withdraw(uint256 _pid, uint256 _wantAmt) external nonReentrant autoCompound {
         _withdraw(_pid, _wantAmt, msg.sender);
     }
 
@@ -102,12 +100,12 @@ contract VaultHealer is ReentrancyGuard, Operators8 {
         _withdraw(_pid, _wantAmt, _to);
     }
 
-    function _withdraw(uint256 _pid, uint256 _wantAmt, address _to) internal {
+    function _withdraw(uint256 _pid, uint256 _wantAmt, address _to) internal virtual returns (uint sharesTotal, uint sharesRemoved) {
         PoolInfo storage pool = poolInfo[_pid];
         UserInfo storage user = userInfo[_pid][msg.sender];
 
         uint256 wantLockedTotal = IStrategy(poolInfo[_pid].strat).wantLockedTotal();
-        uint256 sharesTotal = IStrategy(poolInfo[_pid].strat).sharesTotal();
+        sharesTotal = IStrategy(poolInfo[_pid].strat).sharesTotal();
 
         require(user.shares > 0, "user.shares is 0");
         require(sharesTotal > 0, "sharesTotal is 0");
@@ -117,7 +115,7 @@ contract VaultHealer is ReentrancyGuard, Operators8 {
             _wantAmt = amount;
         }
         if (_wantAmt > 0) {
-            uint256 sharesRemoved = IStrategy(poolInfo[_pid].strat).withdraw(msg.sender, _wantAmt);
+            sharesRemoved = IStrategy(poolInfo[_pid].strat).withdraw(msg.sender, _wantAmt);
 
             if (sharesRemoved > user.shares) {
                 user.shares = 0;
