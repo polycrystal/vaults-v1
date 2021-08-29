@@ -78,15 +78,29 @@ contract VaultHealer is ReentrancyGuard, Operators8 {
         _deposit(_pid, _wantAmt, _to);
     }
     
+    //getter and setter are overriden to enable maximizers    
+    function getUserShares(uint256 _pid, address _user) internal view virtual returns (uint shares) {
+        return userInfo[_pid][_user].shares;
+    }
+    function addUserShares(uint256 _pid, address _user, uint sharesAdded) internal virtual returns (uint shares) {
+        userInfo[_pid][_user].shares += sharesAdded;
+        return userInfo[_pid][_user].shares;
+    }
+    function removeUserShares(uint256 _pid, address _user, uint sharesRemoved) internal virtual returns (uint shares) {
+        userInfo[_pid][_user].shares -= sharesRemoved;
+        return userInfo[_pid][_user].shares;
+    }
+    
+    
     function _deposit(uint256 _pid, uint256 _wantAmt, address _to) internal virtual returns (uint sharesAdded) {
         PoolInfo storage pool = poolInfo[_pid];
-        UserInfo storage user = userInfo[_pid][_to];
+        uint userShares = getUserShares(_pid, _to);
 
         if (_wantAmt > 0) {
             pool.want.safeTransferFrom(msg.sender, address(this), _wantAmt);
 
             sharesAdded = IStrategy(poolInfo[_pid].strat).deposit(_to, _wantAmt);
-            user.shares += sharesAdded;
+            addUserShares(_pid, _to, sharesAdded);
         }
         emit Deposit(_to, _pid, _wantAmt);
     }
@@ -99,28 +113,28 @@ contract VaultHealer is ReentrancyGuard, Operators8 {
     function withdraw(uint256 _pid, uint256 _wantAmt, address _to) external nonReentrant onlyOperator {
         _withdraw(_pid, _wantAmt, _to);
     }
-
+    
     function _withdraw(uint256 _pid, uint256 _wantAmt, address _to) internal virtual returns (uint sharesTotal, uint sharesRemoved) {
         PoolInfo storage pool = poolInfo[_pid];
-        UserInfo storage user = userInfo[_pid][msg.sender];
+        uint userShares = getUserShares(_pid, msg.sender);
 
         uint256 wantLockedTotal = IStrategy(poolInfo[_pid].strat).wantLockedTotal();
         sharesTotal = IStrategy(poolInfo[_pid].strat).sharesTotal();
 
-        require(user.shares > 0, "user.shares is 0");
+        require(userShares > 0, "userShares is 0");
         require(sharesTotal > 0, "sharesTotal is 0");
 
-        uint256 amount = user.shares * wantLockedTotal / sharesTotal;
+        uint256 amount = userShares * wantLockedTotal / sharesTotal;
         if (_wantAmt > amount) {
             _wantAmt = amount;
         }
         if (_wantAmt > 0) {
             sharesRemoved = IStrategy(poolInfo[_pid].strat).withdraw(msg.sender, _wantAmt);
 
-            if (sharesRemoved > user.shares) {
-                user.shares = 0;
+            if (sharesRemoved > userShares) {
+                removeUserShares(_pid, msg.sender, userShares);
             } else {
-                user.shares = user.shares - sharesRemoved;
+                removeUserShares(_pid, msg.sender, sharesRemoved);
             }
 
             uint256 wantBal = IERC20(pool.want).balanceOf(address(this));
