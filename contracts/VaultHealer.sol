@@ -6,7 +6,7 @@ import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "./Operators8.sol";
 import "./libs/IStrategy.sol";
 
-contract VaultHealer is ReentrancyGuard, Operators8 {
+contract VaultHealer is ReentrancyGuard, Operators {
     using SafeERC20 for IERC20;
 
     // Info of each user.
@@ -20,7 +20,7 @@ contract VaultHealer is ReentrancyGuard, Operators8 {
     }
 
     PoolInfo[] public poolInfo;
-    mapping(uint256 => mapping(address => UserInfo)) public userInfo;
+    mapping(uint256 => mapping(address => UserInfo)) private userInfo;
     mapping(address => bool) internal strats;
 
     // Compounding Variables
@@ -44,7 +44,7 @@ contract VaultHealer is ReentrancyGuard, Operators8 {
     /**
      * @dev Add a new want to the pool. Can only be called by the owner.
      */
-    function addPool(address _strat) external onlyOwner nonReentrant {
+    function addPool(address _strat) public onlyOwner nonReentrant {
         require(!strats[_strat], "Existing strategy");
         poolInfo.push(
             PoolInfo({
@@ -59,14 +59,13 @@ contract VaultHealer is ReentrancyGuard, Operators8 {
 
     function stakedWantTokens(uint256 _pid, address _user) external view returns (uint256) {
         PoolInfo storage pool = poolInfo[_pid];
-        UserInfo storage user = userInfo[_pid][_user];
 
         uint256 sharesTotal = IStrategy(pool.strat).sharesTotal();
         uint256 wantLockedTotal = IStrategy(poolInfo[_pid].strat).wantLockedTotal();
         if (sharesTotal == 0) {
             return 0;
         }
-        return user.shares * wantLockedTotal / sharesTotal;
+        return getUserShares(_pid, _user) * wantLockedTotal / sharesTotal;
     }
 
     function deposit(uint256 _pid, uint256 _wantAmt) external nonReentrant autoCompound {
@@ -91,10 +90,8 @@ contract VaultHealer is ReentrancyGuard, Operators8 {
         return userInfo[_pid][_user].shares;
     }
     
-    
     function _deposit(uint256 _pid, uint256 _wantAmt, address _to) internal virtual returns (uint sharesAdded) {
         PoolInfo storage pool = poolInfo[_pid];
-        uint userShares = getUserShares(_pid, _to);
 
         if (_wantAmt > 0) {
             pool.want.safeTransferFrom(msg.sender, address(this), _wantAmt);

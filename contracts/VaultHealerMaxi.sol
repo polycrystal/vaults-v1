@@ -3,6 +3,7 @@
 pragma solidity ^0.8.4;
 
 import "./VaultHealer.sol";
+import "./StrategyMaxiCore.sol";
 import "@openzeppelin/contracts/utils/math/SafeCast.sol";
 import "@openzeppelin/contracts/utils/math/Math.sol";
 
@@ -11,59 +12,55 @@ contract VaultHealerMaxi is VaultHealer {
     
     mapping(address => uint) maxiDebt; //negative maximizer tokens to offset adding to pools
     
-    constructor(address _maximizeToken) {
-        maxiToken = _maximizeToken;
-        //deploy maxi core strategy here
+    constructor(
+        address _masterchefAddress,
+        address _uniRouterAddress,
+        uint256 _pid,
+        address _wantAddress,
+        uint256 _tolerance,
+        address[] memory _earnedToWmaticPath,
+        address[] memory _earnedToUsdcPath,
+        address[] memory _earnedToFishPath
+    ) {
+        maxiToken = _wantAddress;
+        
+        StrategyMaxiCore coreStrategy = new StrategyMaxiCore(msg.sender, _masterchefAddress, _uniRouterAddress, _pid, _wantAddress, _tolerance, _earnedToWmaticPath, _earnedToUsdcPath, _earnedToFishPath);
+        addPool(address(coreStrategy));
     }
     
-    //maximized token balance
-    function balanceOf(address account) external view returns (uint) {
-        address core = poolInfo[0].strat;
-        uint totalShares = IStrategy(core).sharesTotal();
-        uint shares = coreShares(account);
-        
-        return totalShares == 0 ? 0 : shares * IStrategy(core).wantLockedTotal() / totalShares;
-    }
-    
-    //returns a user's share of the maximizer core vault
-    function coreShares(address user) public view returns (uint shares) {
-
-        shares = userInfo[0][user].shares;
-        
-        //Add the user's share of each maximizer's share of the core vault
-        for (uint i; i < poolInfo.length; i++) {
-            shares += coreSharesFromMaximizer(i, user);
-        }
-    }
     //for a particular account, shares contributed by one of the maximizers
     function coreSharesFromMaximizer(uint _pid, address _user) internal view returns (uint shares) {
 
-        require(_pid > 0 && _pid < poolInfo.length, "ASSERT: coreSharesFromMaximizer bad pid");
+        require(_pid > 0 && _pid < poolInfo.length, "VaultHealerMaxi: coreSharesFromMaximizer bad pid");
         
-        uint userStratShares = userInfo[_pid][_user].shares; //user's share of the maximizer
+        uint userStratShares = getUserShares(_pid, _user); //user's share of the maximizer
         
         address strategy = poolInfo[_pid].strat; //maximizer strategy
         uint stratSharesTotal = IStrategy(strategy).sharesTotal(); //total shares of the maximizer vault
         if (stratSharesTotal == 0) return 0;
-        uint stratCoreShares = userInfo[_pid][strategy].shares;
+        uint stratCoreShares = getUserShares(_pid, strategy);
         
         return userStratShares * stratCoreShares / stratSharesTotal;
     }
-    //subtract debt for core strategy
     function getUserShares(uint256 _pid, address _user) internal view override returns (uint shares) {
-        return userInfo[_pid][_user].shares - (_pid == 0 ? maxiDebt[_user] : 0);
-    }
-    function addUserShares(uint256 _pid, address _user, uint sharesAdded) internal virtual returns (uint shares) {
-        if (_pid == 0) {
-            
-        } else {
-            userInfo[_pid][_user].shares += sharesAdded;
-            return userInfo[_pid][_user].shares;
+        
+        shares = super.getUserShares(0, _user);
+        
+        if (_pid == 0 && !strats[_user]) {
+            //Add the user's share of each maximizer's share of the core vault
+            for (uint i; i < poolInfo.length; i++) {
+                shares += coreSharesFromMaximizer(i, _user);
+            }
+            shares -= maxiDebt[_user];
         }
     }
-    function removeUserShares(uint256 _pid, address _user, uint sharesRemoved) internal virtual returns (uint shares) {
-        userInfo[_pid][_user].shares -= sharesRemoved;
-        return userInfo[_pid][_user].shares;
+    function removeUserShares(uint256 _pid, address _user, uint sharesRemoved) internal override returns (uint shares) {
+        if (_pid == 0 && !strats[_user] && sharesRemoved > super.getUserShares(0, _user)) {
+            maxiDebt[_user] += sharesRemoved;
+            return getUserShares(_pid, _user);
+        } else {
+            return super.removeUserShares(_pid, _user, sharesRemoved);
+        }
     }
     
     //for maximizer functions to deposit the maximized token in the core vault
@@ -78,12 +75,12 @@ contract VaultHealerMaxi is VaultHealer {
         sharesAdded = super._deposit(_pid, _wantAmt, _to);
         if (_pid > 0 && sharesTotal > 0) {
             //rebalance shares so core shares are the same as before for the individual user and for the rest of the pool
-            UserInfo storage maxiCoreInfo = userInfo[0][strat]; // core shares held by the maximizer
+            uint maxiCoreShares = getUserShares(0, strat); // core shares held by the maximizer
             
             //old/new == old/new; vault gets +shares, depositor gets -shares but it all evens out
-            uint coreShareOffset = (maxiCoreInfo.shares * (sharesTotal + sharesAdded)).ceilDiv(sharesTotal) - maxiCoreInfo.shares; //ceilDiv benefits pool over user preventing abuse
-            maxiCoreInfo.shares += coreShareOffset; 
-            userInfo[0][_to].shares -= coreShareOffset;
+            uint coreShareOffset = (maxiCoreShares * (sharesTotal + sharesAdded)).ceilDiv(sharesTotal) - maxiCoreShares; //ceilDiv benefits pool over user preventing abuse
+            addUserShares(0, strat, coreShareOffset); 
+            removeUserShares(0, _to, coreShareOffset);
         }
     }
     
@@ -92,11 +89,11 @@ contract VaultHealerMaxi is VaultHealer {
         if (_pid > 0 && sharesTotal > 0) {
             //rebalance shares so core shares are the same as before for the individual user and for the rest of the pool
             address strat = poolInfo[_pid].strat;
-            UserInfo storage maxiCoreInfo = userInfo[0][strat]; // core shares held by the maximizer
+            uint maxiCoreShares = getUserShares(0, strat); // core shares held by the maximizer
             
-            uint coreShareOffset = maxiCoreInfo.shares - ((sharesTotal - sharesRemoved) * maxiCoreInfo.shares).ceilDiv(sharesTotal); //ceilDiv benefits pool over user preventing abuse
-            maxiCoreInfo.shares -= coreShareOffset; 
-            userInfo[0][msg.sender].shares += coreShareOffset;
+            uint coreShareOffset = maxiCoreShares - ((sharesTotal - sharesRemoved) * maxiCoreShares).ceilDiv(sharesTotal); //ceilDiv benefits pool over user preventing abuse
+            removeUserShares(0, strat, coreShareOffset); 
+            addUserShares(0, _to, coreShareOffset);
         }
     }
 }

@@ -31,12 +31,16 @@
 	},
 	"data": {
 		"bytecode": {
+			"functionDebugData": {},
+			"generatedSources": [],
 			"linkReferences": {},
 			"object": "",
 			"opcodes": "",
 			"sourceMap": ""
 		},
 		"deployedBytecode": {
+			"functionDebugData": {},
+			"generatedSources": [],
 			"immutableReferences": {},
 			"linkReferences": {},
 			"object": "",

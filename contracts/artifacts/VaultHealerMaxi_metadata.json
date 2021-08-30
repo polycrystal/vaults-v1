@@ -9,8 +9,43 @@
 				"inputs": [
 					{
 						"internalType": "address",
-						"name": "_maximizeToken",
+						"name": "_masterchefAddress",
 						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "_uniRouterAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_pid",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "_wantAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_tolerance",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address[]",
+						"name": "_earnedToWmaticPath",
+						"type": "address[]"
+					},
+					{
+						"internalType": "address[]",
+						"name": "_earnedToUsdcPath",
+						"type": "address[]"
+					},
+					{
+						"internalType": "address[]",
+						"name": "_earnedToFishPath",
+						"type": "address[]"
 					}
 				],
 				"stateMutability": "nonpayable",
@@ -207,25 +242,6 @@
 				"type": "function"
 			},
 			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "account",
-						"type": "address"
-					}
-				],
-				"name": "balanceOf",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
 				"inputs": [],
 				"name": "compoundAll",
 				"outputs": [],
@@ -240,25 +256,6 @@
 						"internalType": "uint256",
 						"name": "",
 						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "user",
-						"type": "address"
-					}
-				],
-				"name": "coreShares",
-				"outputs": [
-					{
-						"internalType": "int256",
-						"name": "shares",
-						"type": "int256"
 					}
 				],
 				"stateMutability": "view",
@@ -307,7 +304,7 @@
 			},
 			{
 				"inputs": [],
-				"name": "maximizeToken",
+				"name": "maxiToken",
 				"outputs": [
 					{
 						"internalType": "address",
@@ -504,30 +501,6 @@
 				"inputs": [
 					{
 						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					},
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
-					}
-				],
-				"name": "userInfo",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "shares",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "uint256",
 						"name": "_pid",
 						"type": "uint256"
 					},
@@ -627,6 +600,14 @@
 				"dweb:/ipfs/Qmd5c7Vxtis9wzkDNhxwc6A2QT5H9xn9kfjhx7qx44vpro"
 			]
 		},
+		"@openzeppelin/contracts/security/Pausable.sol": {
+			"keccak256": "0xa35b1f2a670cd2a701a52c398032c9fed72df1909fe394d77ceacbf074e8937b",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://72b957861691ebdaa78c52834465c4f8296480fe4f1a12ba72dc6c0c8ac076dd",
+				"dweb:/ipfs/QmVz1sHCwgEivHPRDswdt9tdvky7EnWqFmbuk1wFE55VMG"
+			]
+		},
 		"@openzeppelin/contracts/security/ReentrancyGuard.sol": {
 			"keccak256": "0x842ccf9a6cd33e17b7acef8372ca42090755217b358fe0c44c98e951ea549d3a",
 			"license": "MIT",
@@ -667,6 +648,14 @@
 				"dweb:/ipfs/QmWcsmkVr24xmmjfnBQZoemFniXjj3vwT78Cz6uqZW1Hux"
 			]
 		},
+		"@openzeppelin/contracts/utils/math/Math.sol": {
+			"keccak256": "0x49ebdac5d515aebb95168564158940b79d7d5d12fbfe59cec546a00d57fee64a",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://c02d3ba19711bffdb7aa33ff3107cfd17902c82640837ef0de2e327515f4f70d",
+				"dweb:/ipfs/QmdR7JUXpD5X7eXkc24bRtNj3e7ahs8RC8s25cu7X14GHU"
+			]
+		},
 		"@openzeppelin/contracts/utils/math/SafeCast.sol": {
 			"keccak256": "0x08d867b4c0bb782b9135691fa732b6846e0f133006489c3aa505abd1f6de56cb",
 			"license": "MIT",
@@ -675,28 +664,52 @@
 				"dweb:/ipfs/QmdZs431M8sA4mTsSe8PeycREkBAmzC4a6NN7eFppyK62B"
 			]
 		},
-		"vaults-v1/contracts/Operators8.sol": {
-			"keccak256": "0x67f6f4ca092b0cc4e2e418db6e7d1a979f30e72d8ceaaf98f1a22a07ac991723",
+		"vaults-v1/contracts/BaseStrategy8.sol": {
+			"keccak256": "0x8095e0e044e3a8889975e518bc4e42cfe3952c7578ff8c87a4f51e9ebb644f3a",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://38c34ef14a8dce037a415939cee2511d27bba2637c118f5f549d26edc0bc1654",
-				"dweb:/ipfs/QmZ2Ud6p3YtqtZ87AgVmEzENkgcvHrgwYtAZTnQJYdcMgq"
+				"bzz-raw://f5acd2d4d7b8c5e88520d61eadc50c5d773187cd4a48e0dfcb03a8694f44a7de",
+				"dweb:/ipfs/QmZGKMnpTbMa3jP8pCkbr1pN9S1a8eSyx1d7R8kEFtoMZs"
+			]
+		},
+		"vaults-v1/contracts/Operators8.sol": {
+			"keccak256": "0xa5845502ed82b98d1094d1bd07c057b436f67f6aea0d52c69f0b89fdec353063",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://c212044d7248f83466447a7c939f47d4e2a06c341e22cba13099f0b9548794a7",
+				"dweb:/ipfs/QmQCnTfmXSzKwW7y8ZJs4uraVvuPfy5yevXPgqj87watkV"
+			]
+		},
+		"vaults-v1/contracts/StrategyMaxiCore.sol": {
+			"keccak256": "0x9aec4535ad135966241ba9771e46f300ac309265df6f6132837db789ea3a61c5",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://a347529145d2ee3e860b71e9123562f255d461f615934e44f5632692d258d501",
+				"dweb:/ipfs/QmSijjeoYpE4Mds7EaMgsaBBnJXtTZgA2tMfpdQGwCM2YD"
 			]
 		},
 		"vaults-v1/contracts/VaultHealer.sol": {
-			"keccak256": "0x19877092c213df5fbcc9ea34a5054987e81d302f9dae2361db1515a345dd104e",
+			"keccak256": "0xb1c6f06a8013216b7ae9c3547ea5d60f13d51853cea88ef729536edd2aec2557",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://0855d1acc38cc5007634aee6763130b54cf5af42be656065acb6645acad0d262",
-				"dweb:/ipfs/QmdZJPiWFwLcAWJvWos46esf3gHUKLBctTaPsNmyCfUgUH"
+				"bzz-raw://854e25b1f94058252c84e89334bc595dfddb66773aa66dd07647231ad85b2a57",
+				"dweb:/ipfs/QmbFoZ2mP6Y9X2eQuEyQd985JPVEkLAhqe26kq1bSFcDhf"
 			]
 		},
 		"vaults-v1/contracts/VaultHealerMaxi.sol": {
-			"keccak256": "0x875da46e548d131e33ac9c3ab83839b799dbe882e2eb4379fd959513885bb71e",
+			"keccak256": "0x3e9f5c07ad4938575a76cef2f662acdb641b8e387a6e7dc00a309fee12a971fa",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://11d83566f781fca6ce83ceb96079ae22d66f2ff42d618c00bfa8b25e42c4e40d",
-				"dweb:/ipfs/QmQpG8rumfuJrDqGr6GGJpweV92gT79sxUUAxVmiuDiijH"
+				"bzz-raw://1650d066c381c93038b054f8d14829d50c94c6456a5839d599b287ae07adbd80",
+				"dweb:/ipfs/QmYPszuntDiXbW4tF9KHu3bmV5bEctk365aKrc1ESgrb2r"
+			]
+		},
+		"vaults-v1/contracts/libs/IMasterchef.sol": {
+			"keccak256": "0xedfb8d80370a4b1db2892cb16bc4a747f7a2c94f4db475493c2636a183bed83a",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://63ecf8dcac499f94f66a8e4a00aea92f0724320515b9cdfa4fa7a8e297fede8a",
+				"dweb:/ipfs/QmcM324dif62qJLrgWotCCiwHfEu7h7QsG4GBtWEg4Rg2t"
 			]
 		},
 		"vaults-v1/contracts/libs/IStrategy.sol": {
@@ -705,6 +718,38 @@
 			"urls": [
 				"bzz-raw://1c35bae2bf6ba606fc58e4bd5b7bcb904b9f34fbad6d9fcc26b91148237f6c66",
 				"dweb:/ipfs/QmaZhNn4N48CdW94tQ3kyeYW9f8gY3UNB8oqvNGGYERuDf"
+			]
+		},
+		"vaults-v1/contracts/libs/IStrategyFish.sol": {
+			"keccak256": "0x47db6681adffc6188f5301007f60967b57709bc6165e301c40c7e56aa77a490a",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://5ce012100112143969cba71426ee46da6c8b8a7b7055d42d00d2e87e5853613e",
+				"dweb:/ipfs/QmRVc9mqeGfeuiWrLyZeM2NGoiX8cfPhiuNNTm7tcNjusU"
+			]
+		},
+		"vaults-v1/contracts/libs/IUniPair.sol": {
+			"keccak256": "0x18db10c4956f8924791879b151319ae39b90cc2baf767a943b290317d39521d2",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://ddc063cbf21cb266d25084204e43124187fa5c0e944bb71ea37987e4cacd23d4",
+				"dweb:/ipfs/QmeeVLK61fSRYReupTpG2L9rwowrGP4egJfwoyVasrXvFy"
+			]
+		},
+		"vaults-v1/contracts/libs/IUniRouter01.sol": {
+			"keccak256": "0x450778b9c14a200deb06e415b7d66bae2a9d09ec94a45ebafdaf2cdb0945a910",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://ef637d6122da031f8149b65092412624170517f983b21fc124506b1e7864ed71",
+				"dweb:/ipfs/QmbgEtcysDJZLZRzKErso6hxTD5LGWRfQmReFLDNNC2eWa"
+			]
+		},
+		"vaults-v1/contracts/libs/IUniRouter02.sol": {
+			"keccak256": "0x9483f46667c7de038c6857f908a7d2d110fbbf9748876b6a9314191e24bc895d",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://1b825fb00fa27304eb84eb03521889517b84fa1d954965a801fa3e4de5d361bb",
+				"dweb:/ipfs/QmWvaWmPaBpL5TVSBLKJRnWE5GuFGWYA1i1tSKVQFLyPyS"
 			]
 		}
 	},
