@@ -132,7 +132,7 @@ contract VaultHealer is ReentrancyGuard, Operators {
                 removeUserShares(_pid, msg.sender, sharesRemoved);
             }
 
-            uint256 wantBal = IERC20(pool.want).balanceOf(address(this));
+            uint256 wantBal = pool.want.balanceOf(address(this));
             if (wantBal < _wantAmt) {
                 _wantAmt = wantBal;
             }
