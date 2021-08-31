@@ -24,7 +24,17 @@ contract VaultHealerMaxi is VaultHealer {
     ) {
         maxiToken = _wantAddress;
         
-        StrategyMaxiCore coreStrategy = new StrategyMaxiCore(msg.sender, _masterchefAddress, _uniRouterAddress, _pid, _wantAddress, _tolerance, _earnedToWmaticPath, _earnedToUsdcPath, _earnedToFishPath);
+        StrategyMaxiCore coreStrategy = new StrategyMaxiCore(
+            msg.sender, 
+            _masterchefAddress,
+            _uniRouterAddress,
+            _pid,
+            _wantAddress,
+            _tolerance,
+            _earnedToWmaticPath,
+            _earnedToUsdcPath,
+            _earnedToFishPath
+        );
         addPool(address(coreStrategy));
     }
     
