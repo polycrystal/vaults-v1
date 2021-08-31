@@ -58,7 +58,7 @@ contract VaultHealerMaxi is VaultHealer {
         
         if (_pid == 0 && !strats[_user]) {
             //Add the user's share of each maximizer's share of the core vault
-            for (uint i; i < poolInfo.length; i++) {
+            for (uint i = 1; i < poolInfo.length; i++) {
                 shares += coreSharesFromMaximizer(i, _user);
             }
             shares -= maxiDebt[_user];
