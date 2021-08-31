@@ -10,10 +10,12 @@ import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import "./libs/IStrategyFish.sol";
 import "./libs/IUniPair.sol";
 import "./libs/IUniRouter02.sol";
+import "./libs/CeilDiv.sol";
 
 abstract contract BaseStrategy is Ownable, ReentrancyGuard, Pausable {
     using SafeMath for uint256;
     using SafeERC20 for IERC20;
+    using CeilDiv for uint256;
 
     address public wantAddress;
     address public token0Address;
@@ -49,6 +51,7 @@ abstract contract BaseStrategy is Ownable, ReentrancyGuard, Pausable {
     // Frontend variables
     uint256 public tolerance;
     uint256 public burnedAmount;
+    bool public active;
 
     address[] public earnedToWmaticPath;
     address[] public earnedToUsdcPath;
@@ -65,7 +68,8 @@ abstract contract BaseStrategy is Ownable, ReentrancyGuard, Pausable {
         uint256 _withdrawFeeFactor,
         uint256 _slippageFactor,
         uint256 _tolerance,
-        address _uniRouterAddress
+        address _uniRouterAddress,
+        bool _active
     );
     
     modifier onlyGov() {
@@ -131,7 +135,7 @@ abstract contract BaseStrategy is Ownable, ReentrancyGuard, Pausable {
             _wantAmt = wantLockedTotal();
         }
 
-        uint256 sharesRemoved = _wantAmt.mul(sharesTotal).div(wantLockedTotal());
+        uint256 sharesRemoved = _wantAmt.mul(sharesTotal).ceilDiv(wantLockedTotal());
         if (sharesRemoved > sharesTotal) {
             sharesRemoved = sharesTotal;
         }
@@ -241,7 +245,8 @@ abstract contract BaseStrategy is Ownable, ReentrancyGuard, Pausable {
         uint256 _withdrawFeeFactor,
         uint256 _slippageFactor,
         uint256 _tolerance,
-        address _uniRouterAddress
+        address _uniRouterAddress,
+        bool _active
     ) external onlyGov {
         require(_controllerFee.add(_rewardRate).add(_buyBackRate) <= feeMaxTotal, "Max fee of 10%");
         require(_withdrawFeeFactor >= withdrawFeeFactorLL, "_withdrawFeeFactor too low");
@@ -254,6 +259,7 @@ abstract contract BaseStrategy is Ownable, ReentrancyGuard, Pausable {
         slippageFactor = _slippageFactor;
         tolerance = _tolerance;
         uniRouterAddress = _uniRouterAddress;
+        active = _active;
 
         emit SetSettings(
             _controllerFee,
@@ -262,7 +268,8 @@ abstract contract BaseStrategy is Ownable, ReentrancyGuard, Pausable {
             _withdrawFeeFactor,
             _slippageFactor,
             _tolerance,
-            _uniRouterAddress
+            _uniRouterAddress,
+            _active
         );
     }
     

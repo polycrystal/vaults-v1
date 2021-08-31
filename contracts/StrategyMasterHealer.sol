@@ -41,6 +41,7 @@ contract StrategyMasterHealer is BaseStrategyLPSingle {
         pid = _pid;
         earnedAddress = _earnedAddress;
         tolerance = _tolerance;
+        active = true;
 
         earnedToWmaticPath = _earnedToWmaticPath;
         earnedToUsdcPath = _earnedToUsdcPath;
