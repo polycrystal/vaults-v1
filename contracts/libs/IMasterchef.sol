@@ -12,4 +12,5 @@ interface IMasterchef {
     function userInfo(uint256 _pid, address _address) external view returns (uint256, uint256);
     
     function harvest(uint256 _pid, address _to) external;
+    
 }

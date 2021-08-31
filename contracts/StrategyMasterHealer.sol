@@ -12,14 +12,18 @@ contract StrategyMasterHealer is BaseStrategyLPSingle {
     address public masterchefAddress;
     uint256 public pid;
 
+    struct InitAddresses {
+        address vaultChef;
+        address masterChef;
+        address uniRouter;
+        address want;
+        address earned;
+    }
+
     constructor(
-        address _vaultChefAddress,
-        address _masterchefAddress,
-        address _uniRouterAddress,
         uint256 _pid,
-        address _wantAddress,
-        address _earnedAddress,
         uint256 _tolerance,
+        InitAddresses memory _initAddr,
         address[] memory _earnedToWmaticPath,
         address[] memory _earnedToUsdcPath,
         address[] memory _earnedToFishPath,
@@ -29,16 +33,17 @@ contract StrategyMasterHealer is BaseStrategyLPSingle {
         address[] memory _token1ToEarnedPath
     ) {
         govAddress = msg.sender;
-        vaultChefAddress = _vaultChefAddress;
-        masterchefAddress = _masterchefAddress;
-        uniRouterAddress = _uniRouterAddress;
+        
+        vaultChefAddress = _initAddr.vaultChef;
+        masterchefAddress = _initAddr.masterChef;
+        uniRouterAddress = _initAddr.uniRouter;
+        wantAddress = _initAddr.want;
+        earnedAddress = _initAddr.earned;
 
-        wantAddress = _wantAddress;
         token0Address = IUniPair(wantAddress).token0();
         token1Address = IUniPair(wantAddress).token1();
 
         pid = _pid;
-        earnedAddress = _earnedAddress;
         tolerance = _tolerance;
 
         earnedToWmaticPath = _earnedToWmaticPath;

@@ -16,7 +16,7 @@ contract StrategyMaxiCore is BaseStrategy {
         address _masterchefAddress,
         address _uniRouterAddress,
         uint256 _pid,
-        address _wantAddress,
+        address _wantAddress, //want == earned for maximizer core
         uint256 _tolerance,
         address[] memory _earnedToWmaticPath,
         address[] memory _earnedToUsdcPath,

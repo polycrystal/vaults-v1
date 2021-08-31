@@ -411,6 +411,25 @@
 				"inputs": [
 					{
 						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"name": "strats",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
 						"name": "newOwner",
 						"type": "address"
 					}
@@ -436,6 +455,30 @@
 				"name": "updateOperator",
 				"outputs": [],
 				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"name": "userInfo",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "shares",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
 				"type": "function"
 			},
 			{
@@ -590,11 +633,11 @@
 			]
 		},
 		"vaults-v1/contracts/VaultHealer.sol": {
-			"keccak256": "0xf8ed204e112c8ebf0c59760f0987f60d6e9d373428f54de1f681ef6b7b824f94",
+			"keccak256": "0x3a9a898a9bf816ed76af74655dea728567ad85ace58412e43ef491d164a38682",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://35d93d0228d45f6676217138031342b1badf1be620d6bf5573b07d2d643d9520",
-				"dweb:/ipfs/QmYF3KZgBBZhMYqCCD6aTgqjseVTDVfff2Mp11yqyLw72a"
+				"bzz-raw://2a56ca18dfe4645e7f04854671a065c937a14603534c709c0803d14ac31c6231",
+				"dweb:/ipfs/QmTV1hxgRsPSH1faZw1DCckXYPSNKS4Y57t32E3Ngf9Et3"
 			]
 		},
 		"vaults-v1/contracts/libs/IStrategy.sol": {
