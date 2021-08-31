@@ -16,11 +16,9 @@ contract VaultHealerMaxi is VaultHealer {
         address _masterchefAddress,
         address _uniRouterAddress,
         uint256 _pid,
-        address _wantAddress,
+        address _wantAddress, //want == earned for maximizer core
         uint256 _tolerance,
-        address[] memory _earnedToWmaticPath,
-        address[] memory _earnedToUsdcPath,
-        address[] memory _earnedToFishPath
+        address _earnedToWmaticStep //address(0) if swapping earned->wmatic directly, or the address of an intermediate trade token such as weth
     ) {
         maxiToken = _wantAddress;
         
@@ -31,9 +29,7 @@ contract VaultHealerMaxi is VaultHealer {
             _pid,
             _wantAddress,
             _tolerance,
-            _earnedToWmaticPath,
-            _earnedToUsdcPath,
-            _earnedToFishPath
+            _earnedToWmaticStep
         );
         addPool(address(coreStrategy));
     }

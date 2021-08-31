@@ -3,6 +3,7 @@
 pragma solidity ^0.8.4;
 
 import "./libs/IMasterchef.sol";
+import "./libs/StrategySwapPaths.sol";
 import "./BaseStrategy.sol";
 
 contract StrategyMaxiCore is BaseStrategy {
@@ -18,9 +19,7 @@ contract StrategyMaxiCore is BaseStrategy {
         uint256 _pid,
         address _wantAddress, //want == earned for maximizer core
         uint256 _tolerance,
-        address[] memory _earnedToWmaticPath,
-        address[] memory _earnedToUsdcPath,
-        address[] memory _earnedToFishPath
+        address _earnedToWmaticStep //address(0) if swapping earned->wmatic directly, or the address of an intermediate trade token such as weth
     ) {
         govAddress = _govAddress;
         vaultChefAddress = msg.sender;
@@ -32,10 +31,10 @@ contract StrategyMaxiCore is BaseStrategy {
         pid = _pid;
         earnedAddress = _wantAddress;
         tolerance = _tolerance;
-
-        earnedToWmaticPath = _earnedToWmaticPath;
-        earnedToUsdcPath = _earnedToUsdcPath;
-        earnedToFishPath = _earnedToFishPath;
+        
+        earnedToWmaticPath = StrategySwapPaths.makeEarnedToWmaticPath(earnedAddress, _earnedToWmaticStep);
+        earnedToUsdcPath = StrategySwapPaths.makeEarnedToXPath(earnedToWmaticPath, usdcAddress);
+        earnedToFishPath = StrategySwapPaths.makeEarnedToXPath(earnedToWmaticPath, fishAddress);
 
         transferOwnership(vaultChefAddress);
         

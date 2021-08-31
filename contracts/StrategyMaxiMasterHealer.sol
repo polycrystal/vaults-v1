@@ -3,7 +3,7 @@
 pragma solidity ^0.8.4;
 
 import "./libs/IMasterchef.sol";
-
+import "./libs/StrategySwapPaths.sol";
 import "./BaseStrategyMaxiSingle.sol";
 
 //Can be used for both single-stake and LP want tokens
@@ -13,32 +13,25 @@ contract StrategyMaxiMasterHealer is BaseStrategyMaxiSingle {
     address public masterchefAddress;
     uint256 public pid;
 
-    struct InitAddresses {
-        address vaultChef;
-        address masterChef;
-        address uniRouter;
-        address want;
-        address earned;
-        address maxi;
-    }
-
     constructor(
+        address _vaultChef,
+        address _masterChef,
+        address _uniRouter,
+        address _want,
+        address _earned,
+        address _maxi,
         uint256 _pid,
         uint256 _tolerance,
-        InitAddresses memory _initAddr,
-        address[] memory _earnedToWmaticPath,
-        address[] memory _earnedToUsdcPath,
-        address[] memory _earnedToFishPath,
-        address[] memory _earnedToMaxiPath
+        address _earnedToWmaticStep //address(0) if swapping earned->wmatic directly, or the address of an intermediate trade token such as weth
     ) {
         govAddress = msg.sender;
 
-        vaultChefAddress = _initAddr.vaultChef;
-        masterchefAddress = _initAddr.masterChef;
-        uniRouterAddress = _initAddr.uniRouter;
-        wantAddress = _initAddr.want;
-        earnedAddress = _initAddr.earned;
-        maxiAddress = _initAddr.maxi;
+        vaultChefAddress = _vaultChef;
+        masterchefAddress = _masterChef;
+        uniRouterAddress = _uniRouter;
+        wantAddress = _want;
+        earnedAddress = _earned;
+        maxiAddress = _maxi;
         
         pid = _pid;
         tolerance = _tolerance;
@@ -49,10 +42,10 @@ contract StrategyMaxiMasterHealer is BaseStrategyMaxiSingle {
             token1Address = IUniPair(wantAddress).token1();
         } catch {}
         
-        earnedToWmaticPath = _earnedToWmaticPath;
-        earnedToUsdcPath = _earnedToUsdcPath;
-        earnedToFishPath = _earnedToFishPath;
-        earnedToMaxiPath = _earnedToMaxiPath;
+        earnedToWmaticPath = StrategySwapPaths.makeEarnedToWmaticPath(earnedAddress, _earnedToWmaticStep);
+        earnedToUsdcPath = StrategySwapPaths.makeEarnedToXPath(earnedToWmaticPath, usdcAddress);
+        earnedToFishPath = StrategySwapPaths.makeEarnedToXPath(earnedToWmaticPath, fishAddress);
+        earnedToMaxiPath = StrategySwapPaths.makeEarnedToXPath(earnedToWmaticPath, maxiAddress);
 
         transferOwnership(vaultChefAddress);
         

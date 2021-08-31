@@ -845,6 +845,19 @@
 				],
 				"stateMutability": "view",
 				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "wmaticAddress",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
 			}
 		],
 		"devdoc": {
@@ -952,11 +965,11 @@
 			]
 		},
 		"vaults-v1/contracts/BaseStrategy.sol": {
-			"keccak256": "0xc07bc8193b2c4b411dd67e32f47b71f51f32684106cfe83c6166ed99260ba2f7",
+			"keccak256": "0x048fd4b917118fdfda1cf9b99479adf9c58e98cefb27f8f89e60f47649213e2b",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://6b6ee64e12730f874e8e01578add7dd7d4187be38eda95482de284eebf2b4777",
-				"dweb:/ipfs/QmWVCpirywuR5QF3Ay9N2HpyUE68nuQ9xxJFJA6biVnexd"
+				"bzz-raw://740b4de115b76f6a6288ed8dd11ab0f6f31cda267088cc585bcd66fda1828a8d",
+				"dweb:/ipfs/QmQ6itoQQ6HTBGs5wXwehc25W5X859xC47D3UvzSbFWaCD"
 			]
 		},
 		"vaults-v1/contracts/libs/IStrategyFish.sol": {
