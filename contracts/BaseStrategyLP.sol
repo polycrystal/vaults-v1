@@ -1,11 +1,10 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity 0.6.12;
+pragma solidity ^0.8.4;
 
 import "./BaseStrategy.sol";
 
 abstract contract BaseStrategyLP is BaseStrategy {
-    using SafeMath for uint256;
     using SafeERC20 for IERC20;
 
     function convertDustToEarned() external nonReentrant whenNotPaused {

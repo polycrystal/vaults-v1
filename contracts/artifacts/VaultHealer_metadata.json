@@ -581,7 +581,7 @@
 				"dweb:/ipfs/QmWcsmkVr24xmmjfnBQZoemFniXjj3vwT78Cz6uqZW1Hux"
 			]
 		},
-		"vaults-v1/contracts/Operators8.sol": {
+		"vaults-v1/contracts/Operators.sol": {
 			"keccak256": "0xa5845502ed82b98d1094d1bd07c057b436f67f6aea0d52c69f0b89fdec353063",
 			"license": "MIT",
 			"urls": [
@@ -590,11 +590,11 @@
 			]
 		},
 		"vaults-v1/contracts/VaultHealer.sol": {
-			"keccak256": "0xb1c6f06a8013216b7ae9c3547ea5d60f13d51853cea88ef729536edd2aec2557",
+			"keccak256": "0xf8ed204e112c8ebf0c59760f0987f60d6e9d373428f54de1f681ef6b7b824f94",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://854e25b1f94058252c84e89334bc595dfddb66773aa66dd07647231ad85b2a57",
-				"dweb:/ipfs/QmbFoZ2mP6Y9X2eQuEyQd985JPVEkLAhqe26kq1bSFcDhf"
+				"bzz-raw://35d93d0228d45f6676217138031342b1badf1be620d6bf5573b07d2d643d9520",
+				"dweb:/ipfs/QmYF3KZgBBZhMYqCCD6aTgqjseVTDVfff2Mp11yqyLw72a"
 			]
 		},
 		"vaults-v1/contracts/libs/IStrategy.sol": {

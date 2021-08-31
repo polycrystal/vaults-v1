@@ -3,7 +3,7 @@
 pragma solidity ^0.8.4;
 
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
-import "./Operators8.sol";
+import "./Operators.sol";
 import "./libs/IStrategy.sol";
 
 contract VaultHealer is ReentrancyGuard, Operators {
@@ -20,8 +20,8 @@ contract VaultHealer is ReentrancyGuard, Operators {
     }
 
     PoolInfo[] public poolInfo;
-    mapping(uint256 => mapping(address => UserInfo)) private userInfo;
-    mapping(address => bool) internal strats;
+    mapping(uint256 => mapping(address => UserInfo)) public userInfo;
+    mapping(address => bool) public strats;
 
     // Compounding Variables
     // 0: compound by anyone; 1: EOA only; 2: restricted to operators

@@ -3,8 +3,7 @@
 pragma solidity ^0.8.4;
 
 import "./libs/IMasterchef.sol";
-
-import "./BaseStrategy8.sol";
+import "./BaseStrategy.sol";
 
 contract StrategyMaxiCore is BaseStrategy {
     using SafeERC20 for IERC20;

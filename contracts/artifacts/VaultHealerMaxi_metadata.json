@@ -303,6 +303,25 @@
 				"type": "function"
 			},
 			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"name": "maxiDebt",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
 				"inputs": [],
 				"name": "maxiToken",
 				"outputs": [
@@ -470,6 +489,25 @@
 				"inputs": [
 					{
 						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"name": "strats",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
 						"name": "newOwner",
 						"type": "address"
 					}
@@ -495,6 +533,30 @@
 				"name": "updateOperator",
 				"outputs": [],
 				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"name": "userInfo",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "shares",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
 				"type": "function"
 			},
 			{
@@ -664,15 +726,15 @@
 				"dweb:/ipfs/QmdZs431M8sA4mTsSe8PeycREkBAmzC4a6NN7eFppyK62B"
 			]
 		},
-		"vaults-v1/contracts/BaseStrategy8.sol": {
-			"keccak256": "0x8095e0e044e3a8889975e518bc4e42cfe3952c7578ff8c87a4f51e9ebb644f3a",
+		"vaults-v1/contracts/BaseStrategy.sol": {
+			"keccak256": "0xc07bc8193b2c4b411dd67e32f47b71f51f32684106cfe83c6166ed99260ba2f7",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://f5acd2d4d7b8c5e88520d61eadc50c5d773187cd4a48e0dfcb03a8694f44a7de",
-				"dweb:/ipfs/QmZGKMnpTbMa3jP8pCkbr1pN9S1a8eSyx1d7R8kEFtoMZs"
+				"bzz-raw://6b6ee64e12730f874e8e01578add7dd7d4187be38eda95482de284eebf2b4777",
+				"dweb:/ipfs/QmWVCpirywuR5QF3Ay9N2HpyUE68nuQ9xxJFJA6biVnexd"
 			]
 		},
-		"vaults-v1/contracts/Operators8.sol": {
+		"vaults-v1/contracts/Operators.sol": {
 			"keccak256": "0xa5845502ed82b98d1094d1bd07c057b436f67f6aea0d52c69f0b89fdec353063",
 			"license": "MIT",
 			"urls": [
@@ -681,27 +743,27 @@
 			]
 		},
 		"vaults-v1/contracts/StrategyMaxiCore.sol": {
-			"keccak256": "0x9aec4535ad135966241ba9771e46f300ac309265df6f6132837db789ea3a61c5",
+			"keccak256": "0x7156c8ea3fa78aaab7352b4f5270a3fcca760308f5486f847c18e675549e7f2c",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://a347529145d2ee3e860b71e9123562f255d461f615934e44f5632692d258d501",
-				"dweb:/ipfs/QmSijjeoYpE4Mds7EaMgsaBBnJXtTZgA2tMfpdQGwCM2YD"
+				"bzz-raw://a920e04ab97ba226e8aee887a23588cc4a5b75043daf708cf8d86807eb83d305",
+				"dweb:/ipfs/QmeccfTWGNmRSJnvnr9jv9mzs8S1iuMqqxGeMqeJUS7Tz9"
 			]
 		},
 		"vaults-v1/contracts/VaultHealer.sol": {
-			"keccak256": "0xb1c6f06a8013216b7ae9c3547ea5d60f13d51853cea88ef729536edd2aec2557",
+			"keccak256": "0x3a9a898a9bf816ed76af74655dea728567ad85ace58412e43ef491d164a38682",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://854e25b1f94058252c84e89334bc595dfddb66773aa66dd07647231ad85b2a57",
-				"dweb:/ipfs/QmbFoZ2mP6Y9X2eQuEyQd985JPVEkLAhqe26kq1bSFcDhf"
+				"bzz-raw://2a56ca18dfe4645e7f04854671a065c937a14603534c709c0803d14ac31c6231",
+				"dweb:/ipfs/QmTV1hxgRsPSH1faZw1DCckXYPSNKS4Y57t32E3Ngf9Et3"
 			]
 		},
 		"vaults-v1/contracts/VaultHealerMaxi.sol": {
-			"keccak256": "0x3e9f5c07ad4938575a76cef2f662acdb641b8e387a6e7dc00a309fee12a971fa",
+			"keccak256": "0x6726f078a33ca7076827894a653e5c7d3754214fed3e3895db19f614e2c19263",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://1650d066c381c93038b054f8d14829d50c94c6456a5839d599b287ae07adbd80",
-				"dweb:/ipfs/QmYPszuntDiXbW4tF9KHu3bmV5bEctk365aKrc1ESgrb2r"
+				"bzz-raw://c539c0f098c00bf1642d63d0b39418c05c1d60a050f6b507b96e2475141a5185",
+				"dweb:/ipfs/QmQB8u6rXh6fcaqHHN3mLezZ3t3ynzEKHCbBw1BxTUnw2N"
 			]
 		},
 		"vaults-v1/contracts/libs/IMasterchef.sol": {

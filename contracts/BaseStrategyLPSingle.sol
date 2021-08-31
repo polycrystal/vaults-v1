@@ -1,11 +1,10 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity 0.6.12;
+pragma solidity ^0.8.4;
 
 import "./BaseStrategyLP.sol";
 
 abstract contract BaseStrategyLPSingle is BaseStrategyLP {
-    using SafeMath for uint256;
     using SafeERC20 for IERC20;
     
     function _vaultHarvest() internal virtual;
@@ -25,7 +24,7 @@ abstract contract BaseStrategyLPSingle is BaseStrategyLP {
             if (earnedAddress != token0Address) {
                 // Swap half earned to token0
                 _safeSwap(
-                    earnedAmt.div(2),
+                    earnedAmt / 2,
                     earnedToToken0Path,
                     address(this)
                 );
@@ -34,7 +33,7 @@ abstract contract BaseStrategyLPSingle is BaseStrategyLP {
             if (earnedAddress != token1Address) {
                 // Swap half earned to token1
                 _safeSwap(
-                    earnedAmt.div(2),
+                    earnedAmt / 2,
                     earnedToToken1Path,
                     address(this)
                 );
@@ -52,7 +51,7 @@ abstract contract BaseStrategyLPSingle is BaseStrategyLP {
                     0,
                     0,
                     address(this),
-                    now.add(600)
+                    block.timestamp + 600
                 );
             }
     

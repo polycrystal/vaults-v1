@@ -155,7 +155,7 @@
 				"inputs": [
 					{
 						"internalType": "address",
-						"name": "_userAddress",
+						"name": "",
 						"type": "address"
 					},
 					{
@@ -774,7 +774,7 @@
 				"inputs": [
 					{
 						"internalType": "address",
-						"name": "_userAddress",
+						"name": "",
 						"type": "address"
 					},
 					{
@@ -873,7 +873,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"vaults-v1/contracts/BaseStrategy8.sol": "BaseStrategy"
+			"vaults-v1/contracts/BaseStrategy.sol": "BaseStrategy"
 		},
 		"evmVersion": "london",
 		"libraries": {},
@@ -951,12 +951,12 @@
 				"dweb:/ipfs/QmdR7JUXpD5X7eXkc24bRtNj3e7ahs8RC8s25cu7X14GHU"
 			]
 		},
-		"vaults-v1/contracts/BaseStrategy8.sol": {
-			"keccak256": "0x8095e0e044e3a8889975e518bc4e42cfe3952c7578ff8c87a4f51e9ebb644f3a",
+		"vaults-v1/contracts/BaseStrategy.sol": {
+			"keccak256": "0xc07bc8193b2c4b411dd67e32f47b71f51f32684106cfe83c6166ed99260ba2f7",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://f5acd2d4d7b8c5e88520d61eadc50c5d773187cd4a48e0dfcb03a8694f44a7de",
-				"dweb:/ipfs/QmZGKMnpTbMa3jP8pCkbr1pN9S1a8eSyx1d7R8kEFtoMZs"
+				"bzz-raw://6b6ee64e12730f874e8e01578add7dd7d4187be38eda95482de284eebf2b4777",
+				"dweb:/ipfs/QmWVCpirywuR5QF3Ay9N2HpyUE68nuQ9xxJFJA6biVnexd"
 			]
 		},
 		"vaults-v1/contracts/libs/IStrategyFish.sol": {

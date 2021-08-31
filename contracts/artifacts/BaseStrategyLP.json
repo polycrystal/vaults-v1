@@ -31,12 +31,16 @@
 	},
 	"data": {
 		"bytecode": {
+			"functionDebugData": {},
+			"generatedSources": [],
 			"linkReferences": {},
 			"object": "",
 			"opcodes": "",
 			"sourceMap": ""
 		},
 		"deployedBytecode": {
+			"functionDebugData": {},
+			"generatedSources": [],
 			"immutableReferences": {},
 			"linkReferences": {},
 			"object": "",
@@ -54,6 +58,7 @@
 			"earn()": "d389800f",
 			"earnedAddress()": "e7198474",
 			"earnedToFishPath(uint256)": "8811dad0",
+			"earnedToMaxiPath(uint256)": "30f6cf63",
 			"earnedToToken0Path(uint256)": "c8e3d18b",
 			"earnedToToken1Path(uint256)": "96e9aff8",
 			"earnedToUsdcPath(uint256)": "49281683",
@@ -78,6 +83,7 @@
 			"sharesTotal()": "44a3955e",
 			"slippageFactor()": "ffbd3b1f",
 			"slippageFactorUL()": "b74cd242",
+			"stratType()": "7115e9fa",
 			"token0Address()": "7ff36fbe",
 			"token0ToEarnedPath(uint256)": "b77050e7",
 			"token1Address()": "d7cb416f",
@@ -306,6 +312,25 @@
 				}
 			],
 			"name": "earnedToFishPath",
+			"outputs": [
+				{
+					"internalType": "address",
+					"name": "",
+					"type": "address"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"name": "earnedToMaxiPath",
 			"outputs": [
 				{
 					"internalType": "address",
@@ -653,6 +678,19 @@
 					"internalType": "uint256",
 					"name": "",
 					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "stratType",
+			"outputs": [
+				{
+					"internalType": "enum BaseStrategy.StratType",
+					"name": "",
+					"type": "uint8"
 				}
 			],
 			"stateMutability": "view",

@@ -1,13 +1,12 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity 0.6.12;
+pragma solidity ^0.8.4;
 
 import "./libs/IMasterchef.sol";
 
 import "./BaseStrategyLPSingle.sol";
 
 contract StrategyMasterHealer is BaseStrategyLPSingle {
-    using SafeMath for uint256;
     using SafeERC20 for IERC20;
 
     address public masterchefAddress;
@@ -28,7 +27,7 @@ contract StrategyMasterHealer is BaseStrategyLPSingle {
         address[] memory _earnedToToken1Path,
         address[] memory _token0ToEarnedPath,
         address[] memory _token1ToEarnedPath
-    ) public {
+    ) {
         govAddress = msg.sender;
         vaultChefAddress = _vaultChefAddress;
         masterchefAddress = _masterchefAddress;
@@ -74,39 +73,38 @@ contract StrategyMasterHealer is BaseStrategyLPSingle {
     }
     
     function wantLockedTotal() public override view returns (uint256) {
-        return IERC20(wantAddress).balanceOf(address(this))
-            .add(vaultSharesTotal());
+        return IERC20(wantAddress).balanceOf(address(this)) + vaultSharesTotal();
     }
 
     function _resetAllowances() internal override {
         IERC20(wantAddress).safeApprove(masterchefAddress, uint256(0));
         IERC20(wantAddress).safeIncreaseAllowance(
             masterchefAddress,
-            uint256(-1)
+            type(uint256).max
         );
 
         IERC20(earnedAddress).safeApprove(uniRouterAddress, uint256(0));
         IERC20(earnedAddress).safeIncreaseAllowance(
             uniRouterAddress,
-            uint256(-1)
+            type(uint256).max
         );
 
         IERC20(token0Address).safeApprove(uniRouterAddress, uint256(0));
         IERC20(token0Address).safeIncreaseAllowance(
             uniRouterAddress,
-            uint256(-1)
+            type(uint256).max
         );
 
         IERC20(token1Address).safeApprove(uniRouterAddress, uint256(0));
         IERC20(token1Address).safeIncreaseAllowance(
             uniRouterAddress,
-            uint256(-1)
+            type(uint256).max
         );
 
         IERC20(usdcAddress).safeApprove(rewardAddress, uint256(0));
         IERC20(usdcAddress).safeIncreaseAllowance(
             rewardAddress,
-            uint256(-1)
+            type(uint256).max
         );
     }
     

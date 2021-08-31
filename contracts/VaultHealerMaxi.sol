@@ -10,7 +10,7 @@ import "@openzeppelin/contracts/utils/math/Math.sol";
 contract VaultHealerMaxi is VaultHealer {
     using Math for uint256;
     
-    mapping(address => uint) maxiDebt; //negative maximizer tokens to offset adding to pools
+    mapping(address => uint) public maxiDebt; //negative maximizer tokens to offset adding to pools
     
     constructor(
         address _masterchefAddress,
