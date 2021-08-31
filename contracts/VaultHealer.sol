@@ -11,7 +11,7 @@ contract VaultHealer is ReentrancyGuard, Operators {
 
     struct PoolInfo {
         IERC20 want;
-        address strat;
+        IStrategy strat;
     }
 
     PoolInfo[] public poolInfo;
@@ -44,7 +44,7 @@ contract VaultHealer is ReentrancyGuard, Operators {
         poolInfo.push(
             PoolInfo({
                 want: IERC20(IStrategy(_strat).wantAddress()),
-                strat: _strat
+                strat: IStrategy(_strat)
             })
         );
         strats[_strat] = true;
@@ -55,8 +55,8 @@ contract VaultHealer is ReentrancyGuard, Operators {
     function stakedWantTokens(uint256 _pid, address _user) external view returns (uint256) {
         PoolInfo storage pool = poolInfo[_pid];
 
-        uint256 sharesTotal = IStrategy(pool.strat).sharesTotal();
-        uint256 wantLockedTotal = IStrategy(poolInfo[_pid].strat).wantLockedTotal();
+        uint256 sharesTotal = pool.strat.sharesTotal();
+        uint256 wantLockedTotal = poolInfo[_pid].strat.wantLockedTotal();
         if (sharesTotal == 0) {
             return 0;
         }
@@ -94,7 +94,7 @@ contract VaultHealer is ReentrancyGuard, Operators {
         if (_wantAmt > 0) {
             pool.want.safeTransferFrom(msg.sender, address(this), _wantAmt);
 
-            sharesAdded = IStrategy(poolInfo[_pid].strat).deposit(_to, _wantAmt);
+            sharesAdded = poolInfo[_pid].strat.deposit(_to, _wantAmt);
             addUserShares(_pid, _to, sharesAdded);
         }
         emit Deposit(_to, _pid, _wantAmt);
@@ -113,8 +113,8 @@ contract VaultHealer is ReentrancyGuard, Operators {
         PoolInfo storage pool = poolInfo[_pid];
         uint _userShares = getUserShares(_pid, msg.sender);
 
-        uint256 wantLockedTotal = IStrategy(poolInfo[_pid].strat).wantLockedTotal();
-        sharesTotal = IStrategy(poolInfo[_pid].strat).sharesTotal();
+        uint256 wantLockedTotal = poolInfo[_pid].strat.wantLockedTotal();
+        sharesTotal = poolInfo[_pid].strat.sharesTotal();
 
         require(_userShares > 0, "userShares is 0");
         require(sharesTotal > 0, "sharesTotal is 0");
@@ -124,7 +124,7 @@ contract VaultHealer is ReentrancyGuard, Operators {
             _wantAmt = amount;
         }
         if (_wantAmt > 0) {
-            sharesRemoved = IStrategy(poolInfo[_pid].strat).withdraw(msg.sender, _wantAmt);
+            sharesRemoved = poolInfo[_pid].strat.withdraw(msg.sender, _wantAmt);
 
             if (sharesRemoved > _userShares) {
                 removeUserShares(_pid, msg.sender, _userShares);
@@ -148,15 +148,15 @@ contract VaultHealer is ReentrancyGuard, Operators {
     function resetAllowances() external onlyOwner {
         for (uint256 i=0; i<poolInfo.length; i++) {
             PoolInfo storage pool = poolInfo[i];
-            pool.want.safeApprove(pool.strat, uint256(0));
-            pool.want.safeIncreaseAllowance(pool.strat, type(uint256).max);
+            pool.want.safeApprove(address(pool.strat), uint256(0));
+            pool.want.safeIncreaseAllowance(address(pool.strat), type(uint256).max);
         }
     }
 
     function resetSingleAllowance(uint256 _pid) public onlyOwner {
         PoolInfo storage pool = poolInfo[_pid];
-        pool.want.safeApprove(pool.strat, uint256(0));
-        pool.want.safeIncreaseAllowance(pool.strat, type(uint256).max);
+        pool.want.safeApprove(address(pool.strat), uint256(0));
+        pool.want.safeIncreaseAllowance(address(pool.strat), type(uint256).max);
     }
     
     // Compounding Functionality
@@ -181,7 +181,7 @@ contract VaultHealer is ReentrancyGuard, Operators {
     function _compoundAll() internal {
         uint numPools = poolInfo.length;
         for (uint i; i < numPools; i++) {
-            try IStrategy(poolInfo[i].strat).earn() {}
+            try poolInfo[i].strat.earn() {}
             catch (bytes memory reason) {
                 emit CompoundError(i, reason);
             }

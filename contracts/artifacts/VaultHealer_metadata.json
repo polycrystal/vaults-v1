@@ -317,7 +317,7 @@
 						"type": "address"
 					},
 					{
-						"internalType": "address",
+						"internalType": "contract IStrategy",
 						"name": "strat",
 						"type": "address"
 					}
@@ -633,11 +633,11 @@
 			]
 		},
 		"vaults-v1/contracts/VaultHealer.sol": {
-			"keccak256": "0x46b0e9f7fcc3043a05661837964d053f703d6ab3987ea401222a5992ea3591ce",
+			"keccak256": "0x068a661bf01862a689c92752a75911a6f655e32760b548a575a3bafad52b06a5",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://fedad4eb2cdb446663926b1119f18281d9ba4e27b9a00c154478a9749d50b088",
-				"dweb:/ipfs/QmYcqiEofiQ1CGJSHmsZSpHgrq1KtZS2hJZAZ2BYv8G15s"
+				"bzz-raw://99ee87eae3b20f790325b16385af490eb46e37e7ed5786661ecaf42b98a223cb",
+				"dweb:/ipfs/QmeXAPTC8LthZzeFsHtzdPWenw4x4pqTswiydD6EBS5ZdX"
 			]
 		},
 		"vaults-v1/contracts/libs/IStrategy.sol": {
