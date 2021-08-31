@@ -9,18 +9,13 @@ import "./libs/IStrategy.sol";
 contract VaultHealer is ReentrancyGuard, Operators {
     using SafeERC20 for IERC20;
 
-    // Info of each user.
-    struct UserInfo {
-        uint256 shares;
-    }
-
     struct PoolInfo {
         IERC20 want;
         address strat;
     }
 
     PoolInfo[] public poolInfo;
-    mapping(uint256 => mapping(address => UserInfo)) public userInfo;
+    mapping(uint256 => mapping(address => uint256)) private userShares;
     mapping(address => bool) public strats;
 
     // Compounding Variables
@@ -78,16 +73,19 @@ contract VaultHealer is ReentrancyGuard, Operators {
     }
     
     //getter and setter are overriden to enable maximizers    
+    function userInfo(uint256 _pid, address _user) external view returns (uint) {
+        return getUserShares(_pid, _user);
+    }
     function getUserShares(uint256 _pid, address _user) internal view virtual returns (uint shares) {
-        return userInfo[_pid][_user].shares;
+        return userShares[_pid][_user];
     }
     function addUserShares(uint256 _pid, address _user, uint sharesAdded) internal virtual returns (uint shares) {
-        userInfo[_pid][_user].shares += sharesAdded;
-        return userInfo[_pid][_user].shares;
+        userShares[_pid][_user] += sharesAdded;
+        return userShares[_pid][_user];
     }
     function removeUserShares(uint256 _pid, address _user, uint sharesRemoved) internal virtual returns (uint shares) {
-        userInfo[_pid][_user].shares -= sharesRemoved;
-        return userInfo[_pid][_user].shares;
+        userShares[_pid][_user] -= sharesRemoved;
+        return userShares[_pid][_user];
     }
     
     function _deposit(uint256 _pid, uint256 _wantAmt, address _to) internal virtual returns (uint sharesAdded) {
@@ -113,23 +111,23 @@ contract VaultHealer is ReentrancyGuard, Operators {
     
     function _withdraw(uint256 _pid, uint256 _wantAmt, address _to) internal virtual returns (uint sharesTotal, uint sharesRemoved) {
         PoolInfo storage pool = poolInfo[_pid];
-        uint userShares = getUserShares(_pid, msg.sender);
+        uint _userShares = getUserShares(_pid, msg.sender);
 
         uint256 wantLockedTotal = IStrategy(poolInfo[_pid].strat).wantLockedTotal();
         sharesTotal = IStrategy(poolInfo[_pid].strat).sharesTotal();
 
-        require(userShares > 0, "userShares is 0");
+        require(_userShares > 0, "userShares is 0");
         require(sharesTotal > 0, "sharesTotal is 0");
 
-        uint256 amount = userShares * wantLockedTotal / sharesTotal;
+        uint256 amount = _userShares * wantLockedTotal / sharesTotal;
         if (_wantAmt > amount) {
             _wantAmt = amount;
         }
         if (_wantAmt > 0) {
             sharesRemoved = IStrategy(poolInfo[_pid].strat).withdraw(msg.sender, _wantAmt);
 
-            if (sharesRemoved > userShares) {
-                removeUserShares(_pid, msg.sender, userShares);
+            if (sharesRemoved > _userShares) {
+                removeUserShares(_pid, msg.sender, _userShares);
             } else {
                 removeUserShares(_pid, msg.sender, sharesRemoved);
             }

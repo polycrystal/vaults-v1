@@ -461,12 +461,12 @@
 				"inputs": [
 					{
 						"internalType": "uint256",
-						"name": "",
+						"name": "_pid",
 						"type": "uint256"
 					},
 					{
 						"internalType": "address",
-						"name": "",
+						"name": "_user",
 						"type": "address"
 					}
 				],
@@ -474,7 +474,7 @@
 				"outputs": [
 					{
 						"internalType": "uint256",
-						"name": "shares",
+						"name": "",
 						"type": "uint256"
 					}
 				],
@@ -633,11 +633,11 @@
 			]
 		},
 		"vaults-v1/contracts/VaultHealer.sol": {
-			"keccak256": "0x3a9a898a9bf816ed76af74655dea728567ad85ace58412e43ef491d164a38682",
+			"keccak256": "0xe6e52f368069ee4170fcec3a02d6b9a081988d21424107fab54941a348182798",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://2a56ca18dfe4645e7f04854671a065c937a14603534c709c0803d14ac31c6231",
-				"dweb:/ipfs/QmTV1hxgRsPSH1faZw1DCckXYPSNKS4Y57t32E3Ngf9Et3"
+				"bzz-raw://c97dd877429e849c4a18f48f2cae45edc905e38bfb4305489231b780397e4c70",
+				"dweb:/ipfs/QmWnW9DiqCFTCLHRpK5YtrrRKwZYwuknX4FcryB7twbMHe"
 			]
 		},
 		"vaults-v1/contracts/libs/IStrategy.sol": {

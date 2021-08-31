@@ -3,7 +3,7 @@
 pragma solidity ^0.8.4;
 
 import "./BaseStrategy.sol";
-import "./VaultHealerMaxi.sol";
+import "./IVaultHealer.sol";
 
 abstract contract BaseStrategyMaxiSingle is BaseStrategy {
 
@@ -32,7 +32,7 @@ abstract contract BaseStrategyMaxiSingle is BaseStrategy {
     
             lastEarnBlock = block.number;
     
-            VaultHealerMaxi(vaultChefAddress).maximizerDeposit(IERC20(maxiAddress).balanceOf(address(this)));
+            IVaultHealer(vaultChefAddress).maximizerDeposit(IERC20(maxiAddress).balanceOf(address(this)));
             _farm();
         }
     }

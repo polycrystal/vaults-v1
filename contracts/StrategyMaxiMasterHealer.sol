@@ -3,6 +3,7 @@
 pragma solidity ^0.8.4;
 
 import "./libs/IMasterchef.sol";
+import "./libs/IVaultHealer.sol";
 import "./libs/StrategySwapPaths.sol";
 import "./BaseStrategyMaxiSingle.sol";
 
@@ -19,7 +20,6 @@ contract StrategyMaxiMasterHealer is BaseStrategyMaxiSingle {
         address _uniRouter,
         address _want,
         address _earned,
-        address _maxi,
         uint256 _pid,
         uint256 _tolerance,
         address _earnedToWmaticStep //address(0) if swapping earned->wmatic directly, or the address of an intermediate trade token such as weth
@@ -31,7 +31,7 @@ contract StrategyMaxiMasterHealer is BaseStrategyMaxiSingle {
         uniRouterAddress = _uniRouter;
         wantAddress = _want;
         earnedAddress = _earned;
-        maxiAddress = _maxi;
+        (maxiAddress,) = IVaultHealer(vaultChefAddress).poolInfo(0);
         
         pid = _pid;
         tolerance = _tolerance;
