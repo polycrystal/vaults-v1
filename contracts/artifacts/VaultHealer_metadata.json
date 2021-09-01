@@ -257,19 +257,6 @@
 				"type": "function"
 			},
 			{
-				"inputs": [],
-				"name": "maxiToken",
-				"outputs": [
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
 				"inputs": [
 					{
 						"internalType": "address",
@@ -571,7 +558,7 @@
 		},
 		"optimizer": {
 			"enabled": true,
-			"runs": 200
+			"runs": 999999
 		},
 		"remappings": []
 	},
@@ -633,11 +620,11 @@
 			]
 		},
 		"vaults-v1/contracts/VaultHealer.sol": {
-			"keccak256": "0x068a661bf01862a689c92752a75911a6f655e32760b548a575a3bafad52b06a5",
+			"keccak256": "0xeb39ed3b8b71d9fe48184cf3e16f34807a3df8e7adf82e532c96ad4e4100e9dd",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://99ee87eae3b20f790325b16385af490eb46e37e7ed5786661ecaf42b98a223cb",
-				"dweb:/ipfs/QmeXAPTC8LthZzeFsHtzdPWenw4x4pqTswiydD6EBS5ZdX"
+				"bzz-raw://23013d90a6504a8e16183a0f76bcbb21fa74947eb175d091f829b38c4b5b9e7b",
+				"dweb:/ipfs/QmQLnrChE9iD8q9A6qBrV3K7q4BEUi7nhebTcQd5r1V7jh"
 			]
 		},
 		"vaults-v1/contracts/libs/IStrategy.sol": {

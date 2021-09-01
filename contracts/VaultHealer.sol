@@ -23,8 +23,6 @@ contract VaultHealer is ReentrancyGuard, Operators {
     uint public compoundMode = 1;
     bool public autocompoundOn = true;
 
-    address public maxiToken; //Unused/zero unless this is a maximizer VaultHealer
-
     event AddPool(address indexed strat);
     event Deposit(address indexed user, uint256 indexed pid, uint256 amount);
     event Withdraw(address indexed user, uint256 indexed pid, uint256 amount);
@@ -39,7 +37,10 @@ contract VaultHealer is ReentrancyGuard, Operators {
     /**
      * @dev Add a new want to the pool. Can only be called by the owner.
      */
-    function addPool(address _strat) public onlyOwner nonReentrant {
+    function addPool(address _strat) external onlyOwner nonReentrant {
+        _addPool(_strat);
+    }
+    function _addPool(address _strat) internal {
         require(!strats[_strat], "Existing strategy");
         poolInfo.push(
             PoolInfo({

@@ -9,6 +9,11 @@
 				"inputs": [
 					{
 						"internalType": "address",
+						"name": "_factory",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
 						"name": "_masterchefAddress",
 						"type": "address"
 					},
@@ -254,6 +259,49 @@
 			{
 				"inputs": [
 					{
+						"internalType": "address",
+						"name": "_masterChef",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "_uniRouter",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "_want",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "_earned",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_pid",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_tolerance",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "_earnedToWmaticStep",
+						"type": "address"
+					}
+				],
+				"name": "deployMaxiMasterHealer",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
 						"internalType": "uint256",
 						"name": "_pid",
 						"type": "uint256"
@@ -306,19 +354,6 @@
 						"internalType": "uint256",
 						"name": "",
 						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "maxiToken",
-				"outputs": [
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
 					}
 				],
 				"stateMutability": "view",
@@ -385,7 +420,7 @@
 						"type": "address"
 					},
 					{
-						"internalType": "address",
+						"internalType": "contract IStrategy",
 						"name": "strat",
 						"type": "address"
 					}
@@ -529,12 +564,12 @@
 				"inputs": [
 					{
 						"internalType": "uint256",
-						"name": "",
+						"name": "_pid",
 						"type": "uint256"
 					},
 					{
 						"internalType": "address",
-						"name": "",
+						"name": "_user",
 						"type": "address"
 					}
 				],
@@ -542,7 +577,7 @@
 				"outputs": [
 					{
 						"internalType": "uint256",
-						"name": "shares",
+						"name": "",
 						"type": "uint256"
 					}
 				],
@@ -639,7 +674,7 @@
 		},
 		"optimizer": {
 			"enabled": true,
-			"runs": 200
+			"runs": 999999
 		},
 		"remappings": []
 	},
@@ -708,20 +743,20 @@
 				"dweb:/ipfs/QmdR7JUXpD5X7eXkc24bRtNj3e7ahs8RC8s25cu7X14GHU"
 			]
 		},
-		"@openzeppelin/contracts/utils/math/SafeCast.sol": {
-			"keccak256": "0x08d867b4c0bb782b9135691fa732b6846e0f133006489c3aa505abd1f6de56cb",
+		"vaults-v1/contracts/BaseStrategy.sol": {
+			"keccak256": "0x31f34f718883170da6b676541c93aa7cb07d0e3399dfdeb2ff67b28979988056",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://b77bcb10d18368236908e2dd94a8e138e330ce672995017c1dae001551a5d639",
-				"dweb:/ipfs/QmdZs431M8sA4mTsSe8PeycREkBAmzC4a6NN7eFppyK62B"
+				"bzz-raw://d22fb95e969e2c5382902c974dbac04a4274e73a4a645edb9c2688fb561cf39f",
+				"dweb:/ipfs/QmTmZ3sDs9k5yjgGUUgDKY4tbzCc17naQLG2V1yRz4aP37"
 			]
 		},
-		"vaults-v1/contracts/BaseStrategy.sol": {
-			"keccak256": "0x048fd4b917118fdfda1cf9b99479adf9c58e98cefb27f8f89e60f47649213e2b",
+		"vaults-v1/contracts/BaseStrategyMaxiSingle.sol": {
+			"keccak256": "0x624a7b15386d7f71b4e9ed4f4eece80d1c9c2000b8dc7a607b132c41a5a92a4a",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://740b4de115b76f6a6288ed8dd11ab0f6f31cda267088cc585bcd66fda1828a8d",
-				"dweb:/ipfs/QmQ6itoQQ6HTBGs5wXwehc25W5X859xC47D3UvzSbFWaCD"
+				"bzz-raw://05339e747f75e53ed59a4f9a4f5920bf14659b68d0264cd535b9807488b9df94",
+				"dweb:/ipfs/QmUocjJXBN7aff3mm1dbRjpQCryhYpw4x9NcUyHRscympA"
 			]
 		},
 		"vaults-v1/contracts/Operators.sol": {
@@ -733,27 +768,43 @@
 			]
 		},
 		"vaults-v1/contracts/StrategyMaxiCore.sol": {
-			"keccak256": "0x271efefd5fec5c7a8cd8d72c931bcdc90ff713d7f39f6933c55cdf17fe5e4d9a",
+			"keccak256": "0xd935d2a20573892d5c06eef19eaa375185af1ea1592095d72b96e329bd18f6b1",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://418e41b5a5cca35d9f386738feaec6700b0ae31d77c760dc46d96a90403dcc79",
-				"dweb:/ipfs/QmPqJVzcEpQ8agdhRn16g2uYJb7wBiwy9NmGG8SiJdnifo"
+				"bzz-raw://f779a64c1a84994497994ba0867bcad2cdc71c865167ff013f573f254cd6ba97",
+				"dweb:/ipfs/QmZSJFTfLh5EgFB2krABAdW5bKhAFT39skdMBckuYBVj2A"
+			]
+		},
+		"vaults-v1/contracts/StrategyMaxiMasterHealer.sol": {
+			"keccak256": "0xbec3e9f28de4be1a5c0947b699284cf27a0501f640bdf7b9274838f0ce604e31",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://7eca3d562071e41d8f5006fad4d69768fc46c740cfe0f8de5db7d986abd150e6",
+				"dweb:/ipfs/QmPUHu8aVEaXYWqD9GEdnHghhkxTr5bNNuauAiCcRwRPe8"
+			]
+		},
+		"vaults-v1/contracts/VaultFactory.sol": {
+			"keccak256": "0xdd30fb915de0aab5954376eb3a90e0e9013abd751b0c5cc7947d492f7ef98ca6",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://a970444d1424f6be4b2b047fdc6d88f78bf4074c0bd9d72565de85c64d6e9f03",
+				"dweb:/ipfs/QmRrBj3ch2jDCFLwunXpSfM7tqeoezXsYbdcNvYLtaPrBn"
 			]
 		},
 		"vaults-v1/contracts/VaultHealer.sol": {
-			"keccak256": "0x3a9a898a9bf816ed76af74655dea728567ad85ace58412e43ef491d164a38682",
+			"keccak256": "0xeb39ed3b8b71d9fe48184cf3e16f34807a3df8e7adf82e532c96ad4e4100e9dd",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://2a56ca18dfe4645e7f04854671a065c937a14603534c709c0803d14ac31c6231",
-				"dweb:/ipfs/QmTV1hxgRsPSH1faZw1DCckXYPSNKS4Y57t32E3Ngf9Et3"
+				"bzz-raw://23013d90a6504a8e16183a0f76bcbb21fa74947eb175d091f829b38c4b5b9e7b",
+				"dweb:/ipfs/QmQLnrChE9iD8q9A6qBrV3K7q4BEUi7nhebTcQd5r1V7jh"
 			]
 		},
 		"vaults-v1/contracts/VaultHealerMaxi.sol": {
-			"keccak256": "0x37e23aa12184205e71b497f9d50ff3d7f61348610ed2d25779c823175697f37f",
+			"keccak256": "0xf096ded12dbe1b4e64a41e37ee94f193fb7b7fe62a8fa0bd7b2f814741e4e96e",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://bc9fbba5a1975f496a5d816763012ad6cc9a32006d931c58fb0f81716ea6d320",
-				"dweb:/ipfs/QmRmn1QENP1oBWjtLEUg3mzKDQRukNK7Ba4xfKTcbTHEbx"
+				"bzz-raw://1e9af1d4bfb4ca3ad4ea8313fa3ce90427b1a52722febe5fff9d2d5ed8967e55",
+				"dweb:/ipfs/QmPSNfPNgaQvuqmVpY837xpxgq5wpJNf72Ydux8EV7tyda"
 			]
 		},
 		"vaults-v1/contracts/libs/IMasterchef.sol": {
@@ -802,6 +853,14 @@
 			"urls": [
 				"bzz-raw://1b825fb00fa27304eb84eb03521889517b84fa1d954965a801fa3e4de5d361bb",
 				"dweb:/ipfs/QmWvaWmPaBpL5TVSBLKJRnWE5GuFGWYA1i1tSKVQFLyPyS"
+			]
+		},
+		"vaults-v1/contracts/libs/IVaultHealer.sol": {
+			"keccak256": "0xa5042ee06017ac08f914c8daa593f4d2a69a94b875c6719f96e72589c227ba95",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://83b411e44916de65cae173474cf317b3ac8a5616cd5301b2b3cf7fd2e8b6e403",
+				"dweb:/ipfs/QmPtyVxVkX6uSX1C7vejJxMQgHHg973dBQjNNt8dvLytd2"
 			]
 		},
 		"vaults-v1/contracts/libs/StrategySwapPaths.sol": {

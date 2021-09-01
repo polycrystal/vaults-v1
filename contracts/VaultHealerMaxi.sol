@@ -3,16 +3,19 @@
 pragma solidity ^0.8.4;
 
 import "./VaultHealer.sol";
+import "./VaultFactory.sol";
 import "./StrategyMaxiCore.sol";
-import "@openzeppelin/contracts/utils/math/SafeCast.sol";
+import "./StrategyMaxiMasterHealer.sol";
 import "@openzeppelin/contracts/utils/math/Math.sol";
 
 contract VaultHealerMaxi is VaultHealer {
     using Math for uint256;
     
     mapping(address => uint) public maxiDebt; //negative maximizer tokens to offset adding to pools
+    address immutable factory;
     
     constructor(
+        address _factory,
         address _masterchefAddress,
         address _uniRouterAddress,
         uint256 _pid,
@@ -20,18 +23,40 @@ contract VaultHealerMaxi is VaultHealer {
         uint256 _tolerance,
         address _earnedToWmaticStep //address(0) if swapping earned->wmatic directly, or the address of an intermediate trade token such as weth
     ) {
-        maxiToken = _wantAddress;
+        factory = _factory;
+        _addPool(VaultFactory(_factory).deployMaxiCore(
+            msg.sender,
+            _masterchefAddress, 
+            _uniRouterAddress, 
+            _pid, 
+            _wantAddress, 
+            _tolerance, 
+            _earnedToWmaticStep
+        )); 
+    }
+    
+    function addMaxiMasterHealer(
+        address _govAddress,    
+        address _masterChef,
+        address _uniRouter,
+        address _want,
+        address _earned,
+        uint256 _pid,
+        uint256 _tolerance,
+        address _earnedToWmaticStep //address(0) if swapping earned->wmatic directly, or the address of an intermediate trade token such as weth
+    ) external onlyOwner nonReentrant {
         
-        StrategyMaxiCore coreStrategy = new StrategyMaxiCore(
-            msg.sender, 
-            _masterchefAddress,
-            _uniRouterAddress,
+        _addPool(VaultFactory(factory).deployMaxiMasterHealer(
+            msg.sender,
+            _masterChef,
+            _uniRouter,
+            _want,
+            _earned,
+            address(poolInfo[0].want),
             _pid,
-            _wantAddress,
             _tolerance,
             _earnedToWmaticStep
-        );
-        addPool(address(coreStrategy));
+        ));
     }
     
     //for a particular account, shares contributed by one of the maximizers
@@ -41,7 +66,7 @@ contract VaultHealerMaxi is VaultHealer {
         
         uint userStratShares = getUserShares(_pid, _user); //user's share of the maximizer
         
-        address strategy = poolInfo[_pid].strat; //maximizer strategy
+        address strategy = address(poolInfo[_pid].strat); //maximizer strategy
         uint stratSharesTotal = IStrategy(strategy).sharesTotal(); //total shares of the maximizer vault
         if (stratSharesTotal == 0) return 0;
         uint stratCoreShares = getUserShares(_pid, strategy);
@@ -76,7 +101,7 @@ contract VaultHealerMaxi is VaultHealer {
     }
 
     function _deposit(uint256 _pid, uint256 _wantAmt, address _to) internal override returns (uint sharesAdded) {
-        address strat = poolInfo[_pid].strat;
+        address strat = address(poolInfo[_pid].strat);
         uint256 sharesTotal = IStrategy(strat).sharesTotal(); // must be total before shares are added
         sharesAdded = super._deposit(_pid, _wantAmt, _to);
         if (_pid > 0 && sharesTotal > 0) {
@@ -94,7 +119,7 @@ contract VaultHealerMaxi is VaultHealer {
         (sharesTotal, sharesRemoved) = super._withdraw(_pid, _wantAmt, _to);
         if (_pid > 0 && sharesTotal > 0) {
             //rebalance shares so core shares are the same as before for the individual user and for the rest of the pool
-            address strat = poolInfo[_pid].strat;
+            address strat = address(poolInfo[_pid].strat);
             uint maxiCoreShares = getUserShares(0, strat); // core shares held by the maximizer
             
             uint coreShareOffset = maxiCoreShares - ((sharesTotal - sharesRemoved) * maxiCoreShares).ceilDiv(sharesTotal); //ceilDiv benefits pool over user preventing abuse

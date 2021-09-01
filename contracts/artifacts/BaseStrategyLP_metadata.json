@@ -42,55 +42,6 @@
 				"inputs": [
 					{
 						"indexed": false,
-						"internalType": "uint256",
-						"name": "_controllerFee",
-						"type": "uint256"
-					},
-					{
-						"indexed": false,
-						"internalType": "uint256",
-						"name": "_rewardRate",
-						"type": "uint256"
-					},
-					{
-						"indexed": false,
-						"internalType": "uint256",
-						"name": "_buyBackRate",
-						"type": "uint256"
-					},
-					{
-						"indexed": false,
-						"internalType": "uint256",
-						"name": "_withdrawFeeFactor",
-						"type": "uint256"
-					},
-					{
-						"indexed": false,
-						"internalType": "uint256",
-						"name": "_slippageFactor",
-						"type": "uint256"
-					},
-					{
-						"indexed": false,
-						"internalType": "uint256",
-						"name": "_tolerance",
-						"type": "uint256"
-					},
-					{
-						"indexed": false,
-						"internalType": "address",
-						"name": "_uniRouterAddress",
-						"type": "address"
-					}
-				],
-				"name": "SetSettings",
-				"type": "event"
-			},
-			{
-				"anonymous": false,
-				"inputs": [
-					{
-						"indexed": false,
 						"internalType": "address",
 						"name": "account",
 						"type": "address"
@@ -101,68 +52,170 @@
 			},
 			{
 				"inputs": [],
-				"name": "burnedAmount",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "buyBackAddress",
-				"outputs": [
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "buyBackRate",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "controllerFee",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
 				"name": "convertDustToEarned",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
 			},
 			{
+				"inputs": [],
+				"name": "data",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "address",
+								"name": "vaultChef",
+								"type": "address"
+							},
+							{
+								"internalType": "address",
+								"name": "want",
+								"type": "address"
+							},
+							{
+								"internalType": "address",
+								"name": "earned",
+								"type": "address"
+							},
+							{
+								"internalType": "address",
+								"name": "masterChef",
+								"type": "address"
+							},
+							{
+								"internalType": "address",
+								"name": "maxiWant",
+								"type": "address"
+							}
+						],
+						"internalType": "struct BaseStrategyLogic.Addresses",
+						"name": "addresses",
+						"type": "tuple"
+					},
+					{
+						"components": [
+							{
+								"internalType": "address",
+								"name": "uniRouterAddress",
+								"type": "address"
+							},
+							{
+								"internalType": "uint16",
+								"name": "controllerFee",
+								"type": "uint16"
+							},
+							{
+								"internalType": "uint16",
+								"name": "rewardRate",
+								"type": "uint16"
+							},
+							{
+								"internalType": "uint16",
+								"name": "buyBackRate",
+								"type": "uint16"
+							},
+							{
+								"internalType": "uint16",
+								"name": "withdrawFeeFactor",
+								"type": "uint16"
+							},
+							{
+								"internalType": "uint16",
+								"name": "tolerance",
+								"type": "uint16"
+							},
+							{
+								"internalType": "address",
+								"name": "govAddress",
+								"type": "address"
+							}
+						],
+						"internalType": "struct BaseStrategyLogic.Settings",
+						"name": "settings",
+						"type": "tuple"
+					},
+					{
+						"components": [
+							{
+								"internalType": "address[]",
+								"name": "earnedToWmatic",
+								"type": "address[]"
+							},
+							{
+								"internalType": "address[]",
+								"name": "earnedToUsdc",
+								"type": "address[]"
+							},
+							{
+								"internalType": "address[]",
+								"name": "earnedToFish",
+								"type": "address[]"
+							},
+							{
+								"internalType": "address[]",
+								"name": "earnedToToken0",
+								"type": "address[]"
+							},
+							{
+								"internalType": "address[]",
+								"name": "earnedToToken1",
+								"type": "address[]"
+							},
+							{
+								"internalType": "address[]",
+								"name": "token0ToEarned",
+								"type": "address[]"
+							},
+							{
+								"internalType": "address[]",
+								"name": "token1ToEarned",
+								"type": "address[]"
+							},
+							{
+								"internalType": "address[]",
+								"name": "earnedToMaxi",
+								"type": "address[]"
+							}
+						],
+						"internalType": "struct BaseStrategyLogic.Paths",
+						"name": "paths",
+						"type": "tuple"
+					},
+					{
+						"internalType": "uint256",
+						"name": "sharesTotal",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "burnedAmount",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint64",
+						"name": "lastEarnBlock",
+						"type": "uint64"
+					},
+					{
+						"internalType": "uint24",
+						"name": "pid",
+						"type": "uint24"
+					},
+					{
+						"internalType": "enum StratType",
+						"name": "stratType",
+						"type": "uint8"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
 				"inputs": [
 					{
 						"internalType": "address",
-						"name": "_userAddress",
+						"name": "",
 						"type": "address"
 					},
 					{
@@ -180,231 +233,6 @@
 					}
 				],
 				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "earn",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "earnedAddress",
-				"outputs": [
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"name": "earnedToFishPath",
-				"outputs": [
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"name": "earnedToMaxiPath",
-				"outputs": [
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"name": "earnedToToken0Path",
-				"outputs": [
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"name": "earnedToToken1Path",
-				"outputs": [
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"name": "earnedToUsdcPath",
-				"outputs": [
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"name": "earnedToWmaticPath",
-				"outputs": [
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "feeAddress",
-				"outputs": [
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "feeMax",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "feeMaxTotal",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "fishAddress",
-				"outputs": [
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "govAddress",
-				"outputs": [
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "lastEarnBlock",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "maxiAddress",
-				"outputs": [
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
-					}
-				],
-				"stateMutability": "view",
 				"type": "function"
 			},
 			{
@@ -462,32 +290,6 @@
 				"type": "function"
 			},
 			{
-				"inputs": [],
-				"name": "rewardAddress",
-				"outputs": [
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "rewardRate",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
 				"inputs": [
 					{
 						"internalType": "address",
@@ -503,34 +305,29 @@
 			{
 				"inputs": [
 					{
-						"internalType": "uint256",
+						"internalType": "uint16",
 						"name": "_controllerFee",
-						"type": "uint256"
+						"type": "uint16"
 					},
 					{
-						"internalType": "uint256",
+						"internalType": "uint16",
 						"name": "_rewardRate",
-						"type": "uint256"
+						"type": "uint16"
 					},
 					{
-						"internalType": "uint256",
+						"internalType": "uint16",
 						"name": "_buyBackRate",
-						"type": "uint256"
+						"type": "uint16"
 					},
 					{
-						"internalType": "uint256",
+						"internalType": "uint16",
 						"name": "_withdrawFeeFactor",
-						"type": "uint256"
+						"type": "uint16"
 					},
 					{
-						"internalType": "uint256",
-						"name": "_slippageFactor",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
+						"internalType": "uint16",
 						"name": "_tolerance",
-						"type": "uint256"
+						"type": "uint16"
 					},
 					{
 						"internalType": "address",
@@ -544,135 +341,6 @@
 				"type": "function"
 			},
 			{
-				"inputs": [],
-				"name": "sharesTotal",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "slippageFactor",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "slippageFactorUL",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "stratType",
-				"outputs": [
-					{
-						"internalType": "enum BaseStrategy.StratType",
-						"name": "",
-						"type": "uint8"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "token0Address",
-				"outputs": [
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"name": "token0ToEarnedPath",
-				"outputs": [
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "token1Address",
-				"outputs": [
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"name": "token1ToEarnedPath",
-				"outputs": [
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "tolerance",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
 				"inputs": [
 					{
 						"internalType": "address",
@@ -683,19 +351,6 @@
 				"name": "transferOwnership",
 				"outputs": [],
 				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "uniRouterAddress",
-				"outputs": [
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
-					}
-				],
-				"stateMutability": "view",
 				"type": "function"
 			},
 			{
@@ -714,51 +369,12 @@
 			},
 			{
 				"inputs": [],
-				"name": "usdcAddress",
-				"outputs": [
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "vaultChefAddress",
-				"outputs": [
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
 				"name": "vaultSharesTotal",
 				"outputs": [
 					{
 						"internalType": "uint256",
 						"name": "",
 						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "wantAddress",
-				"outputs": [
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
 					}
 				],
 				"stateMutability": "view",
@@ -781,7 +397,7 @@
 				"inputs": [
 					{
 						"internalType": "address",
-						"name": "_userAddress",
+						"name": "",
 						"type": "address"
 					},
 					{
@@ -799,58 +415,6 @@
 					}
 				],
 				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "withdrawFeeAddress",
-				"outputs": [
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "withdrawFeeFactor",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "withdrawFeeFactorLL",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "withdrawFeeFactorMax",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
 				"type": "function"
 			}
 		],
@@ -889,7 +453,7 @@
 		},
 		"optimizer": {
 			"enabled": true,
-			"runs": 200
+			"runs": 999999
 		},
 		"remappings": []
 	},
@@ -959,19 +523,35 @@
 			]
 		},
 		"vaults-v1/contracts/BaseStrategy.sol": {
-			"keccak256": "0x8095e0e044e3a8889975e518bc4e42cfe3952c7578ff8c87a4f51e9ebb644f3a",
+			"keccak256": "0x46398f711f76572f1045dbcb71f07b5964f6dfb8a95179601504f0cb08e03569",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://f5acd2d4d7b8c5e88520d61eadc50c5d773187cd4a48e0dfcb03a8694f44a7de",
-				"dweb:/ipfs/QmZGKMnpTbMa3jP8pCkbr1pN9S1a8eSyx1d7R8kEFtoMZs"
+				"bzz-raw://b82ef41223b3d82c44560b52ccba39056421315d64af4f392201413a92a89673",
+				"dweb:/ipfs/QmWgTE3vCSg5ztuxhT1bzG45gLwbbXh39GTwpKNXVEthV8"
 			]
 		},
 		"vaults-v1/contracts/BaseStrategyLP.sol": {
-			"keccak256": "0xcb77c0f10ac7c42e46751e4a1901c6b17d231510047dabe06362fcb71c14976c",
+			"keccak256": "0x9154cee82042d322245eaad8af43565a6f02b4d22995a771537250d355037e67",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://86141214485462be215d6769c4c9090bbb19d01a931e7d3d80c4c706246c698e",
-				"dweb:/ipfs/QmNuKWSnACzzA5iSs9XXvhcXW5wJvQNsg33fNKdxVGv6kp"
+				"bzz-raw://07c62a55c9ccd7a9a6b7fa44ba1ead817d7052bfd90d4b389c90105b0caffcfa",
+				"dweb:/ipfs/QmPWJVitMxKVSppP2vNxfmL1vFMYHcXkZRn67tSeSDeDSx"
+			]
+		},
+		"vaults-v1/contracts/libs/BaseStrategyLogic.sol": {
+			"keccak256": "0x98344f9749da7d3ce4012a9f72b8562383ecd38041d27baa6d91ba1066a927a9",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://049e5e63d33e675dcbe3487877af4e60bb710fbc1145f5f982c292bb157bfaaa",
+				"dweb:/ipfs/Qmbn2fTcCy1MfUNRHnJfU2B4jTtzs6xZfLra5LLfctMiuu"
+			]
+		},
+		"vaults-v1/contracts/libs/IMasterchef.sol": {
+			"keccak256": "0x6a2b76a1f0a3ac61ebf4112c1a2915f6e03708f6d87f5403e9547f86bd6efd11",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://51ea6c4270ca3b41fa31d7d636b2778bdbbc7ab84d0fcecf7bc3849f91eaa44f",
+				"dweb:/ipfs/QmNMpqkBCVT3X7WuH2HwfA1nr6Bu6rVF9RTQpuLXpn9QjB"
 			]
 		},
 		"vaults-v1/contracts/libs/IStrategyFish.sol": {
@@ -1004,6 +584,14 @@
 			"urls": [
 				"bzz-raw://1b825fb00fa27304eb84eb03521889517b84fa1d954965a801fa3e4de5d361bb",
 				"dweb:/ipfs/QmWvaWmPaBpL5TVSBLKJRnWE5GuFGWYA1i1tSKVQFLyPyS"
+			]
+		},
+		"vaults-v1/contracts/libs/IVaultHealer.sol": {
+			"keccak256": "0xa5042ee06017ac08f914c8daa593f4d2a69a94b875c6719f96e72589c227ba95",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://83b411e44916de65cae173474cf317b3ac8a5616cd5301b2b3cf7fd2e8b6e403",
+				"dweb:/ipfs/QmPtyVxVkX6uSX1C7vejJxMQgHHg973dBQjNNt8dvLytd2"
 			]
 		}
 	},
