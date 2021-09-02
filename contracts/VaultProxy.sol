@@ -4,18 +4,18 @@ pragma solidity ^0.8.4;
 
 import "@openzeppelin/contracts/proxy/Proxy.sol";
 
-import "./VaultHealerMaxi.sol";
+import "./libs/IVaultHealer.sol";
 import "./libs/IStrategy.sol";
 
 contract VaultProxy is Proxy {
 
-    VaultHealerMaxi internal __vaultHealer;
+    IVaultHealer internal __vaultHealer;
     StratType internal __stratType;
     
     constructor(StratType _stratType) {
         require(_stratType != StratType.BASIC, "YA BASIC");
         __stratType = _stratType;
-        __vaultHealer = VaultHealerMaxi(msg.sender);
+        __vaultHealer = IVaultHealer(msg.sender);
     }
     
     function _implementation() internal view override returns (address) {

@@ -7,12 +7,6 @@ import "./VaultProxy.sol";
 import "@openzeppelin/contracts/utils/math/Math.sol";
 import "@openzeppelin/contracts/proxy/utils/Initializable.sol";
 
-interface IStrategyInit {
-    function initialize(uint _pid, uint _tolerance, address _govAddress, address _masterChef, address _uniRouter, address _wantAddress, address _earnedToWmaticStep) external;
-    function initialize(uint _pid, uint _tolerance, address _govAddress, address _masterChef, address _uniRouter, address _wantAddress, address _earnedAddress, address _earnedToWmaticStep) external;
-    function maxiAddress() external returns (address);
-}
-
 contract VaultHealerMaxi is VaultHealer, Initializable {
     using Math for uint256;
     

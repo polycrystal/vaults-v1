@@ -41,7 +41,7 @@ abstract contract BaseStrategy is Ownable, ReentrancyGuard, Pausable, Initializa
     uint256 public tolerance;
     uint256 public burnedAmount;
     
-    StrategyPaths internal paths;
+    StrategySwapPaths.Paths internal paths;
     
     address public constant wmaticAddress = 0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270;
     address public constant usdcAddress = 0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174;

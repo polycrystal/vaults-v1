@@ -1,4 +1,12 @@
-struct StrategyPaths {
+// SPDX-License-Identifier: MIT
+
+pragma solidity ^0.8.4;
+
+import "./IUniPair.sol";
+
+library StrategySwapPaths {
+    
+    struct Paths {
     address[] earnedToWmatic;
     address[] earnedToUsdc;
     address[] earnedToCrystl;
@@ -7,19 +15,12 @@ struct StrategyPaths {
     address[] token0ToEarned;
     address[] token1ToEarned;
     address[] earnedToMaxi;
-}
-
-interface IUniPair {
-    function token0() external view returns (address);
-    function token1() external view returns (address);
-}
-
-library StrategySwapPaths {
+    }
     
     address internal constant USDC = 0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174;
     address internal constant WMATIC = 0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270;
     
-    function buildAllPaths(StrategyPaths storage paths, address earnedAddress, address middleStep, address crystl, address want, address maxi) public {
+    function buildAllPaths(Paths storage paths, address earnedAddress, address middleStep, address crystl, address want, address maxi) internal {
             
         makeEarnedToWmaticPath(paths.earnedToWmatic, earnedAddress, middleStep);
         makeEarnedToXPath(paths.earnedToUsdc, paths.earnedToWmatic, USDC);
@@ -36,7 +37,7 @@ library StrategySwapPaths {
 
     }
     
-    function makeEarnedToWmaticPath(address[] storage _path, address earnedAddress, address middleStep) public {
+    function makeEarnedToWmaticPath(address[] storage _path, address earnedAddress, address middleStep) internal {
 
          _path.push(earnedAddress);
         
@@ -48,7 +49,7 @@ library StrategySwapPaths {
             _path.push(WMATIC);
         }
     }
-    function makeEarnedToXPath(address[] storage _path, address[] memory earnedToWmaticPath, address xToken) public {
+    function makeEarnedToXPath(address[] storage _path, address[] memory earnedToWmaticPath, address xToken) internal {
         
         if (earnedToWmaticPath[0] == xToken) {
         } else if (earnedToWmaticPath[1] == xToken) {

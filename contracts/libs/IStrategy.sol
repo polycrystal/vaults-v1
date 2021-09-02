@@ -28,4 +28,7 @@ interface IStrategy {
     function maxiAddress() external returns (address);
     
     function stratType() external returns (StratType);
+    
+    function initialize(uint _pid, uint _tolerance, address _govAddress, address _masterChef, address _uniRouter, address _wantAddress, address _earnedToWmaticStep) external;
+
 }

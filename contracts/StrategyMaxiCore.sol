@@ -3,11 +3,9 @@
 pragma solidity ^0.8.4;
 
 import "./libs/IMasterchef.sol";
-import "./libs/StrategySwapPaths.sol";
 import "./BaseStrategy.sol";
 
 contract StrategyMaxiCore is BaseStrategy {
-    using SafeERC20 for IERC20;
 
     function initialize(
         uint256 _pid,
@@ -84,10 +82,10 @@ contract StrategyMaxiCore is BaseStrategy {
     }
 
     function _resetAllowances() internal override {
-        IERC20(wantAddress).safeApprove(masterchefAddress, type(uint256).max);
-        IERC20(earnedAddress).safeApprove(uniRouterAddress, type(uint256).max);
-        IERC20(usdcAddress).safeApprove(rewardAddress, type(uint256).max);
-        IERC20(earnedAddress).safeApprove(vaultChefAddress, type(uint256).max);
+        IERC20(wantAddress).approve(masterchefAddress, type(uint256).max);
+        IERC20(earnedAddress).approve(uniRouterAddress, type(uint256).max);
+        IERC20(usdcAddress).approve(rewardAddress, type(uint256).max);
+        IERC20(earnedAddress).approve(vaultChefAddress, type(uint256).max);
     }
     
     function _emergencyVaultWithdraw() internal override {
