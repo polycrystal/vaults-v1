@@ -12,6 +12,7 @@ contract VaultHealer is ReentrancyGuard, Operators {
     struct PoolInfo {
         IERC20 want;
         IStrategy strat;
+        StratType stratType;
     }
 
     PoolInfo[] public poolInfo;
@@ -22,8 +23,6 @@ contract VaultHealer is ReentrancyGuard, Operators {
     // 0: compound by anyone; 1: EOA only; 2: restricted to operators
     uint public compoundMode = 1;
     bool public autocompoundOn = true;
-
-    address public maxiToken; //Unused/zero unless this is a maximizer VaultHealer
 
     event AddPool(address indexed strat);
     event Deposit(address indexed user, uint256 indexed pid, uint256 amount);
@@ -44,7 +43,8 @@ contract VaultHealer is ReentrancyGuard, Operators {
         poolInfo.push(
             PoolInfo({
                 want: IERC20(IStrategy(_strat).wantAddress()),
-                strat: IStrategy(_strat)
+                strat: IStrategy(_strat),
+                stratType: IStrategy(_strat).stratType()
             })
         );
         strats[_strat] = true;

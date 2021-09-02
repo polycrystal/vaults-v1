@@ -9,52 +9,31 @@ import "./BaseStrategyLPSingle.sol";
 contract StrategyMasterHealer is BaseStrategyLPSingle {
     using SafeERC20 for IERC20;
 
-    address public masterchefAddress;
-    uint256 public pid;
-
-    struct InitAddresses {
-        address vaultChef;
-        address masterChef;
-        address uniRouter;
-        address want;
-        address earned;
-    }
-
-    constructor(
+    function initialize(
         uint256 _pid,
         uint256 _tolerance,
-        InitAddresses memory _initAddr,
-        address[] memory _earnedToWmaticPath,
-        address[] memory _earnedToUsdcPath,
-        address[] memory _earnedToFishPath,
-        address[] memory _earnedToToken0Path,
-        address[] memory _earnedToToken1Path,
-        address[] memory _token0ToEarnedPath,
-        address[] memory _token1ToEarnedPath
-    ) {
-        govAddress = msg.sender;
+        address _govAddress,
+        address _masterChef,
+        address _uniRouter,
+        address _wantAddress,
+        address _earnedAddress,
+        address _earnedToWmaticStep
+    ) external {
+        _baseInit();
         
-        vaultChefAddress = _initAddr.vaultChef;
-        masterchefAddress = _initAddr.masterChef;
-        uniRouterAddress = _initAddr.uniRouter;
-        wantAddress = _initAddr.want;
-        earnedAddress = _initAddr.earned;
-
-        token0Address = IUniPair(wantAddress).token0();
-        token1Address = IUniPair(wantAddress).token1();
+        govAddress = _govAddress;
+        vaultChefAddress = msg.sender;
+        masterchefAddress = _masterChef;
+        uniRouterAddress = _uniRouter;
+        wantAddress = _wantAddress;
+        earnedAddress = _earnedAddress;
 
         pid = _pid;
         tolerance = _tolerance;
 
-        earnedToWmaticPath = _earnedToWmaticPath;
-        earnedToUsdcPath = _earnedToUsdcPath;
-        earnedToFishPath = _earnedToFishPath;
-        earnedToToken0Path = _earnedToToken0Path;
-        earnedToToken1Path = _earnedToToken1Path;
-        token0ToEarnedPath = _token0ToEarnedPath;
-        token1ToEarnedPath = _token1ToEarnedPath;
+        StrategySwapPaths.buildAllPaths(paths, _earnedAddress, _earnedToWmaticStep, crystlAddress, _wantAddress, address(0));
 
-        transferOwnership(vaultChefAddress);
+        transferOwnership(msg.sender);
         
         _resetAllowances();
         stratType = StratType.MASTER_HEALER;
@@ -82,35 +61,11 @@ contract StrategyMasterHealer is BaseStrategyLPSingle {
     }
 
     function _resetAllowances() internal override {
-        IERC20(wantAddress).safeApprove(masterchefAddress, uint256(0));
-        IERC20(wantAddress).safeIncreaseAllowance(
-            masterchefAddress,
-            type(uint256).max
-        );
-
-        IERC20(earnedAddress).safeApprove(uniRouterAddress, uint256(0));
-        IERC20(earnedAddress).safeIncreaseAllowance(
-            uniRouterAddress,
-            type(uint256).max
-        );
-
-        IERC20(token0Address).safeApprove(uniRouterAddress, uint256(0));
-        IERC20(token0Address).safeIncreaseAllowance(
-            uniRouterAddress,
-            type(uint256).max
-        );
-
-        IERC20(token1Address).safeApprove(uniRouterAddress, uint256(0));
-        IERC20(token1Address).safeIncreaseAllowance(
-            uniRouterAddress,
-            type(uint256).max
-        );
-
-        IERC20(usdcAddress).safeApprove(rewardAddress, uint256(0));
-        IERC20(usdcAddress).safeIncreaseAllowance(
-            rewardAddress,
-            type(uint256).max
-        );
+        IERC20(wantAddress).safeApprove(masterchefAddress, type(uint256).max);
+        IERC20(earnedAddress).safeApprove(uniRouterAddress, type(uint256).max);
+        IERC20(paths.token0ToEarned[0]).safeApprove(uniRouterAddress, type(uint256).max);
+        IERC20(paths.token1ToEarned[0]).safeApprove(uniRouterAddress, type(uint256).max);
+        IERC20(usdcAddress).safeApprove(rewardAddress, type(uint256).max);
     }
     
     function _emergencyVaultWithdraw() internal override {

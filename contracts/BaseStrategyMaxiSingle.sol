@@ -3,7 +3,7 @@
 pragma solidity ^0.8.4;
 
 import "./BaseStrategy.sol";
-import "./IVaultHealer.sol";
+import "./libs/IVaultHealer.sol";
 
 abstract contract BaseStrategyMaxiSingle is BaseStrategy {
 
@@ -25,7 +25,7 @@ abstract contract BaseStrategyMaxiSingle is BaseStrategy {
                 // Swap all earned to maximized token
                 _safeSwap(
                     earnedAmt,
-                    earnedToMaxiPath,
+                    paths.earnedToMaxi,
                     address(this)
                 );
             }

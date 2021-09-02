@@ -7,63 +7,56 @@ import "@openzeppelin/contracts/security/Pausable.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/utils/math/Math.sol";
+import "@openzeppelin/contracts/proxy/utils/Initializable.sol";
 
 import "./libs/IStrategyFish.sol";
-import "./libs/IUniPair.sol";
 import "./libs/IUniRouter02.sol";
-abstract contract BaseStrategy is Ownable, ReentrancyGuard, Pausable {
+import "./libs/StrategySwapPaths.sol";
+import "./libs/IStrategy.sol";
+
+
+abstract contract BaseStrategy is Ownable, ReentrancyGuard, Pausable, Initializable {
     using Math for uint256;
     using SafeERC20 for IERC20;
-
+    uint256 private __blankSpace;
     address public wantAddress;
-    address public token0Address;
-    address public token1Address;
     address public earnedAddress;
-    
     address public uniRouterAddress;
-    address public constant wmaticAddress = 0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270;
-    address public constant usdcAddress = 0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174;
-    address public constant fishAddress = 0x76bF0C28e604CC3fE9967c83b3C3F31c213cfE64; 
-    address public constant rewardAddress = 0x917FB15E8aAA12264DCBdC15AFef7cD3cE76BA39; 
-    address public constant withdrawFeeAddress = 0x5386881b46C37CdD30A748f7771CF95D7B213637; 
-    address public constant feeAddress = 0x5386881b46C37CdD30A748f7771CF95D7B213637; 
     address public vaultChefAddress;
     address public govAddress;
-
-    uint256 public lastEarnBlock = block.number;
-    uint256 public sharesTotal = 0;
-
-    address public constant buyBackAddress = 0x000000000000000000000000000000000000dEaD;
-    uint256 public controllerFee = 50;
-    uint256 public rewardRate = 0;
-    uint256 public buyBackRate = 450;
-    uint256 public constant feeMaxTotal = 1000;
-    uint256 public constant feeMax = 10000; // 100 = 1%
-
-    uint256 public withdrawFeeFactor = 9990; // 0.1% withdraw fee
-    uint256 public constant withdrawFeeFactorMax = 10000;
-    uint256 public constant withdrawFeeFactorLL = 9900; 
-
-    uint256 public slippageFactor = 950; // 5% default slippage tolerance
-    uint256 public constant slippageFactorUL = 995;
+    address public masterchefAddress;
+    address public maxiAddress; // zero and unused except for maximizer vaults. This is the maximized want token
+    StratType public stratType;
+    
+    uint256 public pid;
+    uint256 public lastEarnBlock;
+    uint256 public sharesTotal;
+    uint256 public controllerFee;
+    uint256 public rewardRate;
+    uint256 public buyBackRate;
+    uint256 public withdrawFeeFactor; 
+    uint256 public slippageFactor;
 
     // Frontend variables
     uint256 public tolerance;
     uint256 public burnedAmount;
+    
+    StrategyPaths internal paths;
+    
+    address public constant wmaticAddress = 0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270;
+    address public constant usdcAddress = 0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174;
+    address public constant crystlAddress = 0x76bF0C28e604CC3fE9967c83b3C3F31c213cfE64; 
+    address public constant rewardAddress = 0x917FB15E8aAA12264DCBdC15AFef7cD3cE76BA39; 
+    address public constant withdrawFeeAddress = 0x5386881b46C37CdD30A748f7771CF95D7B213637; 
+    address public constant feeAddress = 0x5386881b46C37CdD30A748f7771CF95D7B213637; 
+    
+    address public constant buyBackAddress = 0x000000000000000000000000000000000000dEaD;
+    uint256 public constant feeMaxTotal = 1000;
+    uint256 public constant feeMax = 10000; // 100 = 1%
+    uint256 public constant withdrawFeeFactorMax = 10000;
+    uint256 public constant withdrawFeeFactorLL = 9900; 
+    uint256 public constant slippageFactorUL = 995;
 
-    address[] public earnedToWmaticPath;
-    address[] public earnedToUsdcPath;
-    address[] public earnedToFishPath;
-    address[] public earnedToToken0Path;
-    address[] public earnedToToken1Path;
-    address[] public token0ToEarnedPath;
-    address[] public token1ToEarnedPath;
-    address[] public earnedToMaxiPath;
-    
-    address public maxiAddress; // zero and unused except for maximizer vaults. This is the maximized want token
-    enum StratType { BASIC, MASTER_HEALER, MAXIMIZER, MAXIMIZER_CORE }
-    StratType public stratType;
-    
     event SetSettings(
         uint256 _controllerFee,
         uint256 _rewardRate,
@@ -77,6 +70,14 @@ abstract contract BaseStrategy is Ownable, ReentrancyGuard, Pausable {
     modifier onlyGov() {
         require(msg.sender == govAddress, "!gov");
         _;
+    }
+
+    function _baseInit() internal initializer {
+        lastEarnBlock = block.number;
+        controllerFee = 50;
+        buyBackRate = 450;
+        withdrawFeeFactor = 9990; // 0.1% withdraw fee
+        slippageFactor = 950; // 5% default slippage tolerance
     }
 
     function _vaultDeposit(uint256 _amount) internal virtual;
@@ -163,7 +164,7 @@ abstract contract BaseStrategy is Ownable, ReentrancyGuard, Pausable {
     
             _safeSwapWmatic(
                 fee,
-                earnedToWmaticPath,
+                paths.earnedToWmatic,
                 feeAddress
             );
             
@@ -181,7 +182,7 @@ abstract contract BaseStrategy is Ownable, ReentrancyGuard, Pausable {
             
             _safeSwap(
                 fee,
-                earnedToUsdcPath,
+                paths.earnedToUsdc,
                 address(this)
             );
             
@@ -201,7 +202,7 @@ abstract contract BaseStrategy is Ownable, ReentrancyGuard, Pausable {
     
             _safeSwap(
                 buyBackAmt,
-                earnedToFishPath,
+                paths.earnedToCrystl,
                 buyBackAddress
             );
 
@@ -278,7 +279,7 @@ abstract contract BaseStrategy is Ownable, ReentrancyGuard, Pausable {
         uint256[] memory amounts = IUniRouter02(uniRouterAddress).getAmountsOut(_amountIn, _path);
         uint256 amountOut = amounts[amounts.length - 1];
         
-        if (_path[_path.length - 1] == fishAddress && _to == buyBackAddress) {
+        if (_path[_path.length - 1] == crystlAddress && _to == buyBackAddress) {
             burnedAmount += amountOut;
         }
 

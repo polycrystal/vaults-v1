@@ -11,42 +11,33 @@ import "./BaseStrategyMaxiSingle.sol";
 contract StrategyMaxiMasterHealer is BaseStrategyMaxiSingle {
     using SafeERC20 for IERC20;
 
-    address public masterchefAddress;
-    uint256 public pid;
-
-    constructor(
-        address _vaultChef,
-        address _masterChef,
-        address _uniRouter,
-        address _want,
-        address _earned,
+    function initialize(
         uint256 _pid,
         uint256 _tolerance,
+        address _govAddress,
+        address _masterChef,
+        address _uniRouter,
+        address _wantAddress, 
+        address _earnedAddress,
         address _earnedToWmaticStep //address(0) if swapping earned->wmatic directly, or the address of an intermediate trade token such as weth
-    ) {
-        govAddress = msg.sender;
+    ) external {
+        
+        _baseInit();
 
-        vaultChefAddress = _vaultChef;
+        govAddress = _govAddress;
+
+        vaultChefAddress = msg.sender;
         masterchefAddress = _masterChef;
         uniRouterAddress = _uniRouter;
-        wantAddress = _want;
-        earnedAddress = _earned;
+        wantAddress = _wantAddress;
+        earnedAddress = _earnedAddress;
         (maxiAddress,) = IVaultHealer(vaultChefAddress).poolInfo(0);
         
         pid = _pid;
         tolerance = _tolerance;
         
-        //We don't actually need the token0 and 1 addresses but we might as well try
-        try IUniPair(wantAddress).token0() returns (address _token0) {
-            token0Address = _token0;
-            token1Address = IUniPair(wantAddress).token1();
-        } catch {}
+        StrategySwapPaths.buildAllPaths(paths, _wantAddress, _earnedToWmaticStep, crystlAddress, _wantAddress, maxiAddress);
         
-        earnedToWmaticPath = StrategySwapPaths.makeEarnedToWmaticPath(earnedAddress, _earnedToWmaticStep);
-        earnedToUsdcPath = StrategySwapPaths.makeEarnedToXPath(earnedToWmaticPath, usdcAddress);
-        earnedToFishPath = StrategySwapPaths.makeEarnedToXPath(earnedToWmaticPath, fishAddress);
-        earnedToMaxiPath = StrategySwapPaths.makeEarnedToXPath(earnedToWmaticPath, maxiAddress);
-
         transferOwnership(vaultChefAddress);
         
         stratType = StratType.MAXIMIZER;
@@ -75,23 +66,9 @@ contract StrategyMaxiMasterHealer is BaseStrategyMaxiSingle {
     }
 
     function _resetAllowances() internal override {
-        IERC20(wantAddress).safeApprove(masterchefAddress, uint256(0));
-        IERC20(wantAddress).safeIncreaseAllowance(
-            masterchefAddress,
-            type(uint256).max
-        );
-
-        IERC20(earnedAddress).safeApprove(uniRouterAddress, uint256(0));
-        IERC20(earnedAddress).safeIncreaseAllowance(
-            uniRouterAddress,
-            type(uint256).max
-        );
-
-        IERC20(usdcAddress).safeApprove(rewardAddress, uint256(0));
-        IERC20(usdcAddress).safeIncreaseAllowance(
-            rewardAddress,
-            type(uint256).max
-        );
+        IERC20(wantAddress).safeApprove(masterchefAddress, type(uint256).max);
+        IERC20(earnedAddress).safeApprove(uniRouterAddress, type(uint256).max);
+        IERC20(usdcAddress).safeApprove(rewardAddress, type(uint256).max);
     }
     
     function _emergencyVaultWithdraw() internal override {

@@ -6,89 +6,6 @@
 	"output": {
 		"abi": [
 			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "_pid",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "_tolerance",
-						"type": "uint256"
-					},
-					{
-						"components": [
-							{
-								"internalType": "address",
-								"name": "vaultChef",
-								"type": "address"
-							},
-							{
-								"internalType": "address",
-								"name": "masterChef",
-								"type": "address"
-							},
-							{
-								"internalType": "address",
-								"name": "uniRouter",
-								"type": "address"
-							},
-							{
-								"internalType": "address",
-								"name": "want",
-								"type": "address"
-							},
-							{
-								"internalType": "address",
-								"name": "earned",
-								"type": "address"
-							}
-						],
-						"internalType": "struct StrategyMasterHealer.InitAddresses",
-						"name": "_initAddr",
-						"type": "tuple"
-					},
-					{
-						"internalType": "address[]",
-						"name": "_earnedToWmaticPath",
-						"type": "address[]"
-					},
-					{
-						"internalType": "address[]",
-						"name": "_earnedToUsdcPath",
-						"type": "address[]"
-					},
-					{
-						"internalType": "address[]",
-						"name": "_earnedToFishPath",
-						"type": "address[]"
-					},
-					{
-						"internalType": "address[]",
-						"name": "_earnedToToken0Path",
-						"type": "address[]"
-					},
-					{
-						"internalType": "address[]",
-						"name": "_earnedToToken1Path",
-						"type": "address[]"
-					},
-					{
-						"internalType": "address[]",
-						"name": "_token0ToEarnedPath",
-						"type": "address[]"
-					},
-					{
-						"internalType": "address[]",
-						"name": "_token1ToEarnedPath",
-						"type": "address[]"
-					}
-				],
-				"stateMutability": "nonpayable",
-				"type": "constructor"
-			},
-			{
 				"anonymous": false,
 				"inputs": [
 					{
@@ -242,6 +159,19 @@
 				"type": "function"
 			},
 			{
+				"inputs": [],
+				"name": "crystlAddress",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
 				"inputs": [
 					{
 						"internalType": "address",
@@ -275,120 +205,6 @@
 			{
 				"inputs": [],
 				"name": "earnedAddress",
-				"outputs": [
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"name": "earnedToFishPath",
-				"outputs": [
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"name": "earnedToMaxiPath",
-				"outputs": [
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"name": "earnedToToken0Path",
-				"outputs": [
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"name": "earnedToToken1Path",
-				"outputs": [
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"name": "earnedToUsdcPath",
-				"outputs": [
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"name": "earnedToWmaticPath",
 				"outputs": [
 					{
 						"internalType": "address",
@@ -440,7 +256,7 @@
 			},
 			{
 				"inputs": [],
-				"name": "fishAddress",
+				"name": "govAddress",
 				"outputs": [
 					{
 						"internalType": "address",
@@ -452,16 +268,51 @@
 				"type": "function"
 			},
 			{
-				"inputs": [],
-				"name": "govAddress",
-				"outputs": [
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_pid",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_tolerance",
+						"type": "uint256"
+					},
 					{
 						"internalType": "address",
-						"name": "",
+						"name": "_govAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "_masterChef",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "_uniRouter",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "_wantAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "_earnedAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "_earnedToWmaticStep",
 						"type": "address"
 					}
 				],
-				"stateMutability": "view",
+				"name": "initialize",
+				"outputs": [],
+				"stateMutability": "nonpayable",
 				"type": "function"
 			},
 			{
@@ -696,73 +547,9 @@
 				"name": "stratType",
 				"outputs": [
 					{
-						"internalType": "enum BaseStrategy.StratType",
+						"internalType": "enum StratType",
 						"name": "",
 						"type": "uint8"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "token0Address",
-				"outputs": [
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"name": "token0ToEarnedPath",
-				"outputs": [
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "token1Address",
-				"outputs": [
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"name": "token1ToEarnedPath",
-				"outputs": [
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
 					}
 				],
 				"stateMutability": "view",
@@ -961,6 +748,19 @@
 				],
 				"stateMutability": "view",
 				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "wmaticAddress",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
 			}
 		],
 		"devdoc": {
@@ -998,7 +798,7 @@
 		},
 		"optimizer": {
 			"enabled": true,
-			"runs": 200
+			"runs": 999999
 		},
 		"remappings": []
 	},
@@ -1009,6 +809,14 @@
 			"urls": [
 				"bzz-raw://b2ebbbe6d0011175bd9e7268b83de3f9c2f9d8d4cbfbaef12aff977d7d727163",
 				"dweb:/ipfs/Qmd5c7Vxtis9wzkDNhxwc6A2QT5H9xn9kfjhx7qx44vpro"
+			]
+		},
+		"@openzeppelin/contracts/proxy/utils/Initializable.sol": {
+			"keccak256": "0x8b2abd85d0ece7e866e100e9d47ca9cbec93c87cf71a8d267b2b93eb81f7d5e9",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://fe9fa1beb63e4a09637701f783982ba80380d630d600c9cafe26b68bf58be1b2",
+				"dweb:/ipfs/QmRA3GXhTWys88joD9x8xYhdjzvGwmDGLMMzGw3LxbSEge"
 			]
 		},
 		"@openzeppelin/contracts/security/Pausable.sol": {
@@ -1068,35 +876,35 @@
 			]
 		},
 		"vaults-v1/contracts/BaseStrategy.sol": {
-			"keccak256": "0xc07bc8193b2c4b411dd67e32f47b71f51f32684106cfe83c6166ed99260ba2f7",
+			"keccak256": "0xdb234803f2b2161c0d999ee1d6990f06bb0ed2df7e981082cb0dc94a7e8e5f35",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://6b6ee64e12730f874e8e01578add7dd7d4187be38eda95482de284eebf2b4777",
-				"dweb:/ipfs/QmWVCpirywuR5QF3Ay9N2HpyUE68nuQ9xxJFJA6biVnexd"
+				"bzz-raw://7f5fafd56a1d67cb3242c432b1ccf09daf5ef31a083380b9d682481b205b036e",
+				"dweb:/ipfs/QmNvYS213foP7WosV83aVsg6WK3mqhV5qhj29z6Y3M2hS6"
 			]
 		},
 		"vaults-v1/contracts/BaseStrategyLP.sol": {
-			"keccak256": "0xcb77c0f10ac7c42e46751e4a1901c6b17d231510047dabe06362fcb71c14976c",
+			"keccak256": "0x856c3b31d17b2faffcfee2b53a12078e7a2d9746aa5a62dbb5bc4f9a6b1efc6a",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://86141214485462be215d6769c4c9090bbb19d01a931e7d3d80c4c706246c698e",
-				"dweb:/ipfs/QmNuKWSnACzzA5iSs9XXvhcXW5wJvQNsg33fNKdxVGv6kp"
+				"bzz-raw://334f496771ea8cebbad1964d4c269d0882dd6c5f4f8a63fddb11d83d7045a316",
+				"dweb:/ipfs/QmY3DeqCLeJmLLqWxC9wrHkZnXPc4JDSkyEV13YwBkrjia"
 			]
 		},
 		"vaults-v1/contracts/BaseStrategyLPSingle.sol": {
-			"keccak256": "0x8d9d712f624a3c256ad629011846d92e6e71ba68216a8c9c95ef3066235a66a1",
+			"keccak256": "0xbe054e82f6e1003e89901712911897902a1bf7a0f1b45d0cb3651fe930cae5c3",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://6dd40293ba8c53d2f2b56ef85088c831e664fb2a29ef4a98ee0b4e9c9068ce69",
-				"dweb:/ipfs/Qmd5NxkhQkkbjZHSpvxswU8P71k4y1UpjVdr7S8wZaAKMD"
+				"bzz-raw://7c3a34324e92b169e9c072e172ea06a99b18ae4dca79334f0c9820dd8f2da311",
+				"dweb:/ipfs/QmdL8U3jTUwQFm5yChKUt7qTbUNcytJikZj1BcsmUr2Qg3"
 			]
 		},
 		"vaults-v1/contracts/StrategyMasterHealer.sol": {
-			"keccak256": "0x371c75e3a5a1bf4ebd26a1545ac26157e2be996e1591fae9bd677caf9a6694f8",
+			"keccak256": "0x61f8313281c547cc2be9d8f54e60cf1b979d2bb546e9cf048e126c94123850bb",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://ba89b5c429300e2fe9bd51fd59e28ab1e980f1a0c30d992cdce23c1d911a8549",
-				"dweb:/ipfs/QmWH7pw7tE5QQycXehzubsHAzTH1eYnLaAvKRXR44pBFrE"
+				"bzz-raw://a535131438381b4954a24f220ee0119730f3348e69d8973388b619c651d0d0e4",
+				"dweb:/ipfs/QmVN36t3xVypbCvgVw6cJT2PkjcVr5qsnhP8bwSgcmZSEa"
 			]
 		},
 		"vaults-v1/contracts/libs/IMasterchef.sol": {
@@ -1115,14 +923,6 @@
 				"dweb:/ipfs/QmRVc9mqeGfeuiWrLyZeM2NGoiX8cfPhiuNNTm7tcNjusU"
 			]
 		},
-		"vaults-v1/contracts/libs/IUniPair.sol": {
-			"keccak256": "0x18db10c4956f8924791879b151319ae39b90cc2baf767a943b290317d39521d2",
-			"license": "MIT",
-			"urls": [
-				"bzz-raw://ddc063cbf21cb266d25084204e43124187fa5c0e944bb71ea37987e4cacd23d4",
-				"dweb:/ipfs/QmeeVLK61fSRYReupTpG2L9rwowrGP4egJfwoyVasrXvFy"
-			]
-		},
 		"vaults-v1/contracts/libs/IUniRouter01.sol": {
 			"keccak256": "0x450778b9c14a200deb06e415b7d66bae2a9d09ec94a45ebafdaf2cdb0945a910",
 			"license": "MIT",
@@ -1137,6 +937,14 @@
 			"urls": [
 				"bzz-raw://1b825fb00fa27304eb84eb03521889517b84fa1d954965a801fa3e4de5d361bb",
 				"dweb:/ipfs/QmWvaWmPaBpL5TVSBLKJRnWE5GuFGWYA1i1tSKVQFLyPyS"
+			]
+		},
+		"vaults-v1/contracts/libs/StrategySwapPaths.sol": {
+			"keccak256": "0x7f08dc35516920ad71cfee7d07db7e8525cf3e8a2fa1144aedf70eccfa66106d",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://863792edd4f2a6bfc4916172703e0a6735d1e65d6d2efd09ead2b5093a17ca55",
+				"dweb:/ipfs/QmbwKVHhtkNMehsi4HKws6YGwyQMAPrzqj6ySGhF9ZAgCi"
 			]
 		}
 	},

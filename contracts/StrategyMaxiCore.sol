@@ -9,22 +9,22 @@ import "./BaseStrategy.sol";
 contract StrategyMaxiCore is BaseStrategy {
     using SafeERC20 for IERC20;
 
-    address public masterchefAddress;
-    uint256 public pid;
-    
-    constructor(
-        address _govAddress,
-        address _masterchefAddress,
-        address _uniRouterAddress,
+    function initialize(
         uint256 _pid,
-        address _wantAddress, //want == earned for maximizer core
         uint256 _tolerance,
+        address _govAddress,
+        address _masterChef,
+        address _uniRouter,
+        address _wantAddress, //want == earned for maximizer core
         address _earnedToWmaticStep //address(0) if swapping earned->wmatic directly, or the address of an intermediate trade token such as weth
-    ) {
+    ) external {
+        
+        _baseInit();
+        
         govAddress = _govAddress;
         vaultChefAddress = msg.sender;
-        masterchefAddress = _masterchefAddress;
-        uniRouterAddress = _uniRouterAddress;
+        masterchefAddress = _masterChef;
+        uniRouterAddress = _uniRouter;
 
         wantAddress = _wantAddress;
 
@@ -32,9 +32,7 @@ contract StrategyMaxiCore is BaseStrategy {
         earnedAddress = _wantAddress;
         tolerance = _tolerance;
         
-        earnedToWmaticPath = StrategySwapPaths.makeEarnedToWmaticPath(earnedAddress, _earnedToWmaticStep);
-        earnedToUsdcPath = StrategySwapPaths.makeEarnedToXPath(earnedToWmaticPath, usdcAddress);
-        earnedToFishPath = StrategySwapPaths.makeEarnedToXPath(earnedToWmaticPath, fishAddress);
+        StrategySwapPaths.buildAllPaths(paths, _wantAddress, _earnedToWmaticStep, crystlAddress, _wantAddress, _wantAddress);
 
         transferOwnership(vaultChefAddress);
         
@@ -86,29 +84,10 @@ contract StrategyMaxiCore is BaseStrategy {
     }
 
     function _resetAllowances() internal override {
-        IERC20(wantAddress).safeApprove(masterchefAddress, uint256(0));
-        IERC20(wantAddress).safeIncreaseAllowance(
-            masterchefAddress,
-            type(uint256).max
-        );
-
-        IERC20(earnedAddress).safeApprove(uniRouterAddress, uint256(0));
-        IERC20(earnedAddress).safeIncreaseAllowance(
-            uniRouterAddress,
-            type(uint256).max
-        );
-
-        IERC20(usdcAddress).safeApprove(rewardAddress, uint256(0));
-        IERC20(usdcAddress).safeIncreaseAllowance(
-            rewardAddress,
-            type(uint256).max
-        );
-        
-        IERC20(earnedAddress).safeApprove(vaultChefAddress, uint256(0));
-        IERC20(earnedAddress).safeIncreaseAllowance(
-            vaultChefAddress,
-            type(uint256).max
-        );
+        IERC20(wantAddress).safeApprove(masterchefAddress, type(uint256).max);
+        IERC20(earnedAddress).safeApprove(uniRouterAddress, type(uint256).max);
+        IERC20(usdcAddress).safeApprove(rewardAddress, type(uint256).max);
+        IERC20(earnedAddress).safeApprove(vaultChefAddress, type(uint256).max);
     }
     
     function _emergencyVaultWithdraw() internal override {

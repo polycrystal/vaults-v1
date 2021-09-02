@@ -137,7 +137,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"vaults-v1/contracts/Operators8.sol": "Operators"
+			"vaults-v1/contracts/Operators.sol": "Operators"
 		},
 		"evmVersion": "london",
 		"libraries": {},
@@ -146,7 +146,7 @@
 		},
 		"optimizer": {
 			"enabled": true,
-			"runs": 200
+			"runs": 999999
 		},
 		"remappings": []
 	},
@@ -191,7 +191,7 @@
 				"dweb:/ipfs/QmWcsmkVr24xmmjfnBQZoemFniXjj3vwT78Cz6uqZW1Hux"
 			]
 		},
-		"vaults-v1/contracts/Operators8.sol": {
+		"vaults-v1/contracts/Operators.sol": {
 			"keccak256": "0xa5845502ed82b98d1094d1bd07c057b436f67f6aea0d52c69f0b89fdec353063",
 			"license": "MIT",
 			"urls": [

@@ -54,26 +54,22 @@
 			"buyBackRate()": "178a8d07",
 			"controllerFee()": "85f02dd6",
 			"convertDustToEarned()": "c11c2e92",
+			"crystlAddress()": "a1a7194f",
 			"deposit(address,uint256)": "47e7ef24",
 			"earn()": "d389800f",
 			"earnedAddress()": "e7198474",
-			"earnedToFishPath(uint256)": "8811dad0",
-			"earnedToMaxiPath(uint256)": "30f6cf63",
-			"earnedToToken0Path(uint256)": "c8e3d18b",
-			"earnedToToken1Path(uint256)": "96e9aff8",
-			"earnedToUsdcPath(uint256)": "49281683",
-			"earnedToWmaticPath(uint256)": "260ab48c",
 			"feeAddress()": "41275358",
 			"feeMax()": "ffbe9f1e",
 			"feeMaxTotal()": "8fefda06",
-			"fishAddress()": "9872317f",
 			"govAddress()": "46008a07",
 			"lastEarnBlock()": "0fa4e01e",
+			"masterchefAddress()": "40c34b58",
 			"maxiAddress()": "d62e969d",
 			"owner()": "8da5cb5b",
 			"panic()": "4700d305",
 			"pause()": "8456cb59",
 			"paused()": "5c975abb",
+			"pid()": "f1068454",
 			"renounceOwnership()": "715018a6",
 			"resetAllowances()": "3505b09f",
 			"rewardAddress()": "8cf57cb9",
@@ -84,10 +80,6 @@
 			"slippageFactor()": "ffbd3b1f",
 			"slippageFactorUL()": "b74cd242",
 			"stratType()": "7115e9fa",
-			"token0Address()": "7ff36fbe",
-			"token0ToEarnedPath(uint256)": "b77050e7",
-			"token1Address()": "d7cb416f",
-			"token1ToEarnedPath(uint256)": "007a2ae3",
 			"tolerance()": "dce52dfa",
 			"transferOwnership(address)": "f2fde38b",
 			"uniRouterAddress()": "693a090b",
@@ -102,7 +94,8 @@
 			"withdrawFeeAddress()": "784def8c",
 			"withdrawFeeFactor()": "68f54162",
 			"withdrawFeeFactorLL()": "866b2018",
-			"withdrawFeeFactorMax()": "67057b6c"
+			"withdrawFeeFactorMax()": "67057b6c",
+			"wmaticAddress()": "db4b7eee"
 		}
 	},
 	"abi": [
@@ -260,10 +253,23 @@
 			"type": "function"
 		},
 		{
+			"inputs": [],
+			"name": "crystlAddress",
+			"outputs": [
+				{
+					"internalType": "address",
+					"name": "",
+					"type": "address"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
 			"inputs": [
 				{
 					"internalType": "address",
-					"name": "_userAddress",
+					"name": "",
 					"type": "address"
 				},
 				{
@@ -293,120 +299,6 @@
 		{
 			"inputs": [],
 			"name": "earnedAddress",
-			"outputs": [
-				{
-					"internalType": "address",
-					"name": "",
-					"type": "address"
-				}
-			],
-			"stateMutability": "view",
-			"type": "function"
-		},
-		{
-			"inputs": [
-				{
-					"internalType": "uint256",
-					"name": "",
-					"type": "uint256"
-				}
-			],
-			"name": "earnedToFishPath",
-			"outputs": [
-				{
-					"internalType": "address",
-					"name": "",
-					"type": "address"
-				}
-			],
-			"stateMutability": "view",
-			"type": "function"
-		},
-		{
-			"inputs": [
-				{
-					"internalType": "uint256",
-					"name": "",
-					"type": "uint256"
-				}
-			],
-			"name": "earnedToMaxiPath",
-			"outputs": [
-				{
-					"internalType": "address",
-					"name": "",
-					"type": "address"
-				}
-			],
-			"stateMutability": "view",
-			"type": "function"
-		},
-		{
-			"inputs": [
-				{
-					"internalType": "uint256",
-					"name": "",
-					"type": "uint256"
-				}
-			],
-			"name": "earnedToToken0Path",
-			"outputs": [
-				{
-					"internalType": "address",
-					"name": "",
-					"type": "address"
-				}
-			],
-			"stateMutability": "view",
-			"type": "function"
-		},
-		{
-			"inputs": [
-				{
-					"internalType": "uint256",
-					"name": "",
-					"type": "uint256"
-				}
-			],
-			"name": "earnedToToken1Path",
-			"outputs": [
-				{
-					"internalType": "address",
-					"name": "",
-					"type": "address"
-				}
-			],
-			"stateMutability": "view",
-			"type": "function"
-		},
-		{
-			"inputs": [
-				{
-					"internalType": "uint256",
-					"name": "",
-					"type": "uint256"
-				}
-			],
-			"name": "earnedToUsdcPath",
-			"outputs": [
-				{
-					"internalType": "address",
-					"name": "",
-					"type": "address"
-				}
-			],
-			"stateMutability": "view",
-			"type": "function"
-		},
-		{
-			"inputs": [
-				{
-					"internalType": "uint256",
-					"name": "",
-					"type": "uint256"
-				}
-			],
-			"name": "earnedToWmaticPath",
 			"outputs": [
 				{
 					"internalType": "address",
@@ -458,19 +350,6 @@
 		},
 		{
 			"inputs": [],
-			"name": "fishAddress",
-			"outputs": [
-				{
-					"internalType": "address",
-					"name": "",
-					"type": "address"
-				}
-			],
-			"stateMutability": "view",
-			"type": "function"
-		},
-		{
-			"inputs": [],
 			"name": "govAddress",
 			"outputs": [
 				{
@@ -490,6 +369,19 @@
 					"internalType": "uint256",
 					"name": "",
 					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "masterchefAddress",
+			"outputs": [
+				{
+					"internalType": "address",
+					"name": "",
+					"type": "address"
 				}
 			],
 			"stateMutability": "view",
@@ -543,6 +435,19 @@
 					"internalType": "bool",
 					"name": "",
 					"type": "bool"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "pid",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
 				}
 			],
 			"stateMutability": "view",
@@ -688,73 +593,9 @@
 			"name": "stratType",
 			"outputs": [
 				{
-					"internalType": "enum BaseStrategy.StratType",
+					"internalType": "enum StratType",
 					"name": "",
 					"type": "uint8"
-				}
-			],
-			"stateMutability": "view",
-			"type": "function"
-		},
-		{
-			"inputs": [],
-			"name": "token0Address",
-			"outputs": [
-				{
-					"internalType": "address",
-					"name": "",
-					"type": "address"
-				}
-			],
-			"stateMutability": "view",
-			"type": "function"
-		},
-		{
-			"inputs": [
-				{
-					"internalType": "uint256",
-					"name": "",
-					"type": "uint256"
-				}
-			],
-			"name": "token0ToEarnedPath",
-			"outputs": [
-				{
-					"internalType": "address",
-					"name": "",
-					"type": "address"
-				}
-			],
-			"stateMutability": "view",
-			"type": "function"
-		},
-		{
-			"inputs": [],
-			"name": "token1Address",
-			"outputs": [
-				{
-					"internalType": "address",
-					"name": "",
-					"type": "address"
-				}
-			],
-			"stateMutability": "view",
-			"type": "function"
-		},
-		{
-			"inputs": [
-				{
-					"internalType": "uint256",
-					"name": "",
-					"type": "uint256"
-				}
-			],
-			"name": "token1ToEarnedPath",
-			"outputs": [
-				{
-					"internalType": "address",
-					"name": "",
-					"type": "address"
 				}
 			],
 			"stateMutability": "view",
@@ -882,7 +723,7 @@
 			"inputs": [
 				{
 					"internalType": "address",
-					"name": "_userAddress",
+					"name": "",
 					"type": "address"
 				},
 				{
@@ -949,6 +790,19 @@
 					"internalType": "uint256",
 					"name": "",
 					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "wmaticAddress",
+			"outputs": [
+				{
+					"internalType": "address",
+					"name": "",
+					"type": "address"
 				}
 			],
 			"stateMutability": "view",

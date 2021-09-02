@@ -257,19 +257,6 @@
 				"type": "function"
 			},
 			{
-				"inputs": [],
-				"name": "maxiToken",
-				"outputs": [
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
 				"inputs": [
 					{
 						"internalType": "address",
@@ -320,6 +307,11 @@
 						"internalType": "contract IStrategy",
 						"name": "strat",
 						"type": "address"
+					},
+					{
+						"internalType": "enum StratType",
+						"name": "stratType",
+						"type": "uint8"
 					}
 				],
 				"stateMutability": "view",
@@ -633,19 +625,19 @@
 			]
 		},
 		"vaults-v1/contracts/VaultHealer.sol": {
-			"keccak256": "0x068a661bf01862a689c92752a75911a6f655e32760b548a575a3bafad52b06a5",
+			"keccak256": "0x467fd4a7d09a0a47acc8d1b02081f649bdafa623d2b85682c0f9c3f241356fb6",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://99ee87eae3b20f790325b16385af490eb46e37e7ed5786661ecaf42b98a223cb",
-				"dweb:/ipfs/QmeXAPTC8LthZzeFsHtzdPWenw4x4pqTswiydD6EBS5ZdX"
+				"bzz-raw://c5c99ada58380193cd3a96bc2834006a564ea85f21a1d72542b04f2b8317f2d1",
+				"dweb:/ipfs/QmeVRy643XsD5CYRYWcKPK4F17ceL5Ru4h9yjYj6zhNeqB"
 			]
 		},
 		"vaults-v1/contracts/libs/IStrategy.sol": {
-			"keccak256": "0xf16daac77ecfd51ffa7b98faf74f56f7da9f6a97877c682c43cd080291f9f108",
+			"keccak256": "0x53fee8e8212f949267b6657b56ef68b566e6ac78304ff5dcdcf40490529d8d1d",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://1c35bae2bf6ba606fc58e4bd5b7bcb904b9f34fbad6d9fcc26b91148237f6c66",
-				"dweb:/ipfs/QmaZhNn4N48CdW94tQ3kyeYW9f8gY3UNB8oqvNGGYERuDf"
+				"bzz-raw://076594f9be4d3723f92dad77764cf60b34beebf15d56510b3fcd9d91e48730a7",
+				"dweb:/ipfs/QmREhoRCT514ozxQ9ew2XiPs36j56ZfSqHM8updZF9Q6jd"
 			]
 		}
 	},

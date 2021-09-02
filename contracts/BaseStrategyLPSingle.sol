@@ -20,21 +20,23 @@ abstract contract BaseStrategyLPSingle is BaseStrategyLP {
             earnedAmt = distributeFees(earnedAmt);
             earnedAmt = distributeRewards(earnedAmt);
             earnedAmt = buyBack(earnedAmt);
-    
+            
+            address token0Address = paths.token0ToEarned[0];
             if (earnedAddress != token0Address) {
                 // Swap half earned to token0
                 _safeSwap(
                     earnedAmt / 2,
-                    earnedToToken0Path,
+                    paths.earnedToToken0,
                     address(this)
                 );
             }
-    
+            
+            address token1Address = paths.token1ToEarned[0];
             if (earnedAddress != token1Address) {
                 // Swap half earned to token1
                 _safeSwap(
                     earnedAmt / 2,
-                    earnedToToken1Path,
+                    paths.earnedToToken1,
                     address(this)
                 );
             }

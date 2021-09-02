@@ -1,42 +1,69 @@
-// SPDX-License-Identifier: MIT
+struct StrategyPaths {
+    address[] earnedToWmatic;
+    address[] earnedToUsdc;
+    address[] earnedToCrystl;
+    address[] earnedToToken0;
+    address[] earnedToToken1;
+    address[] token0ToEarned;
+    address[] token1ToEarned;
+    address[] earnedToMaxi;
+}
 
-pragma solidity ^0.8.4;
+interface IUniPair {
+    function token0() external view returns (address);
+    function token1() external view returns (address);
+}
 
 library StrategySwapPaths {
     
     address internal constant USDC = 0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174;
     address internal constant WMATIC = 0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270;
     
-    function makeEarnedToWmaticPath(address earnedAddress, address middleStep) internal pure returns (address[] memory earnedToWmaticPath) {
+    function buildAllPaths(StrategyPaths storage paths, address earnedAddress, address middleStep, address crystl, address want, address maxi) public {
+            
+        makeEarnedToWmaticPath(paths.earnedToWmatic, earnedAddress, middleStep);
+        makeEarnedToXPath(paths.earnedToUsdc, paths.earnedToWmatic, USDC);
+        makeEarnedToXPath(paths.earnedToCrystl, paths.earnedToWmatic, crystl);
+        
+        if (maxi != address(0))  makeEarnedToXPath(paths.earnedToMaxi, paths.earnedToWmatic, maxi);
+        try IUniPair(want).token0() returns (address _token0) {
+            address _token1 = IUniPair(want).token1();
+            makeEarnedToXPath(paths.earnedToToken0, paths.earnedToWmatic, _token0);
+            makeEarnedToXPath(paths.earnedToToken1, paths.earnedToWmatic, _token1);
+            reverseArray(paths.token0ToEarned, paths.earnedToToken0);
+            reverseArray(paths.token1ToEarned, paths.earnedToToken1);
+        } catch {}
+
+    }
+    
+    function makeEarnedToWmaticPath(address[] storage _path, address earnedAddress, address middleStep) public {
+
+         _path.push(earnedAddress);
+        
         if (earnedAddress == WMATIC) {
-            earnedToWmaticPath = new address[](1);
-            earnedToWmaticPath[0] = WMATIC;
         } else if (middleStep == address(0)) {
-            earnedToWmaticPath = new address[](2);
-            earnedToWmaticPath[0] = earnedAddress;
-            earnedToWmaticPath[1] = WMATIC;
+            _path.push(WMATIC);
         } else {
-            earnedToWmaticPath = new address[](3);
-            earnedToWmaticPath[0] = earnedAddress;
-            earnedToWmaticPath[1] = middleStep;
-            earnedToWmaticPath[2] = WMATIC;
+            _path.push(middleStep);
+            _path.push(WMATIC);
         }
     }
-    function makeEarnedToXPath(address[] memory earnedToWmaticPath, address xToken) internal pure returns (address[] memory earnedToXPath) {
+    function makeEarnedToXPath(address[] storage _path, address[] memory earnedToWmaticPath, address xToken) public {
         
         if (earnedToWmaticPath[0] == xToken) {
-            earnedToXPath = new address[](1);
-            earnedToXPath[0] = xToken;
-        } else if (earnedToWmaticPath[1] == USDC) {
-            earnedToXPath = new address[](2);
-            earnedToXPath[0] = earnedToWmaticPath[0];
-            earnedToXPath[1] = xToken;
+        } else if (earnedToWmaticPath[1] == xToken) {
+            _path.push(earnedToWmaticPath[0]);
         } else {
-            earnedToXPath = new address[](earnedToWmaticPath.length + 1);
             for (uint i; i < earnedToWmaticPath.length; i++) {
-                earnedToXPath[i] = earnedToWmaticPath[i];
+                _path.push(earnedToWmaticPath[i]);
             }
-            earnedToXPath[earnedToWmaticPath.length] = xToken;
+        }
+        _path.push(xToken);
+    }
+    
+    function reverseArray(address[] storage _reverse, address[] storage _array) internal {
+        for (uint i; i < _array.length; i++) {
+            _reverse.push(_array[_array.length - 1 - i]);
         }
     }
     

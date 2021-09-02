@@ -51,7 +51,9 @@
 		"methodIdentifiers": {
 			"deposit(address,uint256)": "47e7ef24",
 			"earn()": "d389800f",
+			"maxiAddress()": "d62e969d",
 			"sharesTotal()": "44a3955e",
+			"stratType()": "7115e9fa",
 			"wantAddress()": "e7a03679",
 			"wantLockedTotal()": "42da4eb3",
 			"withdraw(address,uint256)": "f3fef3a3"
@@ -91,6 +93,19 @@
 		},
 		{
 			"inputs": [],
+			"name": "maxiAddress",
+			"outputs": [
+				{
+					"internalType": "address",
+					"name": "",
+					"type": "address"
+				}
+			],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [],
 			"name": "sharesTotal",
 			"outputs": [
 				{
@@ -100,6 +115,19 @@
 				}
 			],
 			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "stratType",
+			"outputs": [
+				{
+					"internalType": "enum StratType",
+					"name": "",
+					"type": "uint8"
+				}
+			],
+			"stateMutability": "nonpayable",
 			"type": "function"
 		},
 		{

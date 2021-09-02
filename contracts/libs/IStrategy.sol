@@ -2,6 +2,8 @@
 
 pragma solidity >=0.6.12;
 
+enum StratType { BASIC, MASTER_HEALER, MAXIMIZER_CORE, MAXIMIZER }
+
 // For interacting with our own strategy
 interface IStrategy {
     // Want address
@@ -22,4 +24,8 @@ interface IStrategy {
     // Transfer want tokens strategy -> vaultChef
     function withdraw(address _userAddress, uint256 _wantAmt) external returns (uint256);
     
+    //Maximizer want token (eg crystl)
+    function maxiAddress() external returns (address);
+    
+    function stratType() external returns (StratType);
 }

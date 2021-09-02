@@ -6,42 +6,6 @@
 	"output": {
 		"abi": [
 			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "_masterchefAddress",
-						"type": "address"
-					},
-					{
-						"internalType": "address",
-						"name": "_uniRouterAddress",
-						"type": "address"
-					},
-					{
-						"internalType": "uint256",
-						"name": "_pid",
-						"type": "uint256"
-					},
-					{
-						"internalType": "address",
-						"name": "_wantAddress",
-						"type": "address"
-					},
-					{
-						"internalType": "uint256",
-						"name": "_tolerance",
-						"type": "uint256"
-					},
-					{
-						"internalType": "address",
-						"name": "_earnedToWmaticStep",
-						"type": "address"
-					}
-				],
-				"stateMutability": "nonpayable",
-				"type": "constructor"
-			},
-			{
 				"anonymous": false,
 				"inputs": [
 					{
@@ -208,6 +172,92 @@
 			{
 				"inputs": [
 					{
+						"internalType": "uint256",
+						"name": "_pid",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_tolerance",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "_masterChef",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "_uniRouter",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "_wantAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "_earnedAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "_earnedToWmaticStep",
+						"type": "address"
+					}
+				],
+				"name": "addMHMaximizerStrategy",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_pid",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_tolerance",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "_masterChef",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "_uniRouter",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "_wantAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "_earnedAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "_earnedToWmaticStep",
+						"type": "address"
+					}
+				],
+				"name": "addMHStandardStrategy",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
 						"internalType": "address",
 						"name": "_strat",
 						"type": "address"
@@ -295,6 +345,44 @@
 			{
 				"inputs": [
 					{
+						"internalType": "uint256",
+						"name": "_pid",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_tolerance",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "_masterChef",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "_uniRouter",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "_wantAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "_earnedToWmaticStep",
+						"type": "address"
+					}
+				],
+				"name": "initialize",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
 						"internalType": "address",
 						"name": "",
 						"type": "address"
@@ -306,19 +394,6 @@
 						"internalType": "uint256",
 						"name": "",
 						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "maxiToken",
-				"outputs": [
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
 					}
 				],
 				"stateMutability": "view",
@@ -385,9 +460,14 @@
 						"type": "address"
 					},
 					{
-						"internalType": "address",
+						"internalType": "contract IStrategy",
 						"name": "strat",
 						"type": "address"
+					},
+					{
+						"internalType": "enum StratType",
+						"name": "stratType",
+						"type": "uint8"
 					}
 				],
 				"stateMutability": "view",
@@ -476,6 +556,45 @@
 				"type": "function"
 			},
 			{
+				"inputs": [],
+				"name": "strategyMasterHealer",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "strategyMaxiCore",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "strategyMaxiMasterHealer",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
 				"inputs": [
 					{
 						"internalType": "address",
@@ -529,12 +648,12 @@
 				"inputs": [
 					{
 						"internalType": "uint256",
-						"name": "",
+						"name": "_pid",
 						"type": "uint256"
 					},
 					{
 						"internalType": "address",
-						"name": "",
+						"name": "_user",
 						"type": "address"
 					}
 				],
@@ -542,7 +661,7 @@
 				"outputs": [
 					{
 						"internalType": "uint256",
-						"name": "shares",
+						"name": "",
 						"type": "uint256"
 					}
 				],
@@ -639,7 +758,7 @@
 		},
 		"optimizer": {
 			"enabled": true,
-			"runs": 200
+			"runs": 999999
 		},
 		"remappings": []
 	},
@@ -652,12 +771,20 @@
 				"dweb:/ipfs/Qmd5c7Vxtis9wzkDNhxwc6A2QT5H9xn9kfjhx7qx44vpro"
 			]
 		},
-		"@openzeppelin/contracts/security/Pausable.sol": {
-			"keccak256": "0xa35b1f2a670cd2a701a52c398032c9fed72df1909fe394d77ceacbf074e8937b",
+		"@openzeppelin/contracts/proxy/Proxy.sol": {
+			"keccak256": "0x8ddea9f930f26e588ea606f44c90d2623560c908e38614a03a4ca78aea8f9202",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://72b957861691ebdaa78c52834465c4f8296480fe4f1a12ba72dc6c0c8ac076dd",
-				"dweb:/ipfs/QmVz1sHCwgEivHPRDswdt9tdvky7EnWqFmbuk1wFE55VMG"
+				"bzz-raw://2fdf3a59554497c50ed8f4ffccd4ebcf73e49e1324e81ec05128d54d1b73c293",
+				"dweb:/ipfs/QmRZtNA2Lx58eAqTXb5DGWxCmH2vxGGuzG6KgBU5fgbzip"
+			]
+		},
+		"@openzeppelin/contracts/proxy/utils/Initializable.sol": {
+			"keccak256": "0x8b2abd85d0ece7e866e100e9d47ca9cbec93c87cf71a8d267b2b93eb81f7d5e9",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://fe9fa1beb63e4a09637701f783982ba80380d630d600c9cafe26b68bf58be1b2",
+				"dweb:/ipfs/QmRA3GXhTWys88joD9x8xYhdjzvGwmDGLMMzGw3LxbSEge"
 			]
 		},
 		"@openzeppelin/contracts/security/ReentrancyGuard.sol": {
@@ -708,22 +835,6 @@
 				"dweb:/ipfs/QmdR7JUXpD5X7eXkc24bRtNj3e7ahs8RC8s25cu7X14GHU"
 			]
 		},
-		"@openzeppelin/contracts/utils/math/SafeCast.sol": {
-			"keccak256": "0x08d867b4c0bb782b9135691fa732b6846e0f133006489c3aa505abd1f6de56cb",
-			"license": "MIT",
-			"urls": [
-				"bzz-raw://b77bcb10d18368236908e2dd94a8e138e330ce672995017c1dae001551a5d639",
-				"dweb:/ipfs/QmdZs431M8sA4mTsSe8PeycREkBAmzC4a6NN7eFppyK62B"
-			]
-		},
-		"vaults-v1/contracts/BaseStrategy.sol": {
-			"keccak256": "0x048fd4b917118fdfda1cf9b99479adf9c58e98cefb27f8f89e60f47649213e2b",
-			"license": "MIT",
-			"urls": [
-				"bzz-raw://740b4de115b76f6a6288ed8dd11ab0f6f31cda267088cc585bcd66fda1828a8d",
-				"dweb:/ipfs/QmQ6itoQQ6HTBGs5wXwehc25W5X859xC47D3UvzSbFWaCD"
-			]
-		},
 		"vaults-v1/contracts/Operators.sol": {
 			"keccak256": "0xa5845502ed82b98d1094d1bd07c057b436f67f6aea0d52c69f0b89fdec353063",
 			"license": "MIT",
@@ -732,84 +843,36 @@
 				"dweb:/ipfs/QmQCnTfmXSzKwW7y8ZJs4uraVvuPfy5yevXPgqj87watkV"
 			]
 		},
-		"vaults-v1/contracts/StrategyMaxiCore.sol": {
-			"keccak256": "0x271efefd5fec5c7a8cd8d72c931bcdc90ff713d7f39f6933c55cdf17fe5e4d9a",
-			"license": "MIT",
-			"urls": [
-				"bzz-raw://418e41b5a5cca35d9f386738feaec6700b0ae31d77c760dc46d96a90403dcc79",
-				"dweb:/ipfs/QmPqJVzcEpQ8agdhRn16g2uYJb7wBiwy9NmGG8SiJdnifo"
-			]
-		},
 		"vaults-v1/contracts/VaultHealer.sol": {
-			"keccak256": "0x3a9a898a9bf816ed76af74655dea728567ad85ace58412e43ef491d164a38682",
+			"keccak256": "0x467fd4a7d09a0a47acc8d1b02081f649bdafa623d2b85682c0f9c3f241356fb6",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://2a56ca18dfe4645e7f04854671a065c937a14603534c709c0803d14ac31c6231",
-				"dweb:/ipfs/QmTV1hxgRsPSH1faZw1DCckXYPSNKS4Y57t32E3Ngf9Et3"
+				"bzz-raw://c5c99ada58380193cd3a96bc2834006a564ea85f21a1d72542b04f2b8317f2d1",
+				"dweb:/ipfs/QmeVRy643XsD5CYRYWcKPK4F17ceL5Ru4h9yjYj6zhNeqB"
 			]
 		},
 		"vaults-v1/contracts/VaultHealerMaxi.sol": {
-			"keccak256": "0x37e23aa12184205e71b497f9d50ff3d7f61348610ed2d25779c823175697f37f",
+			"keccak256": "0x2db937dc71d371c28ea6145f9dd9a4b07e10348b50012cb198bcf25ccdce66c5",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://bc9fbba5a1975f496a5d816763012ad6cc9a32006d931c58fb0f81716ea6d320",
-				"dweb:/ipfs/QmRmn1QENP1oBWjtLEUg3mzKDQRukNK7Ba4xfKTcbTHEbx"
+				"bzz-raw://7ba09144ddf8acf7750aa5ddcb75278e03c7ce38a761d926735e607661916019",
+				"dweb:/ipfs/QmVT7s5Ah2MSg1CAzP9fT8g78FrLsTtTEDNxs26JEzE6RG"
 			]
 		},
-		"vaults-v1/contracts/libs/IMasterchef.sol": {
-			"keccak256": "0x6a2b76a1f0a3ac61ebf4112c1a2915f6e03708f6d87f5403e9547f86bd6efd11",
+		"vaults-v1/contracts/VaultProxy.sol": {
+			"keccak256": "0x4c8f8348fb37167b6da1494e70d82d45844328c8dd2e7e471469b02bf015857c",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://51ea6c4270ca3b41fa31d7d636b2778bdbbc7ab84d0fcecf7bc3849f91eaa44f",
-				"dweb:/ipfs/QmNMpqkBCVT3X7WuH2HwfA1nr6Bu6rVF9RTQpuLXpn9QjB"
+				"bzz-raw://1d367cea854d97e110d2908810160201d43e0446380788786b53fe8f2232f85b",
+				"dweb:/ipfs/QmQPn2wmbGhnf4t1hrGSjihAbAbqt5L1zbS5aPobvek9tg"
 			]
 		},
 		"vaults-v1/contracts/libs/IStrategy.sol": {
-			"keccak256": "0xf16daac77ecfd51ffa7b98faf74f56f7da9f6a97877c682c43cd080291f9f108",
+			"keccak256": "0x53fee8e8212f949267b6657b56ef68b566e6ac78304ff5dcdcf40490529d8d1d",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://1c35bae2bf6ba606fc58e4bd5b7bcb904b9f34fbad6d9fcc26b91148237f6c66",
-				"dweb:/ipfs/QmaZhNn4N48CdW94tQ3kyeYW9f8gY3UNB8oqvNGGYERuDf"
-			]
-		},
-		"vaults-v1/contracts/libs/IStrategyFish.sol": {
-			"keccak256": "0x47db6681adffc6188f5301007f60967b57709bc6165e301c40c7e56aa77a490a",
-			"license": "MIT",
-			"urls": [
-				"bzz-raw://5ce012100112143969cba71426ee46da6c8b8a7b7055d42d00d2e87e5853613e",
-				"dweb:/ipfs/QmRVc9mqeGfeuiWrLyZeM2NGoiX8cfPhiuNNTm7tcNjusU"
-			]
-		},
-		"vaults-v1/contracts/libs/IUniPair.sol": {
-			"keccak256": "0x18db10c4956f8924791879b151319ae39b90cc2baf767a943b290317d39521d2",
-			"license": "MIT",
-			"urls": [
-				"bzz-raw://ddc063cbf21cb266d25084204e43124187fa5c0e944bb71ea37987e4cacd23d4",
-				"dweb:/ipfs/QmeeVLK61fSRYReupTpG2L9rwowrGP4egJfwoyVasrXvFy"
-			]
-		},
-		"vaults-v1/contracts/libs/IUniRouter01.sol": {
-			"keccak256": "0x450778b9c14a200deb06e415b7d66bae2a9d09ec94a45ebafdaf2cdb0945a910",
-			"license": "MIT",
-			"urls": [
-				"bzz-raw://ef637d6122da031f8149b65092412624170517f983b21fc124506b1e7864ed71",
-				"dweb:/ipfs/QmbgEtcysDJZLZRzKErso6hxTD5LGWRfQmReFLDNNC2eWa"
-			]
-		},
-		"vaults-v1/contracts/libs/IUniRouter02.sol": {
-			"keccak256": "0x9483f46667c7de038c6857f908a7d2d110fbbf9748876b6a9314191e24bc895d",
-			"license": "MIT",
-			"urls": [
-				"bzz-raw://1b825fb00fa27304eb84eb03521889517b84fa1d954965a801fa3e4de5d361bb",
-				"dweb:/ipfs/QmWvaWmPaBpL5TVSBLKJRnWE5GuFGWYA1i1tSKVQFLyPyS"
-			]
-		},
-		"vaults-v1/contracts/libs/StrategySwapPaths.sol": {
-			"keccak256": "0x7dc8b095b998f967d95905ffdadded36a444e41cfc14015fa595c9b057b6c848",
-			"license": "MIT",
-			"urls": [
-				"bzz-raw://14e16bb381dff37e706b0658c7b27907b1b89c54f42b9eed4d635b27806adcbb",
-				"dweb:/ipfs/QmdC8DLGnQ2aqh2bzB4YfZe3Wf5NrsdFnkj78frdeFeAQX"
+				"bzz-raw://076594f9be4d3723f92dad77764cf60b34beebf15d56510b3fcd9d91e48730a7",
+				"dweb:/ipfs/QmREhoRCT514ozxQ9ew2XiPs36j56ZfSqHM8updZF9Q6jd"
 			]
 		}
 	},
