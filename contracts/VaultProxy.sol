@@ -5,8 +5,6 @@ pragma solidity ^0.8.4;
 import "@openzeppelin/contracts/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts/proxy/Proxy.sol";
 
-
-
 import "./libs/IVaultHealer.sol";
 import "./libs/IStrategy.sol";
 

@@ -74,10 +74,9 @@
 			"rewardAddress()": "8cf57cb9",
 			"rewardRate()": "7b0a47ee",
 			"setGov(address)": "cfad57a2",
-			"setSettings(uint256,uint256,uint256,uint256,uint256,uint256,address)": "b02381c6",
+			"setSettings(uint256,uint256,uint256,uint256,uint256,address)": "8d9ab2be",
 			"sharesTotal()": "44a3955e",
 			"slippageFactor()": "ffbd3b1f",
-			"slippageFactorUL()": "b74cd242",
 			"stratType()": "7115e9fa",
 			"tolerance()": "dce52dfa",
 			"transferOwnership(address)": "f2fde38b",
@@ -155,12 +154,6 @@
 					"indexed": false,
 					"internalType": "uint256",
 					"name": "_withdrawFeeFactor",
-					"type": "uint256"
-				},
-				{
-					"indexed": false,
-					"internalType": "uint256",
-					"name": "_slippageFactor",
 					"type": "uint256"
 				},
 				{
@@ -522,11 +515,6 @@
 				},
 				{
 					"internalType": "uint256",
-					"name": "_slippageFactor",
-					"type": "uint256"
-				},
-				{
-					"internalType": "uint256",
 					"name": "_tolerance",
 					"type": "uint256"
 				},
@@ -557,19 +545,6 @@
 		{
 			"inputs": [],
 			"name": "slippageFactor",
-			"outputs": [
-				{
-					"internalType": "uint256",
-					"name": "",
-					"type": "uint256"
-				}
-			],
-			"stateMutability": "view",
-			"type": "function"
-		},
-		{
-			"inputs": [],
-			"name": "slippageFactorUL",
 			"outputs": [
 				{
 					"internalType": "uint256",

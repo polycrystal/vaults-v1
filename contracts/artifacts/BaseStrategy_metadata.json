@@ -67,12 +67,6 @@
 					{
 						"indexed": false,
 						"internalType": "uint256",
-						"name": "_slippageFactor",
-						"type": "uint256"
-					},
-					{
-						"indexed": false,
-						"internalType": "uint256",
 						"name": "_tolerance",
 						"type": "uint256"
 					},
@@ -429,11 +423,6 @@
 					},
 					{
 						"internalType": "uint256",
-						"name": "_slippageFactor",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
 						"name": "_tolerance",
 						"type": "uint256"
 					},
@@ -464,19 +453,6 @@
 			{
 				"inputs": [],
 				"name": "slippageFactor",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "slippageFactorUL",
 				"outputs": [
 					{
 						"internalType": "uint256",
@@ -743,7 +719,7 @@
 		},
 		"optimizer": {
 			"enabled": true,
-			"runs": 999999
+			"runs": 200
 		},
 		"remappings": []
 	},
@@ -821,19 +797,19 @@
 			]
 		},
 		"vaults-v1/contracts/BaseStrategy.sol": {
-			"keccak256": "0xb2d83fa87188ee4af50be987b3ac11079100a6c71f473281fc4cc7aef4ece6bf",
+			"keccak256": "0x1ddc3371acbda42bb2060877180363ef20432f79fa7fe8d5eb634c6117ccbed9",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://0b873c9ff420094e466156a14420fe68c5a38d8f34a19d5503ec934cb281eab9",
-				"dweb:/ipfs/QmRBAkdDijQ148muu4R8LPyMXmQQe2WJNijZGuHLkEG2Tr"
+				"bzz-raw://a8079c283be655aa747dea0f4dc42d8b62cc7749f0bee3363f787bb57e87026b",
+				"dweb:/ipfs/QmcC3xmYtUyxXuw5H3j61DziRq3inMGWDW5w7rWBxspTW4"
 			]
 		},
 		"vaults-v1/contracts/libs/IStrategy.sol": {
-			"keccak256": "0x53fee8e8212f949267b6657b56ef68b566e6ac78304ff5dcdcf40490529d8d1d",
+			"keccak256": "0xdec3a5993a4972cc1702200aa9af50a0e520587dcab159141632c766816728c6",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://076594f9be4d3723f92dad77764cf60b34beebf15d56510b3fcd9d91e48730a7",
-				"dweb:/ipfs/QmREhoRCT514ozxQ9ew2XiPs36j56ZfSqHM8updZF9Q6jd"
+				"bzz-raw://55f01e9d11b3b4b4af05682aa416bb19c4144e9a1c8bad3064f0d1af943cbafc",
+				"dweb:/ipfs/QmTcF5FtEM5tngHr69JMb9ugiS2uHEXiVc3SST77ktt6qE"
 			]
 		},
 		"vaults-v1/contracts/libs/IStrategyFish.sol": {

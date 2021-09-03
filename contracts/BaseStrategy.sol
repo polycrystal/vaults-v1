@@ -55,14 +55,12 @@ abstract contract BaseStrategy is Ownable, ReentrancyGuard, Pausable, Initializa
     uint256 public constant feeMax = 10000; // 100 = 1%
     uint256 public constant withdrawFeeFactorMax = 10000;
     uint256 public constant withdrawFeeFactorLL = 9900; 
-    uint256 public constant slippageFactorUL = 995;
 
     event SetSettings(
         uint256 _controllerFee,
         uint256 _rewardRate,
         uint256 _buyBackRate,
         uint256 _withdrawFeeFactor,
-        uint256 _slippageFactor,
         uint256 _tolerance,
         address _uniRouterAddress
     );
@@ -77,7 +75,6 @@ abstract contract BaseStrategy is Ownable, ReentrancyGuard, Pausable, Initializa
         controllerFee = 50;
         buyBackRate = 450;
         withdrawFeeFactor = 9990; // 0.1% withdraw fee
-        slippageFactor = 950; // 5% default slippage tolerance
     }
 
     function _vaultDeposit(uint256 _amount) internal virtual;
@@ -162,7 +159,7 @@ abstract contract BaseStrategy is Ownable, ReentrancyGuard, Pausable, Initializa
         if (controllerFee > 0) {
             uint256 fee = _earnedAmt * controllerFee / feeMax;
     
-            _safeSwapWmatic(
+            _swapWmatic(
                 fee,
                 paths.earnedToWmatic,
                 feeAddress
@@ -180,7 +177,7 @@ abstract contract BaseStrategy is Ownable, ReentrancyGuard, Pausable, Initializa
     
             uint256 usdcBefore = IERC20(usdcAddress).balanceOf(address(this));
             
-            _safeSwap(
+            _swap(
                 fee,
                 paths.earnedToUsdc,
                 address(this)
@@ -200,7 +197,7 @@ abstract contract BaseStrategy is Ownable, ReentrancyGuard, Pausable, Initializa
         if (buyBackRate > 0) {
             uint256 buyBackAmt = _earnedAmt * buyBackRate / feeMax;
     
-            _safeSwap(
+            _swap(
                 buyBackAmt,
                 paths.earnedToCrystl,
                 buyBackAddress
@@ -244,19 +241,16 @@ abstract contract BaseStrategy is Ownable, ReentrancyGuard, Pausable, Initializa
         uint256 _rewardRate,
         uint256 _buyBackRate,
         uint256 _withdrawFeeFactor,
-        uint256 _slippageFactor,
         uint256 _tolerance,
         address _uniRouterAddress
     ) external onlyGov {
         require(_controllerFee + _rewardRate + _buyBackRate <= feeMaxTotal, "Max fee of 10%");
         require(_withdrawFeeFactor >= withdrawFeeFactorLL, "_withdrawFeeFactor too low");
         require(_withdrawFeeFactor <= withdrawFeeFactorMax, "_withdrawFeeFactor too high");
-        require(_slippageFactor <= slippageFactorUL, "_slippageFactor too high");
         controllerFee = _controllerFee;
         rewardRate = _rewardRate;
         buyBackRate = _buyBackRate;
         withdrawFeeFactor = _withdrawFeeFactor;
-        slippageFactor = _slippageFactor;
         tolerance = _tolerance;
         uniRouterAddress = _uniRouterAddress;
 
@@ -265,44 +259,40 @@ abstract contract BaseStrategy is Ownable, ReentrancyGuard, Pausable, Initializa
             _rewardRate,
             _buyBackRate,
             _withdrawFeeFactor,
-            _slippageFactor,
             _tolerance,
             _uniRouterAddress
         );
     }
     
-    function _safeSwap(
+    function _swap(
         uint256 _amountIn,
         address[] memory _path,
         address _to
     ) internal {
-        uint256[] memory amounts = IUniRouter02(uniRouterAddress).getAmountsOut(_amountIn, _path);
-        uint256 amountOut = amounts[amounts.length - 1];
-        
+        uint burnBefore;
         if (_path[_path.length - 1] == crystlAddress && _to == buyBackAddress) {
-            burnedAmount += amountOut;
+            burnBefore = IERC20(crystlAddress).balanceOf(buyBackAddress);
         }
 
         IUniRouter02(uniRouterAddress).swapExactTokensForTokens(
             _amountIn,
-            amountOut * slippageFactor / 1000,
+            0,
             _path,
             _to,
             block.timestamp + 600
         );
+        if (burnBefore > 0) burnedAmount += IERC20(crystlAddress).balanceOf(buyBackAddress) - burnBefore;
     }
     
-    function _safeSwapWmatic(
+    function _swapWmatic(
         uint256 _amountIn,
         address[] memory _path,
         address _to
     ) internal {
-        uint256[] memory amounts = IUniRouter02(uniRouterAddress).getAmountsOut(_amountIn, _path);
-        uint256 amountOut = amounts[amounts.length - 1];
 
         IUniRouter02(uniRouterAddress).swapExactTokensForETH(
             _amountIn,
-            amountOut * slippageFactor / 1000,
+            0,
             _path,
             _to,
             block.timestamp + 600
