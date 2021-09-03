@@ -4,6 +4,7 @@ pragma solidity ^0.8.4;
 
 import "./libs/IMasterchef.sol";
 import "./libs/IVaultHealer.sol";
+
 import "./BaseStrategyMaxiSingle.sol";
 
 //Can be used for both single-stake and LP want tokens

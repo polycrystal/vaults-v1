@@ -52,6 +52,7 @@
 			"deposit(address,uint256)": "47e7ef24",
 			"earn()": "d389800f",
 			"initialize(uint256,uint256,address,address,address,address,address)": "1268a28f",
+			"initialize(uint256,uint256,address,address,address,address,address,address)": "ff63a736",
 			"maxiAddress()": "d62e969d",
 			"sharesTotal()": "44a3955e",
 			"stratType()": "7115e9fa",
@@ -122,6 +123,54 @@
 				{
 					"internalType": "address",
 					"name": "_wantAddress",
+					"type": "address"
+				},
+				{
+					"internalType": "address",
+					"name": "_earnedToWmaticStep",
+					"type": "address"
+				}
+			],
+			"name": "initialize",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "uint256",
+					"name": "_pid",
+					"type": "uint256"
+				},
+				{
+					"internalType": "uint256",
+					"name": "_tolerance",
+					"type": "uint256"
+				},
+				{
+					"internalType": "address",
+					"name": "_govAddress",
+					"type": "address"
+				},
+				{
+					"internalType": "address",
+					"name": "_masterChef",
+					"type": "address"
+				},
+				{
+					"internalType": "address",
+					"name": "_uniRouter",
+					"type": "address"
+				},
+				{
+					"internalType": "address",
+					"name": "_wantAddress",
+					"type": "address"
+				},
+				{
+					"internalType": "address",
+					"name": "_earnedAddress",
 					"type": "address"
 				},
 				{

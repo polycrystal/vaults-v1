@@ -2,10 +2,11 @@
 
 pragma solidity ^0.8.4;
 
-import "./VaultHealer.sol";
-import "./VaultProxy.sol";
 import "@openzeppelin/contracts/utils/math/Math.sol";
 import "@openzeppelin/contracts/proxy/utils/Initializable.sol";
+
+import "./VaultHealer.sol";
+import "./VaultProxy.sol";
 
 contract VaultHealerMaxi is VaultHealer, Initializable {
     using Math for uint256;
@@ -24,11 +25,9 @@ contract VaultHealerMaxi is VaultHealer, Initializable {
         address _wantAddress, //want == earned for maximizer core
         address _earnedToWmaticStep //address(0) if swapping earned->wmatic directly, or the address of an intermediate trade token such as weth
     ) external initializer onlyOwner {
-        strategyMaxiCore = 0x85Ca967EbCf5572Aaf3953BCc51635B6A02D122A;
-        strategyMasterHealer = 0x4b19F4755a162b0CC6990E181B474Db36AF9613a;
-        strategyMaxiMasterHealer = 0x5aC89891AEbED834CD387B9Af727aD5A6A3a7fBD;
-        IStrategyInit core = IStrategyInit(address(new VaultProxy(StratType.MAXIMIZER_CORE)));
-        core.initialize(_pid, _tolerance, owner(), _masterChef, _uniRouter, _wantAddress, _earnedToWmaticStep);
+        VaultProxy core = new VaultProxy();
+        core.__initialize(StratType.MAXIMIZER_CORE);
+        IStrategy(address(core)).initialize(_pid, _tolerance, owner(), _masterChef, _uniRouter, _wantAddress, _earnedToWmaticStep);
         addPool(address(core));
     }
     
@@ -41,8 +40,9 @@ contract VaultHealerMaxi is VaultHealer, Initializable {
         address _earnedAddress,
         address _earnedToWmaticStep
     ) external onlyOwner {
-        IStrategyInit _strat = IStrategyInit(address(new VaultProxy(StratType.MASTER_HEALER)));
-        _strat.initialize(_pid, _tolerance, owner(), _masterChef, _uniRouter, _wantAddress, _earnedAddress, _earnedToWmaticStep);
+        VaultProxy _strat = new VaultProxy();
+        _strat.__initialize(StratType.MASTER_HEALER);
+        IStrategy(address(_strat)).initialize(_pid, _tolerance, owner(), _masterChef, _uniRouter, _wantAddress, _earnedAddress, _earnedToWmaticStep);
         addPool(address(_strat));
     }
     
@@ -55,10 +55,11 @@ contract VaultHealerMaxi is VaultHealer, Initializable {
         address _earnedAddress,
         address _earnedToWmaticStep //address(0) if swapping earned->wmatic directly, or the address of an intermediate trade token such as weth
     ) external onlyOwner {
-        IStrategyInit _strat = IStrategyInit(address(new VaultProxy(StratType.MAXIMIZER)));
-        _strat.initialize(_pid, _tolerance, owner(), _masterChef, _uniRouter, _wantAddress, _earnedAddress, _earnedToWmaticStep);
+        VaultProxy _strat = new VaultProxy();
+        _strat.__initialize(StratType.MAXIMIZER);
+        IStrategy(address(_strat)).initialize(_pid, _tolerance, owner(), _masterChef, _uniRouter, _wantAddress, _earnedAddress, _earnedToWmaticStep);
         addPool(address(_strat));
-        require(_strat.maxiAddress() == address(poolInfo[0].want), "maximizer maximizes the wrong token!");
+        require(IStrategy(address(_strat)).maxiAddress() == address(poolInfo[0].want), "maximizer maximizes the wrong token!");
     }
     
     //for a particular account, shares contributed by one of the maximizers

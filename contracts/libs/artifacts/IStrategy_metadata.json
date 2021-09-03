@@ -80,6 +80,54 @@
 				"type": "function"
 			},
 			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_pid",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_tolerance",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "_govAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "_masterChef",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "_uniRouter",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "_wantAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "_earnedAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "_earnedToWmaticStep",
+						"type": "address"
+					}
+				],
+				"name": "initialize",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
 				"inputs": [],
 				"name": "maxiAddress",
 				"outputs": [
@@ -197,11 +245,11 @@
 	},
 	"sources": {
 		"vaults-v1/contracts/libs/IStrategy.sol": {
-			"keccak256": "0xa5c5e7f684dca78071cd0bad40c5c408558a2cc86370a953e818d8a9a1d27364",
+			"keccak256": "0xdec3a5993a4972cc1702200aa9af50a0e520587dcab159141632c766816728c6",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://56210a12aa758c8c76f14f9b019880c39bea8eb0bd27853522b4ab49e0049923",
-				"dweb:/ipfs/QmQXKTUqq7vcAvyErVJGbfFVzPDaP8Zw9WGNfhPoReADHF"
+				"bzz-raw://55f01e9d11b3b4b4af05682aa416bb19c4144e9a1c8bad3064f0d1af943cbafc",
+				"dweb:/ipfs/QmTcF5FtEM5tngHr69JMb9ugiS2uHEXiVc3SST77ktt6qE"
 			]
 		}
 	},
