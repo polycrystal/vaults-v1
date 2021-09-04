@@ -563,7 +563,7 @@
 		},
 		"optimizer": {
 			"enabled": true,
-			"runs": 999999
+			"runs": 200
 		},
 		"remappings": []
 	},
@@ -625,19 +625,19 @@
 			]
 		},
 		"vaults-v1/contracts/VaultHealer.sol": {
-			"keccak256": "0xe506fbc1dbdd1e9b01a1c8618bd1bec556a7ccfd9e0bc9c0c2ee69ea248ead8d",
+			"keccak256": "0xe6ae45c5d179774c75aa5553e9003c98b76724b026ab3caf75817f0a2b6830ac",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://ffd219cf8a0a9ebc135f123bb142e17a80e8473c51a6f7dfd9838c468724b1a9",
-				"dweb:/ipfs/QmeCmXmfJ6z5FgUe7Xxve63HUtaDsq2jT9KLuv2KU59pYp"
+				"bzz-raw://694ee99a79262d247f18feae51cf9ec7863da805fb1bcff7e5191c49bb472e64",
+				"dweb:/ipfs/QmTSTHH1UyieNk6aQtAcQeyaTuxtRehWY27uyc5mAj5GsP"
 			]
 		},
 		"vaults-v1/contracts/libs/IStrategy.sol": {
-			"keccak256": "0x53fee8e8212f949267b6657b56ef68b566e6ac78304ff5dcdcf40490529d8d1d",
+			"keccak256": "0xdec3a5993a4972cc1702200aa9af50a0e520587dcab159141632c766816728c6",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://076594f9be4d3723f92dad77764cf60b34beebf15d56510b3fcd9d91e48730a7",
-				"dweb:/ipfs/QmREhoRCT514ozxQ9ew2XiPs36j56ZfSqHM8updZF9Q6jd"
+				"bzz-raw://55f01e9d11b3b4b4af05682aa416bb19c4144e9a1c8bad3064f0d1af943cbafc",
+				"dweb:/ipfs/QmTcF5FtEM5tngHr69JMb9ugiS2uHEXiVc3SST77ktt6qE"
 			]
 		}
 	},

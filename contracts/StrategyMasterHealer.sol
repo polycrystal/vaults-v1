@@ -17,56 +17,50 @@ contract StrategyMasterHealer is BaseStrategyLPSingle {
         address _earnedAddress,
         address _earnedToWmaticStep
     ) external {
-        _baseInit();
+        super._initialize();
         
-        govAddress = _govAddress;
-        vaultChefAddress = msg.sender;
-        masterchefAddress = _masterChef;
-        uniRouterAddress = _uniRouter;
-        wantAddress = _wantAddress;
-        earnedAddress = _earnedAddress;
-
         pid = _pid;
         tolerance = _tolerance;
+        
+        addresses = StrategyData.Addresses({
+            gov: _govAddress,
+            want: _wantAddress,
+            earned: _earnedAddress,
+            router: _uniRouter,
+            vaultChef: msg.sender,
+            masterChef: _masterChef,
+            token0: address(0),
+            token1: address(0),
+            maxi: address(0)
+        });
 
-        StrategySwapPaths.buildAllPaths(paths, _earnedAddress, _earnedToWmaticStep, crystlAddress, _wantAddress, address(0));
+        StrategyData.buildAllPaths(addresses, paths, _earnedToWmaticStep, true);
 
         transferOwnership(msg.sender);
-        
         _resetAllowances();
         stratType = StratType.MASTER_HEALER;
     }
 
     function _vaultDeposit(uint256 _amount) internal override {
-        IMasterchef(masterchefAddress).deposit(pid, _amount);
+        IMasterchef(addresses.masterChef).deposit(pid, _amount);
     }
     
     function _vaultWithdraw(uint256 _amount) internal override {
-        IMasterchef(masterchefAddress).withdraw(pid, _amount);
-    }
-    
-    function _vaultHarvest() internal override {
-        IMasterchef(masterchefAddress).withdraw(pid, 0);
+        IMasterchef(addresses.masterChef).withdraw(pid, _amount);
     }
     
     function vaultSharesTotal() public override view returns (uint256) {
-        (uint256 amount,) = IMasterchef(masterchefAddress).userInfo(pid, address(this));
+        (uint256 amount,) = IMasterchef(addresses.masterChef).userInfo(pid, address(this));
         return amount;
-    }
-    
-    function wantLockedTotal() public override view returns (uint256) {
-        return IERC20(wantAddress).balanceOf(address(this)) + vaultSharesTotal();
     }
 
     function _resetAllowances() internal override {
-        IERC20(wantAddress).approve(masterchefAddress, type(uint256).max);
-        IERC20(earnedAddress).approve(uniRouterAddress, type(uint256).max);
-        IERC20(paths.token0ToEarned[0]).approve(uniRouterAddress, type(uint256).max);
-        IERC20(paths.token1ToEarned[0]).approve(uniRouterAddress, type(uint256).max);
+        IERC20(addresses.want).approve(addresses.masterChef, type(uint256).max);
+        IERC20(addresses.earned).approve(addresses.router, type(uint256).max);
         IERC20(usdcAddress).approve(rewardAddress, type(uint256).max);
     }
     
     function _emergencyVaultWithdraw() internal override {
-        IMasterchef(masterchefAddress).emergencyWithdraw(pid);
+        IMasterchef(addresses.masterChef).emergencyWithdraw(pid);
     }
 }

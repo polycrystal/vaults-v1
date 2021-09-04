@@ -67,12 +67,6 @@
 					{
 						"indexed": false,
 						"internalType": "uint256",
-						"name": "_slippageFactor",
-						"type": "uint256"
-					},
-					{
-						"indexed": false,
-						"internalType": "uint256",
 						"name": "_tolerance",
 						"type": "uint256"
 					},
@@ -81,6 +75,12 @@
 						"internalType": "address",
 						"name": "_uniRouterAddress",
 						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "_minEarnAmount",
+						"type": "uint256"
 					}
 				],
 				"name": "SetSettings",
@@ -301,6 +301,19 @@
 			},
 			{
 				"inputs": [],
+				"name": "minEarnAmount",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
 				"name": "owner",
 				"outputs": [
 					{
@@ -424,12 +437,7 @@
 					},
 					{
 						"internalType": "uint256",
-						"name": "_withdrawFeeFactor",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "_slippageFactor",
+						"name": "_withdrawFeeRate",
 						"type": "uint256"
 					},
 					{
@@ -441,6 +449,11 @@
 						"internalType": "address",
 						"name": "_uniRouterAddress",
 						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_minEarnAmount",
+						"type": "uint256"
 					}
 				],
 				"name": "setSettings",
@@ -463,38 +476,38 @@
 			},
 			{
 				"inputs": [],
-				"name": "slippageFactor",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "slippageFactorUL",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
 				"name": "stratType",
 				"outputs": [
 					{
 						"internalType": "enum StratType",
 						"name": "",
 						"type": "uint8"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "token0Address",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "token1Address",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
 					}
 				],
 				"stateMutability": "view",
@@ -657,7 +670,7 @@
 			},
 			{
 				"inputs": [],
-				"name": "withdrawFeeFactor",
+				"name": "withdrawFeeLimit",
 				"outputs": [
 					{
 						"internalType": "uint256",
@@ -670,20 +683,7 @@
 			},
 			{
 				"inputs": [],
-				"name": "withdrawFeeFactorLL",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "withdrawFeeFactorMax",
+				"name": "withdrawFeeRate",
 				"outputs": [
 					{
 						"internalType": "uint256",
@@ -743,7 +743,7 @@
 		},
 		"optimizer": {
 			"enabled": true,
-			"runs": 999999
+			"runs": 200
 		},
 		"remappings": []
 	},
@@ -821,19 +821,27 @@
 			]
 		},
 		"vaults-v1/contracts/BaseStrategy.sol": {
-			"keccak256": "0xf6ffb3b2dbeddaf6b1053e530cd8e2d27939e47075da5eb01bd4dbf208439288",
+			"keccak256": "0xc6330faaf2aa07f409eb18c5917a06910b8295fb7a13215a3081e756dd56534c",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://5a4a7cec9382587143e0477ef53d3a6cfde1473a7b4df089d2d6935bdb15805c",
-				"dweb:/ipfs/QmXgbXomqP14xakp6aaXQk2FF72387u3P41d3HSFG83T9r"
+				"bzz-raw://9ab620981eab2278d18c1e06b29528b1d110be9cf15965aec18675b4ed13aa64",
+				"dweb:/ipfs/QmPk34zvu99YMiQiDtxrtBbZgCJEQPSpf75EogG3HV1VuZ"
 			]
 		},
 		"vaults-v1/contracts/BaseStrategyMaxiSingle.sol": {
-			"keccak256": "0x2bcdda1c55424713afc908a1aba842c1ae34de8edb78fd5c4dfde70d31e091a4",
+			"keccak256": "0x898f7b69c5a027c88a871c38ab1fbca05d743f7197aeb6793ed288aa74a62fec",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://954d67a0881a0bc53c9fb8a68477452b67ce0c505e337a009f57419e3b275842",
-				"dweb:/ipfs/QmPYUNYwzih1y1VqZ7gXvSakUBed4yVGmSgqtMG9jsCTJj"
+				"bzz-raw://c7f871972c3fedfd65c7f9950659fd92b82a99b4f9f9a99f8791e43242650319",
+				"dweb:/ipfs/QmcAR1Ts2WEXGD28sDpRUhyhwNhR3Q4FTqRMj9bNLUybiq"
+			]
+		},
+		"vaults-v1/contracts/libs/IStrategy.sol": {
+			"keccak256": "0xdec3a5993a4972cc1702200aa9af50a0e520587dcab159141632c766816728c6",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://55f01e9d11b3b4b4af05682aa416bb19c4144e9a1c8bad3064f0d1af943cbafc",
+				"dweb:/ipfs/QmTcF5FtEM5tngHr69JMb9ugiS2uHEXiVc3SST77ktt6qE"
 			]
 		},
 		"vaults-v1/contracts/libs/IStrategyFish.sol": {
@@ -842,6 +850,14 @@
 			"urls": [
 				"bzz-raw://5ce012100112143969cba71426ee46da6c8b8a7b7055d42d00d2e87e5853613e",
 				"dweb:/ipfs/QmRVc9mqeGfeuiWrLyZeM2NGoiX8cfPhiuNNTm7tcNjusU"
+			]
+		},
+		"vaults-v1/contracts/libs/IUniPair.sol": {
+			"keccak256": "0x18db10c4956f8924791879b151319ae39b90cc2baf767a943b290317d39521d2",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://ddc063cbf21cb266d25084204e43124187fa5c0e944bb71ea37987e4cacd23d4",
+				"dweb:/ipfs/QmeeVLK61fSRYReupTpG2L9rwowrGP4egJfwoyVasrXvFy"
 			]
 		},
 		"vaults-v1/contracts/libs/IUniRouter01.sol": {
@@ -861,19 +877,19 @@
 			]
 		},
 		"vaults-v1/contracts/libs/IVaultHealer.sol": {
-			"keccak256": "0xa5042ee06017ac08f914c8daa593f4d2a69a94b875c6719f96e72589c227ba95",
+			"keccak256": "0xa4c6a511e628cea6244dacbcb7d19e1e40070256b28c90a24a8fbc80cfb20895",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://83b411e44916de65cae173474cf317b3ac8a5616cd5301b2b3cf7fd2e8b6e403",
-				"dweb:/ipfs/QmPtyVxVkX6uSX1C7vejJxMQgHHg973dBQjNNt8dvLytd2"
+				"bzz-raw://9501077057922ebfdb06d1e23dbc4671c23b7ee98f84f2d74d5889c13a51a8ce",
+				"dweb:/ipfs/QmRwAEto471Vsxt4UMpjtQjSd9Syv7U1m2Fj7TRKa2Nss9"
 			]
 		},
-		"vaults-v1/contracts/libs/StrategySwapPaths.sol": {
-			"keccak256": "0x7f08dc35516920ad71cfee7d07db7e8525cf3e8a2fa1144aedf70eccfa66106d",
+		"vaults-v1/contracts/libs/StrategyData.sol": {
+			"keccak256": "0xb1a9bad3667c18086023b4f21069ce6b4eb95820039cec1276d7dcec95323489",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://863792edd4f2a6bfc4916172703e0a6735d1e65d6d2efd09ead2b5093a17ca55",
-				"dweb:/ipfs/QmbwKVHhtkNMehsi4HKws6YGwyQMAPrzqj6ySGhF9ZAgCi"
+				"bzz-raw://3274129a0b6abbb301b6fc531bb9944d7e6b1d97041a1399bf94d30a109acaa0",
+				"dweb:/ipfs/QmTSfpmwTY1bWfgxTBakK3zN81jvcTGtCMBib15dPM7JVN"
 			]
 		}
 	},

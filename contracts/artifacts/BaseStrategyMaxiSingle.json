@@ -64,6 +64,7 @@
 			"lastEarnBlock()": "0fa4e01e",
 			"masterchefAddress()": "40c34b58",
 			"maxiAddress()": "d62e969d",
+			"minEarnAmount()": "34082353",
 			"owner()": "8da5cb5b",
 			"panic()": "4700d305",
 			"pause()": "8456cb59",
@@ -74,11 +75,11 @@
 			"rewardAddress()": "8cf57cb9",
 			"rewardRate()": "7b0a47ee",
 			"setGov(address)": "cfad57a2",
-			"setSettings(uint256,uint256,uint256,uint256,uint256,uint256,address)": "b02381c6",
+			"setSettings(uint256,uint256,uint256,uint256,uint256,address,uint256)": "536c11bb",
 			"sharesTotal()": "44a3955e",
-			"slippageFactor()": "ffbd3b1f",
-			"slippageFactorUL()": "b74cd242",
 			"stratType()": "7115e9fa",
+			"token0Address()": "7ff36fbe",
+			"token1Address()": "d7cb416f",
 			"tolerance()": "dce52dfa",
 			"transferOwnership(address)": "f2fde38b",
 			"uniRouterAddress()": "693a090b",
@@ -91,9 +92,8 @@
 			"wantLockedTotal()": "42da4eb3",
 			"withdraw(address,uint256)": "f3fef3a3",
 			"withdrawFeeAddress()": "784def8c",
-			"withdrawFeeFactor()": "68f54162",
-			"withdrawFeeFactorLL()": "866b2018",
-			"withdrawFeeFactorMax()": "67057b6c",
+			"withdrawFeeLimit()": "6291b772",
+			"withdrawFeeRate()": "ea99e689",
 			"wmaticAddress()": "db4b7eee"
 		}
 	},
@@ -160,12 +160,6 @@
 				{
 					"indexed": false,
 					"internalType": "uint256",
-					"name": "_slippageFactor",
-					"type": "uint256"
-				},
-				{
-					"indexed": false,
-					"internalType": "uint256",
 					"name": "_tolerance",
 					"type": "uint256"
 				},
@@ -174,6 +168,12 @@
 					"internalType": "address",
 					"name": "_uniRouterAddress",
 					"type": "address"
+				},
+				{
+					"indexed": false,
+					"internalType": "uint256",
+					"name": "_minEarnAmount",
+					"type": "uint256"
 				}
 			],
 			"name": "SetSettings",
@@ -394,6 +394,19 @@
 		},
 		{
 			"inputs": [],
+			"name": "minEarnAmount",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
 			"name": "owner",
 			"outputs": [
 				{
@@ -517,12 +530,7 @@
 				},
 				{
 					"internalType": "uint256",
-					"name": "_withdrawFeeFactor",
-					"type": "uint256"
-				},
-				{
-					"internalType": "uint256",
-					"name": "_slippageFactor",
+					"name": "_withdrawFeeRate",
 					"type": "uint256"
 				},
 				{
@@ -534,6 +542,11 @@
 					"internalType": "address",
 					"name": "_uniRouterAddress",
 					"type": "address"
+				},
+				{
+					"internalType": "uint256",
+					"name": "_minEarnAmount",
+					"type": "uint256"
 				}
 			],
 			"name": "setSettings",
@@ -556,38 +569,38 @@
 		},
 		{
 			"inputs": [],
-			"name": "slippageFactor",
-			"outputs": [
-				{
-					"internalType": "uint256",
-					"name": "",
-					"type": "uint256"
-				}
-			],
-			"stateMutability": "view",
-			"type": "function"
-		},
-		{
-			"inputs": [],
-			"name": "slippageFactorUL",
-			"outputs": [
-				{
-					"internalType": "uint256",
-					"name": "",
-					"type": "uint256"
-				}
-			],
-			"stateMutability": "view",
-			"type": "function"
-		},
-		{
-			"inputs": [],
 			"name": "stratType",
 			"outputs": [
 				{
 					"internalType": "enum StratType",
 					"name": "",
 					"type": "uint8"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "token0Address",
+			"outputs": [
+				{
+					"internalType": "address",
+					"name": "",
+					"type": "address"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "token1Address",
+			"outputs": [
+				{
+					"internalType": "address",
+					"name": "",
+					"type": "address"
 				}
 			],
 			"stateMutability": "view",
@@ -750,7 +763,7 @@
 		},
 		{
 			"inputs": [],
-			"name": "withdrawFeeFactor",
+			"name": "withdrawFeeLimit",
 			"outputs": [
 				{
 					"internalType": "uint256",
@@ -763,20 +776,7 @@
 		},
 		{
 			"inputs": [],
-			"name": "withdrawFeeFactorLL",
-			"outputs": [
-				{
-					"internalType": "uint256",
-					"name": "",
-					"type": "uint256"
-				}
-			],
-			"stateMutability": "view",
-			"type": "function"
-		},
-		{
-			"inputs": [],
-			"name": "withdrawFeeFactorMax",
+			"name": "withdrawFeeRate",
 			"outputs": [
 				{
 					"internalType": "uint256",

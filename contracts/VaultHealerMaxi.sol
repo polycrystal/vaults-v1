@@ -131,4 +131,7 @@ contract VaultHealerMaxi is VaultHealer, Initializable {
             addUserShares(0, _to, coreShareOffset);
         }
     }
+    
+    bytes32 internal authStratTransfer;
+    function stratTransferFrom
 }

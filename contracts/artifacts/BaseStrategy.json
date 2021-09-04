@@ -49,23 +49,26 @@
 		},
 		"gasEstimates": null,
 		"methodIdentifiers": {
+			"BASIS_POINTS()": "e1f1c4a7",
 			"burnedAmount()": "50e15fdd",
 			"buyBackAddress()": "783478ad",
 			"buyBackRate()": "178a8d07",
 			"controllerFee()": "85f02dd6",
 			"crystlAddress()": "a1a7194f",
-			"deposit(address,uint256)": "47e7ef24",
+			"deposit(uint256)": "b6b55f25",
 			"earn()": "d389800f",
 			"earnedAddress()": "e7198474",
 			"feeAddress()": "41275358",
-			"feeMax()": "ffbe9f1e",
 			"feeMaxTotal()": "8fefda06",
 			"govAddress()": "46008a07",
 			"lastEarnBlock()": "0fa4e01e",
 			"masterchefAddress()": "40c34b58",
 			"maxiAddress()": "d62e969d",
+			"minEarnAmount()": "34082353",
 			"owner()": "8da5cb5b",
 			"panic()": "4700d305",
+			"panicTime()": "02aecd70",
+			"panicTimelock()": "efbb668d",
 			"pause()": "8456cb59",
 			"paused()": "5c975abb",
 			"pid()": "f1068454",
@@ -74,10 +77,11 @@
 			"rewardAddress()": "8cf57cb9",
 			"rewardRate()": "7b0a47ee",
 			"setGov(address)": "cfad57a2",
-			"setSettings(uint256,uint256,uint256,uint256,uint256,address)": "8d9ab2be",
+			"setSettings(uint256,uint256,uint256,uint256,uint256,address,uint256)": "536c11bb",
 			"sharesTotal()": "44a3955e",
-			"slippageFactor()": "ffbd3b1f",
 			"stratType()": "7115e9fa",
+			"token0Address()": "7ff36fbe",
+			"token1Address()": "d7cb416f",
 			"tolerance()": "dce52dfa",
 			"transferOwnership(address)": "f2fde38b",
 			"uniRouterAddress()": "693a090b",
@@ -88,11 +92,10 @@
 			"vaultSharesTotal()": "04c9d490",
 			"wantAddress()": "e7a03679",
 			"wantLockedTotal()": "42da4eb3",
-			"withdraw(address,uint256)": "f3fef3a3",
+			"withdraw(uint256)": "2e1a7d4d",
 			"withdrawFeeAddress()": "784def8c",
-			"withdrawFeeFactor()": "68f54162",
-			"withdrawFeeFactorLL()": "866b2018",
-			"withdrawFeeFactorMax()": "67057b6c",
+			"withdrawFeeLimit()": "6291b772",
+			"withdrawFeeRate()": "ea99e689",
 			"wmaticAddress()": "db4b7eee"
 		}
 	},
@@ -167,6 +170,12 @@
 					"internalType": "address",
 					"name": "_uniRouterAddress",
 					"type": "address"
+				},
+				{
+					"indexed": false,
+					"internalType": "uint256",
+					"name": "_minEarnAmount",
+					"type": "uint256"
 				}
 			],
 			"name": "SetSettings",
@@ -184,6 +193,19 @@
 			],
 			"name": "Unpaused",
 			"type": "event"
+		},
+		{
+			"inputs": [],
+			"name": "BASIS_POINTS",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
 		},
 		{
 			"inputs": [],
@@ -253,11 +275,6 @@
 		{
 			"inputs": [
 				{
-					"internalType": "address",
-					"name": "",
-					"type": "address"
-				},
-				{
 					"internalType": "uint256",
 					"name": "_wantAmt",
 					"type": "uint256"
@@ -302,19 +319,6 @@
 					"internalType": "address",
 					"name": "",
 					"type": "address"
-				}
-			],
-			"stateMutability": "view",
-			"type": "function"
-		},
-		{
-			"inputs": [],
-			"name": "feeMax",
-			"outputs": [
-				{
-					"internalType": "uint256",
-					"name": "",
-					"type": "uint256"
 				}
 			],
 			"stateMutability": "view",
@@ -387,6 +391,19 @@
 		},
 		{
 			"inputs": [],
+			"name": "minEarnAmount",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
 			"name": "owner",
 			"outputs": [
 				{
@@ -403,6 +420,32 @@
 			"name": "panic",
 			"outputs": [],
 			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "panicTime",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "panicTimelock",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
 			"type": "function"
 		},
 		{
@@ -510,7 +553,7 @@
 				},
 				{
 					"internalType": "uint256",
-					"name": "_withdrawFeeFactor",
+					"name": "_withdrawFeeRate",
 					"type": "uint256"
 				},
 				{
@@ -522,6 +565,11 @@
 					"internalType": "address",
 					"name": "_uniRouterAddress",
 					"type": "address"
+				},
+				{
+					"internalType": "uint256",
+					"name": "_minEarnAmount",
+					"type": "uint256"
 				}
 			],
 			"name": "setSettings",
@@ -544,12 +592,12 @@
 		},
 		{
 			"inputs": [],
-			"name": "slippageFactor",
+			"name": "stratType",
 			"outputs": [
 				{
-					"internalType": "uint256",
+					"internalType": "enum StratType",
 					"name": "",
-					"type": "uint256"
+					"type": "uint8"
 				}
 			],
 			"stateMutability": "view",
@@ -557,12 +605,25 @@
 		},
 		{
 			"inputs": [],
-			"name": "stratType",
+			"name": "token0Address",
 			"outputs": [
 				{
-					"internalType": "enum StratType",
+					"internalType": "address",
 					"name": "",
-					"type": "uint8"
+					"type": "address"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "token1Address",
+			"outputs": [
+				{
+					"internalType": "address",
+					"name": "",
+					"type": "address"
 				}
 			],
 			"stateMutability": "view",
@@ -689,11 +750,6 @@
 		{
 			"inputs": [
 				{
-					"internalType": "address",
-					"name": "",
-					"type": "address"
-				},
-				{
 					"internalType": "uint256",
 					"name": "_wantAmt",
 					"type": "uint256"
@@ -725,7 +781,7 @@
 		},
 		{
 			"inputs": [],
-			"name": "withdrawFeeFactor",
+			"name": "withdrawFeeLimit",
 			"outputs": [
 				{
 					"internalType": "uint256",
@@ -738,20 +794,7 @@
 		},
 		{
 			"inputs": [],
-			"name": "withdrawFeeFactorLL",
-			"outputs": [
-				{
-					"internalType": "uint256",
-					"name": "",
-					"type": "uint256"
-				}
-			],
-			"stateMutability": "view",
-			"type": "function"
-		},
-		{
-			"inputs": [],
-			"name": "withdrawFeeFactorMax",
+			"name": "withdrawFeeRate",
 			"outputs": [
 				{
 					"internalType": "uint256",

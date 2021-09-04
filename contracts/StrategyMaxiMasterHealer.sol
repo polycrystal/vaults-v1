@@ -21,7 +21,7 @@ contract StrategyMaxiMasterHealer is BaseStrategyMaxiSingle {
         address _earnedToWmaticStep //address(0) if swapping earned->wmatic directly, or the address of an intermediate trade token such as weth
     ) external {
         
-        _baseInit();
+        super.initialize();
 
         govAddress = _govAddress;
 
@@ -49,10 +49,6 @@ contract StrategyMaxiMasterHealer is BaseStrategyMaxiSingle {
     
     function _vaultWithdraw(uint256 _amount) internal override {
         IMasterchef(masterchefAddress).withdraw(pid, _amount);
-    }
-    
-    function _vaultHarvest() internal override {
-        IMasterchef(masterchefAddress).withdraw(pid, 0);
     }
     
     function vaultSharesTotal() public override view returns (uint256) {

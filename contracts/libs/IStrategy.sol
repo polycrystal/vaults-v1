@@ -15,6 +15,8 @@ interface IStrategy {
     // Sum of all shares of users to wantLockedTotal
     function sharesTotal() external view returns (uint256);
 
+    function vaultBalances() external view returns (uint256 wantBalance, uint256 vaultShares);
+
     // Main want token compounding function
     function earn() external;
 

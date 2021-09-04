@@ -13,46 +13,42 @@ contract StrategyMaxiCore is BaseStrategy {
         address _govAddress,
         address _masterChef,
         address _uniRouter,
-        address _wantAddress, //want == earned for maximizer core
+        address _wantAddress,
+        address _earnedAddress,
         address _earnedToWmaticStep //address(0) if swapping earned->wmatic directly, or the address of an intermediate trade token such as weth
     ) external {
+        super._initialize();
         
-        _baseInit();
-        
-        govAddress = _govAddress;
-        vaultChefAddress = msg.sender;
-        masterchefAddress = _masterChef;
-        uniRouterAddress = _uniRouter;
-
-        wantAddress = _wantAddress;
-
         pid = _pid;
-        earnedAddress = _wantAddress;
         tolerance = _tolerance;
         
-        StrategySwapPaths.buildAllPaths(paths, _wantAddress, _earnedToWmaticStep, crystlAddress, _wantAddress, _wantAddress);
-
-        transferOwnership(vaultChefAddress);
+        addresses = StrategyData.Addresses({
+            gov: _govAddress,
+            want: _wantAddress,
+            earned: _earnedAddress,
+            router: _uniRouter,
+            vaultChef: msg.sender,
+            masterChef: _masterChef,
+            token0: address(0),
+            token1: address(0),
+            maxi: _wantAddress
+        });
         
+        StrategyData.buildAllPaths(addresses, paths, _earnedToWmaticStep, false);
+        transferOwnership(msg.sender);
         _resetAllowances();
         stratType = StratType.MAXIMIZER_CORE;
     }
 
     function earn() external override nonReentrant whenNotPaused onlyOwner {
-        
-        // anti-rug: don't charge fees on unearned tokens
-        uint256 unearnedAmt = IERC20(earnedAddress).balanceOf(address(this));
-        
         // Harvest farm tokens
         _vaultHarvest();
 
         // Converts farm tokens into want tokens
-        uint256 earnedAmt = IERC20(earnedAddress).balanceOf(address(this)) - unearnedAmt;
+        uint256 earnedAmt = IERC20(address.earned).balanceOf(address(this));
 
-        if (earnedAmt > 0) {
+        if (earnedAmt > minEarnAmount && block.number > lastEarnBlock) {
             earnedAmt = distributeFees(earnedAmt);
-            earnedAmt = distributeRewards(earnedAmt);
-            earnedAmt = buyBack(earnedAmt);
     
             lastEarnBlock = block.number;
     
@@ -62,14 +58,6 @@ contract StrategyMaxiCore is BaseStrategy {
 
     function _vaultDeposit(uint256 _amount) internal override {
         IMasterchef(masterchefAddress).deposit(pid, _amount);
-    }
-    
-    function _vaultWithdraw(uint256 _amount) internal override {
-        IMasterchef(masterchefAddress).withdraw(pid, _amount);
-    }
-    
-    function _vaultHarvest() internal {
-        IMasterchef(masterchefAddress).withdraw(pid, 0);
     }
     
     function vaultSharesTotal() public override view returns (uint256) {
@@ -85,7 +73,7 @@ contract StrategyMaxiCore is BaseStrategy {
         IERC20(wantAddress).approve(masterchefAddress, type(uint256).max);
         IERC20(earnedAddress).approve(uniRouterAddress, type(uint256).max);
         IERC20(usdcAddress).approve(rewardAddress, type(uint256).max);
-        IERC20(earnedAddress).approve(vaultChefAddress, type(uint256).max);
+        IERC20(earnedAddress).approve(owner(), type(uint256).max);
     }
     
     function _emergencyVaultWithdraw() internal override {

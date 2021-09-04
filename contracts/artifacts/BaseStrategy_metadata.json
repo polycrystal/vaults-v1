@@ -75,6 +75,12 @@
 						"internalType": "address",
 						"name": "_uniRouterAddress",
 						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "_minEarnAmount",
+						"type": "uint256"
 					}
 				],
 				"name": "SetSettings",
@@ -92,6 +98,19 @@
 				],
 				"name": "Unpaused",
 				"type": "event"
+			},
+			{
+				"inputs": [],
+				"name": "BASIS_POINTS",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
 			},
 			{
 				"inputs": [],
@@ -161,11 +180,6 @@
 			{
 				"inputs": [
 					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
-					},
-					{
 						"internalType": "uint256",
 						"name": "_wantAmt",
 						"type": "uint256"
@@ -210,19 +224,6 @@
 						"internalType": "address",
 						"name": "",
 						"type": "address"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "feeMax",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
 					}
 				],
 				"stateMutability": "view",
@@ -295,6 +296,19 @@
 			},
 			{
 				"inputs": [],
+				"name": "minEarnAmount",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
 				"name": "owner",
 				"outputs": [
 					{
@@ -311,6 +325,32 @@
 				"name": "panic",
 				"outputs": [],
 				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "panicTime",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "panicTimelock",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
 				"type": "function"
 			},
 			{
@@ -418,7 +458,7 @@
 					},
 					{
 						"internalType": "uint256",
-						"name": "_withdrawFeeFactor",
+						"name": "_withdrawFeeRate",
 						"type": "uint256"
 					},
 					{
@@ -430,6 +470,11 @@
 						"internalType": "address",
 						"name": "_uniRouterAddress",
 						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_minEarnAmount",
+						"type": "uint256"
 					}
 				],
 				"name": "setSettings",
@@ -452,12 +497,12 @@
 			},
 			{
 				"inputs": [],
-				"name": "slippageFactor",
+				"name": "stratType",
 				"outputs": [
 					{
-						"internalType": "uint256",
+						"internalType": "enum StratType",
 						"name": "",
-						"type": "uint256"
+						"type": "uint8"
 					}
 				],
 				"stateMutability": "view",
@@ -465,12 +510,25 @@
 			},
 			{
 				"inputs": [],
-				"name": "stratType",
+				"name": "token0Address",
 				"outputs": [
 					{
-						"internalType": "enum StratType",
+						"internalType": "address",
 						"name": "",
-						"type": "uint8"
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "token1Address",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
 					}
 				],
 				"stateMutability": "view",
@@ -597,11 +655,6 @@
 			{
 				"inputs": [
 					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
-					},
-					{
 						"internalType": "uint256",
 						"name": "_wantAmt",
 						"type": "uint256"
@@ -633,7 +686,7 @@
 			},
 			{
 				"inputs": [],
-				"name": "withdrawFeeFactor",
+				"name": "withdrawFeeLimit",
 				"outputs": [
 					{
 						"internalType": "uint256",
@@ -646,20 +699,7 @@
 			},
 			{
 				"inputs": [],
-				"name": "withdrawFeeFactorLL",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "withdrawFeeFactorMax",
+				"name": "withdrawFeeRate",
 				"outputs": [
 					{
 						"internalType": "uint256",
@@ -797,11 +837,19 @@
 			]
 		},
 		"vaults-v1/contracts/BaseStrategy.sol": {
-			"keccak256": "0x1ddc3371acbda42bb2060877180363ef20432f79fa7fe8d5eb634c6117ccbed9",
+			"keccak256": "0x5f1c13fb50ff0a4f7a85e35affec08d50041f81cf777f33816709cfe0d3b6e3f",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://a8079c283be655aa747dea0f4dc42d8b62cc7749f0bee3363f787bb57e87026b",
-				"dweb:/ipfs/QmcC3xmYtUyxXuw5H3j61DziRq3inMGWDW5w7rWBxspTW4"
+				"bzz-raw://6e2e62b9a212c50c26b9a04b5be285683e98abdd51464f59692a00b7f8181a0e",
+				"dweb:/ipfs/QmQWwNXRyeTc7VBnz9c82wLz3HBugskU5NiHTvM35s9xPh"
+			]
+		},
+		"vaults-v1/contracts/libs/CrystalZap.sol": {
+			"keccak256": "0x652632e693631dc48c6a1ab48df9c60a74f23b2a6c691a22ddbd0f7b85a178e5",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://cab41823f58f61ac2026f9aa85c23e52fb9775b89f0d64ece20d366562834fee",
+				"dweb:/ipfs/QmW15bGorsw1LUfY6dX2YhcffwhRME7Qick4JUGkLA1uUo"
 			]
 		},
 		"vaults-v1/contracts/libs/IStrategy.sol": {
@@ -844,12 +892,12 @@
 				"dweb:/ipfs/QmWvaWmPaBpL5TVSBLKJRnWE5GuFGWYA1i1tSKVQFLyPyS"
 			]
 		},
-		"vaults-v1/contracts/libs/StrategySwapPaths.sol": {
-			"keccak256": "0x4ae1f29b173aed8ce0d0f44d0b55c7a834e8b102d96847252db700ce5978a461",
+		"vaults-v1/contracts/libs/StrategyData.sol": {
+			"keccak256": "0xb1a9bad3667c18086023b4f21069ce6b4eb95820039cec1276d7dcec95323489",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://00c48a653b128a18a2ae6546105f4933c7cd9ddfda45c33370d79bb7c5d40f2e",
-				"dweb:/ipfs/QmPZhC2VHXTMxgLCGcxqSzxXLQo6dhAbFeusxMz2WgLw4a"
+				"bzz-raw://3274129a0b6abbb301b6fc531bb9944d7e6b1d97041a1399bf94d30a109acaa0",
+				"dweb:/ipfs/QmTSfpmwTY1bWfgxTBakK3zN81jvcTGtCMBib15dPM7JVN"
 			]
 		}
 	},

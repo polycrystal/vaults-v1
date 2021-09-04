@@ -8,17 +8,12 @@ import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
 import "./Operators.sol";
 import "./libs/IStrategy.sol";
+import "./libs/StrategyData.sol";
 
 contract VaultHealer is ReentrancyGuard, Operators {
     using SafeERC20 for IERC20;
 
-    struct PoolInfo {
-        IERC20 want;
-        IStrategy strat;
-        StratType stratType;
-    }
-
-    PoolInfo[] public poolInfo;
+    StrategyData.PoolInfo[] public poolInfo;
     mapping(uint256 => mapping(address => uint256)) private userShares;
     mapping(address => bool) public strats;
 
@@ -91,13 +86,16 @@ contract VaultHealer is ReentrancyGuard, Operators {
         return userShares[_pid][_user];
     }
     
-    function _deposit(uint256 _pid, uint256 _wantAmt, address _to) internal virtual returns (uint sharesAdded) {
+    function _deposit(uint256 _pid, uint256 _wantAmt, uint256 _cPercent, address _to) internal virtual returns (uint sharesAdded) {
         PoolInfo storage pool = poolInfo[_pid];
+        
+        //_cPercent is a number from 0 to 1e18 reflecting the desired percentage of shares the user wants compounded to want
+        require(_cPercent <= 1e18, "_cPercent should be a percentage where 1e18 == 100%");
 
         if (_wantAmt > 0) {
-            pool.want.safeTransferFrom(msg.sender, address(this), _wantAmt);
-
-            sharesAdded = poolInfo[_pid].strat.deposit(_to, _wantAmt);
+            (uint _wantBalanceBefore, uint _vaultSharesBefore) = pool.strat.vaultBalances();
+            pool.want.safeTransferFrom(msg.sender, address(pool.strat), _wantAmt);
+            sharesAdded = pool.strat.deposit(_wantAmt, _cPercent, _wantBalanceBefore, _vaultSharesBefore);
             addUserShares(_pid, _to, sharesAdded);
         }
         emit Deposit(_to, _pid, _wantAmt);

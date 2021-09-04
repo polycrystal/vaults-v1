@@ -10,51 +10,59 @@ import "@openzeppelin/contracts/utils/math/Math.sol";
 import "@openzeppelin/contracts/proxy/utils/Initializable.sol";
 
 import "./libs/IStrategyFish.sol";
-import "./libs/IUniRouter02.sol";
-import "./libs/StrategySwapPaths.sol";
+import "./libs/CrystalZap.sol";
+import "./libs/StrategyData.sol";
 import "./libs/IStrategy.sol";
-
 
 abstract contract BaseStrategy is Ownable, ReentrancyGuard, Pausable, Initializable {
     using Math for uint256;
     using SafeERC20 for IERC20;
-    uint256 private __blankSpace;
-    address public wantAddress;
-    address public earnedAddress;
-    address public uniRouterAddress;
-    address public vaultChefAddress;
-    address public govAddress;
-    address public masterchefAddress;
-    address public maxiAddress; // zero and unused except for maximizer vaults. This is the maximized want token
-    StratType public stratType;
+    using CrystalZap for address[];
     
+    bytes32 private __blankSlot; //used by proxies
+    
+    StratType public stratType;
     uint256 public pid;
     uint256 public lastEarnBlock;
-    uint256 public sharesTotal;
     uint256 public controllerFee;
     uint256 public rewardRate;
     uint256 public buyBackRate;
-    uint256 public withdrawFeeFactor; 
-    uint256 public slippageFactor;
-
+    uint256 public withdrawFeeRate;
+    uint256 public minEarnAmount; //minimum amount that earn() will bother to swap, below which gas and dust costs outweigh the benefits of compounding
+    uint256 public panicTime; //time the vault was most recently panicked
+    
     // Frontend variables
     uint256 public tolerance;
     uint256 public burnedAmount;
     
-    StrategySwapPaths.Paths internal paths;
+    StrategyData.Tokens internal tokens;
+    StrategyData.Addresses internal addresses;
+    StrategyData.Paths internal paths;
+    StrategyData.Balances internal bal;
+    
+    function govAddress() external view returns (address) { return addresses.gov; }
+    function wantAddress() external view returns (address) { return tokens.want; }
+    function earnedAddress() external view returns (address) { return tokens.earned; }
+    function uniRouterAddress() external view returns (address) { return addresses.router; }
+    function vaultChefAddress() external view returns (address) { return owner(); }
+    function masterchefAddress() external view returns (address) { return addresses.masterChef; }
+    function token0Address() external view returns (address) { return tokens.token0; }
+    function token1Address() external view returns (address) { return tokens.token1; }
+    function maxiAddress() external view returns (address) { return tokens.maxi; }
+    function cSharesTotal() external view returns (address) { return bal.cSharesTotal; }
+    function mSharesTotal() external view returns (address) { return bal.mSharesTotal; }
     
     address public constant wmaticAddress = 0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270;
     address public constant usdcAddress = 0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174;
-    address public constant crystlAddress = 0x76bF0C28e604CC3fE9967c83b3C3F31c213cfE64; 
+    address public constant crystlAddress = 0x76bF0C28e604CC3fE9967c83b3C3F31c213cfE64;
     address public constant rewardAddress = 0x917FB15E8aAA12264DCBdC15AFef7cD3cE76BA39; 
-    address public constant withdrawFeeAddress = 0x5386881b46C37CdD30A748f7771CF95D7B213637; 
     address public constant feeAddress = 0x5386881b46C37CdD30A748f7771CF95D7B213637; 
-    
     address public constant buyBackAddress = 0x000000000000000000000000000000000000dEaD;
-    uint256 public constant feeMaxTotal = 1000;
-    uint256 public constant feeMax = 10000; // 100 = 1%
-    uint256 public constant withdrawFeeFactorMax = 10000;
-    uint256 public constant withdrawFeeFactorLL = 9900; 
+    
+    uint256 public constant feeMaxTotal = 1000; //fees can't be more than 10% in total
+    uint256 public constant BASIS_POINTS = 10000; // 100 = 1%
+    uint256 public constant withdrawFeeLimit = 100; // max 1% withdrawal fee
+    uint256 public constant panicTimelock = 24 hours;
 
     event SetSettings(
         uint256 _controllerFee,
@@ -62,69 +70,57 @@ abstract contract BaseStrategy is Ownable, ReentrancyGuard, Pausable, Initializa
         uint256 _buyBackRate,
         uint256 _withdrawFeeFactor,
         uint256 _tolerance,
-        address _uniRouterAddress
+        address _uniRouterAddress,
+        uint256 _minEarnAmount
     );
     
     modifier onlyGov() {
-        require(msg.sender == govAddress, "!gov");
+        require(msg.sender == addresses.gov, "!gov");
         _;
     }
 
-    function _baseInit() internal initializer {
+    function _initialize() internal virtual initializer {
         lastEarnBlock = block.number;
         controllerFee = 50;
         buyBackRate = 450;
-        withdrawFeeFactor = 9990; // 0.1% withdraw fee
+        withdrawFeeRate = 10; // 0.1% withdraw fee
+        minEarnAmount = 1 gwei;
     }
 
     function _vaultDeposit(uint256 _amount) internal virtual;
     function _vaultWithdraw(uint256 _amount) internal virtual;
+    function _vaultHarvest() internal virtual { _vaultWithdraw(0); }
     function earn() external virtual;
     function vaultSharesTotal() public virtual view returns (uint256);
-    function wantLockedTotal() public virtual view returns (uint256);
+    function vaultBalances() public view returns (uint256 wantBalance, uint256 vaultShares) {
+        return (tokens.want.balanceOf(address(this)), vaultSharesTotal());
+    }
+    function wantLockedTotal() public view returns (uint256) {
+        return tokens.want.balanceOf(address(this)) + vaultSharesTotal();
+    }
     function _resetAllowances() internal virtual;
     function _emergencyVaultWithdraw() internal virtual;
     
-    function deposit(address /*_userAddress*/, uint256 _wantAmt) external onlyOwner nonReentrant whenNotPaused returns (uint256) {
-        // Call must happen before transfer
-        uint256 wantLockedBefore = wantLockedTotal();
+    
+    function deposit(uint256 _wantAmt, uint256 _cPercent, uint256 _wantBalanceBefore, uint256 _vaultSharesBefore) external onlyOwner nonReentrant whenNotPaused returns (uint256 tokensAdded) {
 
-        IERC20(wantAddress).safeTransferFrom(
-            address(msg.sender),
-            address(this),
-            _wantAmt
-        );
-
-        // Proper deposit amount for tokens with fees, or vaults with deposit fees
-        uint256 sharesAdded = _farm();
-        if (sharesTotal > 0) {
-            sharesAdded = sharesAdded * sharesTotal / wantLockedBefore;
-        }
-        sharesTotal += sharesAdded;
-
-        return sharesAdded;
+        // Proper deposit amount for tokens with fees, or vaults with deposit fees. With this method, if _vaultDeposit fails without reverting, the vault won't eat user tokens
+         tokensAdded = tokens.want.balanceOf(address(this)) - _wantBalanceBefore;
+        if (tokensAdded > 0) _vaultDeposit(tokensAdded);
+        tokensAdded = wantLockedTotal() - _wantBalanceBefore - _vaultSharesBefore;
+        
+        return tokensAdded;
     }
 
-    function _farm() internal returns (uint256) {
-        uint256 wantAmt = IERC20(wantAddress).balanceOf(address(this));
-        if (wantAmt == 0) return 0;
-        
-        uint256 sharesBefore = vaultSharesTotal();
-        _vaultDeposit(wantAmt);
-        uint256 sharesAfter = vaultSharesTotal();
-        
-        return sharesAfter - sharesBefore;
-    }
-
-    function withdraw(address /*_userAddress*/, uint256 _wantAmt) external onlyOwner nonReentrant returns (uint256) {
+    function withdraw(uint256 _wantAmt) external onlyOwner nonReentrant returns (uint256) {
         require(_wantAmt > 0, "_wantAmt is 0");
         
-        uint256 wantAmt = IERC20(wantAddress).balanceOf(address(this));
+        uint256 wantAmt = IERC20(addresses.want).balanceOf(address(this));
         
         // Check if strategy has tokens from panic
         if (_wantAmt > wantAmt) {
             _vaultWithdraw(_wantAmt - wantAmt);
-            wantAmt = IERC20(wantAddress).balanceOf(address(this));
+            wantAmt = IERC20(addresses.want).balanceOf(address(this));
         }
 
         if (_wantAmt > wantAmt) {
@@ -142,71 +138,41 @@ abstract contract BaseStrategy is Ownable, ReentrancyGuard, Pausable, Initializa
         sharesTotal -= sharesRemoved;
         
         // Withdraw fee
-        uint256 withdrawFee = _wantAmt * (withdrawFeeFactorMax - withdrawFeeFactor) / withdrawFeeFactorMax;
-        if (withdrawFee > 0) {
-            IERC20(wantAddress).safeTransfer(withdrawFeeAddress, withdrawFee);
+        if (withdrawFeeRate > 0) {
+            uint256 withdrawFee = (_wantAmt * withdrawFeeRate).ceilDiv(BASIS_POINTS);
+            IERC20(addresses.want).safeTransfer(feeAddress, withdrawFee);
+            _wantAmt -= withdrawFee;
         }
-        
-        _wantAmt -= withdrawFee;
 
-        IERC20(wantAddress).safeTransfer(vaultChefAddress, _wantAmt);
+        IERC20(addresses.want).safeTransfer(owner(), _wantAmt);
 
         return sharesRemoved;
     }
 
     // To pay for earn function
-    function distributeFees(uint256 _earnedAmt) internal returns (uint256) {
-        if (controllerFee > 0) {
-            uint256 fee = _earnedAmt * controllerFee / feeMax;
-    
-            _swapWmatic(
-                fee,
-                paths.earnedToWmatic,
-                feeAddress
-            );
-            
-            _earnedAmt -= fee;
-        }
-
-        return _earnedAmt;
-    }
-
-    function distributeRewards(uint256 _earnedAmt) internal returns (uint256) {
-        if (rewardRate > 0) {
-            uint256 fee = _earnedAmt * rewardRate / feeMax;
-    
-            uint256 usdcBefore = IERC20(usdcAddress).balanceOf(address(this));
-            
-            _swap(
-                fee,
-                paths.earnedToUsdc,
-                address(this)
-            );
-            
-            uint256 usdcAfter = IERC20(usdcAddress).balanceOf(address(this)) - usdcBefore;
-            
-            IStrategyFish(rewardAddress).depositReward(usdcAfter);
-            
-            _earnedAmt -= fee;
-        }
-
-        return _earnedAmt;
-    }
-
-    function buyBack(uint256 _earnedAmt) internal virtual returns (uint256) {
-        if (buyBackRate > 0) {
-            uint256 buyBackAmt = _earnedAmt * buyBackRate / feeMax;
-    
-            _swap(
-                buyBackAmt,
-                paths.earnedToCrystl,
-                buyBackAddress
-            );
-
-            _earnedAmt -= buyBackAmt;
-        }
+    function distributeFees(uint256 _earnedAmt) internal returns (uint256 earnedAmt) {
         
-        return _earnedAmt;
+        earnedAmt = _earnedAmt;
+        
+        if (controllerFee > 0) {
+            uint256 fee = _earnedAmt * controllerFee / BASIS_POINTS;
+            paths.earnedToWmatic.zip(fee, addresses.router, feeAddress);
+            earnedAmt -= fee;
+        }
+        if (rewardRate > 0) {
+            uint256 fee = _earnedAmt * rewardRate / BASIS_POINTS;
+            uint256 usdcBefore = IERC20(usdcAddress).balanceOf(address(this));
+            paths.earnedToUsdc.zip(fee, addresses.router, address(this));
+            uint256 usdcAfter = IERC20(usdcAddress).balanceOf(address(this)) - usdcBefore;
+            IStrategyFish(rewardAddress).depositReward(usdcAfter);
+            earnedAmt -= fee;
+        }
+        if (buyBackRate > 0) {
+            uint256 buyBackAmt = _earnedAmt * buyBackRate / BASIS_POINTS;
+            paths.earnedToCrystl.zip(buyBackAmt, addresses.router, buyBackAddress);
+            burnedAmount += buyBackAmt;
+            earnedAmt -= buyBackAmt;
+        }
     }
 
     function resetAllowances() external onlyGov {
@@ -217,85 +183,55 @@ abstract contract BaseStrategy is Ownable, ReentrancyGuard, Pausable, Initializa
         _pause();
     }
 
-    function unpause() external onlyGov {
+    function unpause() public onlyGov {
+        require(block.timestamp > panicTime + panicTimelock, "panic timelocked");
         _unpause();
         _resetAllowances();
+        _farm();
     }
 
     function panic() external onlyGov {
+        panicTime = block.timestamp;
         _pause();
         _emergencyVaultWithdraw();
     }
 
     function unpanic() external onlyGov {
-        _unpause();
-        _farm();
+        unpause();
     }
 
     function setGov(address _govAddress) external onlyGov {
-        govAddress = _govAddress;
+        addresses.gov = _govAddress;
     }
     
     function setSettings(
         uint256 _controllerFee,
         uint256 _rewardRate,
         uint256 _buyBackRate,
-        uint256 _withdrawFeeFactor,
+        uint256 _withdrawFeeRate,
         uint256 _tolerance,
-        address _uniRouterAddress
+        address _uniRouterAddress,
+        uint256 _minEarnAmount
     ) external onlyGov {
         require(_controllerFee + _rewardRate + _buyBackRate <= feeMaxTotal, "Max fee of 10%");
-        require(_withdrawFeeFactor >= withdrawFeeFactorLL, "_withdrawFeeFactor too low");
-        require(_withdrawFeeFactor <= withdrawFeeFactorMax, "_withdrawFeeFactor too high");
+        require(_withdrawFeeRate <= withdrawFeeLimit, "_withdrawFeeFactor too high");
+        require(_rewardRate == 0, "rewardRate not implemented yet");
         controllerFee = _controllerFee;
         rewardRate = _rewardRate;
         buyBackRate = _buyBackRate;
-        withdrawFeeFactor = _withdrawFeeFactor;
+        withdrawFeeRate = _withdrawFeeRate;
         tolerance = _tolerance;
-        uniRouterAddress = _uniRouterAddress;
-
+        addresses.router = _uniRouterAddress;
+        minEarnAmount = _minEarnAmount;
+        
         emit SetSettings(
             _controllerFee,
             _rewardRate,
             _buyBackRate,
-            _withdrawFeeFactor,
+            _withdrawFeeRate,
             _tolerance,
-            _uniRouterAddress
-        );
-    }
-    
-    function _swap(
-        uint256 _amountIn,
-        address[] memory _path,
-        address _to
-    ) internal {
-        uint burnBefore;
-        if (_path[_path.length - 1] == crystlAddress && _to == buyBackAddress) {
-            burnBefore = IERC20(crystlAddress).balanceOf(buyBackAddress);
-        }
-
-        IUniRouter02(uniRouterAddress).swapExactTokensForTokens(
-            _amountIn,
-            0,
-            _path,
-            _to,
-            block.timestamp + 600
-        );
-        if (burnBefore > 0) burnedAmount += IERC20(crystlAddress).balanceOf(buyBackAddress) - burnBefore;
-    }
-    
-    function _swapWmatic(
-        uint256 _amountIn,
-        address[] memory _path,
-        address _to
-    ) internal {
-
-        IUniRouter02(uniRouterAddress).swapExactTokensForETH(
-            _amountIn,
-            0,
-            _path,
-            _to,
-            block.timestamp + 600
+            _uniRouterAddress,
+            _minEarnAmount
         );
     }
 }
