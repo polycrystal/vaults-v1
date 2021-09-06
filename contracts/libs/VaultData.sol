@@ -2,7 +2,7 @@
 
 pragma solidity ^0.8.4;
 
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/utils/math/Math.sol";
 import "./IStrategy.sol";
 import "./IApePair.sol";
@@ -11,6 +11,7 @@ struct VaultInfo {
     MCore mCore; //maximizer core data
     mapping (uint => Vault) vaults; // "vid" is indices of this array
     uint vaultsLength;
+    FeeConfig[] feeConfigs;
 }
 
 struct MCore {
@@ -24,8 +25,7 @@ struct MCore {
     mapping (address => int) userShares;
 //    mapping (uint => uint) maxiShares;
     
-    bool customFees;
-    Fees fees;
+    uint feeConfig;
 }
 
 struct Vault {
@@ -40,17 +40,9 @@ struct Vault {
 
     uint maxiCoreShares; //shares of maximizer core owned by this vault
     
-    bool customFees;
-    Fees fees;
+    uint feeConfig;
 }
-struct Fees {
-    uint32 deposit;
-    uint32 withdraw;
-    uint32 burn;
-    uint32 controller;
-    uint32 reward;
-    uint32 misc;
-}
+
 struct UserBalance {
     uint cShares;
     uint mTokens;
@@ -58,8 +50,29 @@ struct UserBalance {
     uint64 lastEditBlock;
 }
 
+enum FeeType { DEPOSIT, WITHDRAW, BUYBACK, CONTROL, REWARD, MISC }
+enum FeeMethod {
+    PUSH, // transfer tokens to fee receiver
+    PUSH_CALL // transfer tokens to fee receiver, then call function
+}
+
+struct FeeConfig {
+    mapping (FeeType => address) receiver;
+    mapping (FeeType => uint16) feeRate;
+    mapping (FeeType => FeeMethod) method;
+}
+
+interface IFeeReceiver {
+    
+    function notifyFeePaid(address _token, uint _amount, FeeType _feeType) external;
+}
+
+
+uint constant BASIS_POINTS = 10000;
+
 library VaultData {
     using Math for uint256;
+    using SafeERC20 for IERC20;
     
     //user maximizer core token deposit, including maximizer shares
     function coreBalance(VaultInfo storage _vaultInfo, address _user) internal view returns (uint amount) {
@@ -182,5 +195,23 @@ library VaultData {
         }
         
     }
-    
+    function coreFees(VaultInfo storage _vaultInfo) internal view returns (FeeConfig storage fees) {
+        fees = _vaultInfo.feeConfigs[_vaultInfo.mCore.feeConfig];
+    }
+    function vaultFees(VaultInfo storage _vaultInfo, uint _vid) internal view returns (FeeConfig storage fees) {
+        fees = _vaultInfo.feeConfigs[_vaultInfo.vaults[_vid].feeConfig];
+    }
+    function transferFromWithFee(IERC20 _token, FeeConfig storage _feeConfig, FeeType _feeType, address _from, address _to, uint _amount) internal {
+        
+        address receiver = _feeConfig.receiver[_feeType];
+        uint feeRate = _feeConfig.feeRate[_feeType];
+        FeeMethod method = _feeConfig.method[_feeType];
+        
+        uint feeAmount = (_amount * feeRate).ceilDiv(BASIS_POINTS);
+        
+        _token.safeTransferFrom(_from, _to, feeAmount);
+        if (method == FeeMethod.PUSH_CALL) IFeeReceiver(receiver).notifyFeePaid(address(_token), feeAmount, _feeType);
+        
+        _token.safeTransferFrom(_from, _to, _amount - feeAmount);
+    }
 }

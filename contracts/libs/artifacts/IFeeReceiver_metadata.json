@@ -4,7 +4,31 @@
 	},
 	"language": "Solidity",
 	"output": {
-		"abi": [],
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_token",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_amount",
+						"type": "uint256"
+					},
+					{
+						"internalType": "enum FeeType",
+						"name": "_feeType",
+						"type": "uint8"
+					}
+				],
+				"name": "notifyFeePaid",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			}
+		],
 		"devdoc": {
 			"kind": "dev",
 			"methods": {},
@@ -18,7 +42,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"vaults-v1/contracts/libs/VaultData.sol": "VaultData"
+			"vaults-v1/contracts/libs/VaultData.sol": "IFeeReceiver"
 		},
 		"evmVersion": "london",
 		"libraries": {},

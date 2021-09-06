@@ -18,7 +18,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"vaults-v1/contracts/libs/VaultData.sol": "VaultData"
+			"vaults-v1/contracts/libs/VaultFees.sol": "VaultFees"
 		},
 		"evmVersion": "london",
 		"libraries": {},
@@ -81,11 +81,19 @@
 			]
 		},
 		"vaults-v1/contracts/libs/VaultData.sol": {
-			"keccak256": "0x561c8ab201f70780eff23f3c6ff27e8f9c6a47d29a33d232fd3c6d2268ed8c9e",
+			"keccak256": "0x25ba064991b0b2b394e9b6d0497eb19adebf06337c9eab81ae5450ec491f2a3b",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://14403c272402f7d4bdc7a09a767b564b122ea376612873fb9c02666ffe562b24",
-				"dweb:/ipfs/Qmb2NvRXzFZCJepHvqo4Xi3UYewMHBU12QPuk85zP4eW1w"
+				"bzz-raw://120a6e6273c9c8cfef048b0191b9018a8a488e37576d1a7a2453c3f35d550d2c",
+				"dweb:/ipfs/QmTXWbtNWSEBuppCZqfdwSzBhN1Da9a4puWQKrBuFMXDGQ"
+			]
+		},
+		"vaults-v1/contracts/libs/VaultFees.sol": {
+			"keccak256": "0x3e6e82a8d16a987e7286b567ef5d3575e1d81c99a11bdcd0df4c7b9fe4fbad90",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://bfe8985cd7c2959c75fb3a53c727f3c45e0f15d7f093f170522030860bf9a1cd",
+				"dweb:/ipfs/QmZEfq1JTXd4YKjuqJwojX1DCZUsdJBnBKFgeHBybHQhTz"
 			]
 		}
 	},

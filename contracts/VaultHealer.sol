@@ -11,7 +11,7 @@ import "./Operators.sol";
 import "./libs/VaultData.sol";
 
 contract VaultHealer is Ownable, ReentrancyGuard, Operators {
-    using SafeERC20 for IERC20;
+    using VaultData for IERC20;
     using VaultData for VaultInfo;
     using VaultData for Vault;
 
@@ -84,7 +84,9 @@ contract VaultHealer is Ownable, ReentrancyGuard, Operators {
         if (_wantAmt > 0) {
             (uint cTokens, uint mTokens) = vault.balance(msg.sender);
             uint amount = cTokens + mTokens;
-            //collect fees!
+            
+            uint depositFee = vaultInfo.vaultFees(_vid).deposit;
+            
             vault.want.safeTransferFrom(msg.sender, address(vault.strat), _wantAmt);
             uint256 tokensAdded = vault.strat.deposit(vault.wantLocked, _wantAmt);
             require(tokensAdded == vault.strat.wantLockedTotal() - vault.wantLocked, "assert: deposit bug");
