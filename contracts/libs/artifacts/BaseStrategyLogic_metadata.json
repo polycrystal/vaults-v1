@@ -1,0 +1,312 @@
+{
+	"compiler": {
+		"version": "0.8.7+commit.e28d00a7"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "_uniRouterAddress",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint16",
+						"name": "_controllerFee",
+						"type": "uint16"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint16",
+						"name": "_rewardRate",
+						"type": "uint16"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint16",
+						"name": "_buyBackRate",
+						"type": "uint16"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint16",
+						"name": "_withdrawFeeFactor",
+						"type": "uint16"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint16",
+						"name": "_tolerance",
+						"type": "uint16"
+					}
+				],
+				"name": "SetSettings",
+				"type": "event"
+			},
+			{
+				"inputs": [],
+				"name": "buyBackAddress",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "feeAddress",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "feeMax",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "feeMaxTotal",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "fishAddress",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "rewardAddress",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "usdcAddress",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "withdrawFeeAddress",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "withdrawFeeFactorLL",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "withdrawFeeFactorMax",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "wmaticAddress",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"vaults-v1/contracts/libs/BaseStrategyLogic.sol": "BaseStrategyLogic"
+		},
+		"evmVersion": "london",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": true,
+			"runs": 999999
+		},
+		"remappings": []
+	},
+	"sources": {
+		"@openzeppelin/contracts/token/ERC20/IERC20.sol": {
+			"keccak256": "0x027b891937d20ccf213fdb9c31531574256de774bda99d3a70ecef6e1913ed2a",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://087318b21c528119f649899f5b5580566dd8d7b0303d4904bd0e8580c3545f14",
+				"dweb:/ipfs/Qmbn5Mj7aUn8hJuQ8VrQjjEXRsXyJKykgnjR9p4C3nfLtL"
+			]
+		},
+		"@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol": {
+			"keccak256": "0x02348b2e4b9f3200c7e3907c5c2661643a6d8520e9f79939fbb9b4005a54894d",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://d41d627f4ef9c6006df8c2d01227d3cf4a6c3359b5704c629d88933272eecadd",
+				"dweb:/ipfs/QmYDo7MvMsvuDxuJZ9RC9zFganS3Tm8RYzSmBP5qSmJfuY"
+			]
+		},
+		"@openzeppelin/contracts/utils/Address.sol": {
+			"keccak256": "0x3336baae5cf23e94274d75336e2d412193be508504aee185e61dc7d58cd05c8a",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://39a05eec7083dfa0cc7e0cbfe6cd1bd085a340af1ede93fdff3ad047c5fb3d8e",
+				"dweb:/ipfs/QmVApz5fCUq2QC8gKTsNNdCmcedJ3ETHp68zR5N3WUKS4r"
+			]
+		},
+		"@openzeppelin/contracts/utils/math/Math.sol": {
+			"keccak256": "0x49ebdac5d515aebb95168564158940b79d7d5d12fbfe59cec546a00d57fee64a",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://c02d3ba19711bffdb7aa33ff3107cfd17902c82640837ef0de2e327515f4f70d",
+				"dweb:/ipfs/QmdR7JUXpD5X7eXkc24bRtNj3e7ahs8RC8s25cu7X14GHU"
+			]
+		},
+		"vaults-v1/contracts/libs/BaseStrategyLogic.sol": {
+			"keccak256": "0xb7fb43ffd21b015c852cc23fd40248a7c6afa754c46e873745bd1d7e96816d51",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://7c8f5036b5890fa4ed61f81e3babdf603c12e6d43b6df62c0404bb6e9f70803b",
+				"dweb:/ipfs/QmdPiEN8LJ6DRAwg5UcHrewRBiVN22aes2jwvP5RRCsGc2"
+			]
+		},
+		"vaults-v1/contracts/libs/IMasterchef.sol": {
+			"keccak256": "0x6a2b76a1f0a3ac61ebf4112c1a2915f6e03708f6d87f5403e9547f86bd6efd11",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://51ea6c4270ca3b41fa31d7d636b2778bdbbc7ab84d0fcecf7bc3849f91eaa44f",
+				"dweb:/ipfs/QmNMpqkBCVT3X7WuH2HwfA1nr6Bu6rVF9RTQpuLXpn9QjB"
+			]
+		},
+		"vaults-v1/contracts/libs/IStrategyFish.sol": {
+			"keccak256": "0x47db6681adffc6188f5301007f60967b57709bc6165e301c40c7e56aa77a490a",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://5ce012100112143969cba71426ee46da6c8b8a7b7055d42d00d2e87e5853613e",
+				"dweb:/ipfs/QmRVc9mqeGfeuiWrLyZeM2NGoiX8cfPhiuNNTm7tcNjusU"
+			]
+		},
+		"vaults-v1/contracts/libs/IUniPair.sol": {
+			"keccak256": "0x18db10c4956f8924791879b151319ae39b90cc2baf767a943b290317d39521d2",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://ddc063cbf21cb266d25084204e43124187fa5c0e944bb71ea37987e4cacd23d4",
+				"dweb:/ipfs/QmeeVLK61fSRYReupTpG2L9rwowrGP4egJfwoyVasrXvFy"
+			]
+		},
+		"vaults-v1/contracts/libs/IUniRouter01.sol": {
+			"keccak256": "0x450778b9c14a200deb06e415b7d66bae2a9d09ec94a45ebafdaf2cdb0945a910",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://ef637d6122da031f8149b65092412624170517f983b21fc124506b1e7864ed71",
+				"dweb:/ipfs/QmbgEtcysDJZLZRzKErso6hxTD5LGWRfQmReFLDNNC2eWa"
+			]
+		},
+		"vaults-v1/contracts/libs/IUniRouter02.sol": {
+			"keccak256": "0x9483f46667c7de038c6857f908a7d2d110fbbf9748876b6a9314191e24bc895d",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://1b825fb00fa27304eb84eb03521889517b84fa1d954965a801fa3e4de5d361bb",
+				"dweb:/ipfs/QmWvaWmPaBpL5TVSBLKJRnWE5GuFGWYA1i1tSKVQFLyPyS"
+			]
+		},
+		"vaults-v1/contracts/libs/IVaultHealer.sol": {
+			"keccak256": "0xa5042ee06017ac08f914c8daa593f4d2a69a94b875c6719f96e72589c227ba95",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://83b411e44916de65cae173474cf317b3ac8a5616cd5301b2b3cf7fd2e8b6e403",
+				"dweb:/ipfs/QmPtyVxVkX6uSX1C7vejJxMQgHHg973dBQjNNt8dvLytd2"
+			]
+		}
+	},
+	"version": 1
+}

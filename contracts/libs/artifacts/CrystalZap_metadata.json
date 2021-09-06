@@ -1,0 +1,45 @@
+{
+	"compiler": {
+		"version": "0.8.7+commit.e28d00a7"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"vaults-v1/contracts/libs/Fraction256.sol": "CrystalZap"
+		},
+		"evmVersion": "london",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": true,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"vaults-v1/contracts/libs/Fraction256.sol": {
+			"keccak256": "0xd1059023da7a2b7b3405ff2cb0f9673545db43534a6a9801ebc872c360531ece",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://517fcfabd6b185bcf36cf229dac28de035026e417b31a26371cb1e1074398d12",
+				"dweb:/ipfs/QmVPSP8zpTMyqrErYuQHm4WWBUBsuso2375Gjtsumgs6uQ"
+			]
+		}
+	},
+	"version": 1
+}

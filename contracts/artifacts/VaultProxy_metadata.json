@@ -1,0 +1,99 @@
+{
+	"compiler": {
+		"version": "0.8.7+commit.e28d00a7"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"stateMutability": "payable",
+				"type": "fallback"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "enum StratType",
+						"name": "_stratType",
+						"type": "uint8"
+					}
+				],
+				"name": "__initialize",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"stateMutability": "payable",
+				"type": "receive"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"vaults-v1/contracts/VaultProxy.sol": "VaultProxy"
+		},
+		"evmVersion": "london",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": true,
+			"runs": 99999
+		},
+		"remappings": []
+	},
+	"sources": {
+		"@openzeppelin/contracts/proxy/Proxy.sol": {
+			"keccak256": "0x8ddea9f930f26e588ea606f44c90d2623560c908e38614a03a4ca78aea8f9202",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://2fdf3a59554497c50ed8f4ffccd4ebcf73e49e1324e81ec05128d54d1b73c293",
+				"dweb:/ipfs/QmRZtNA2Lx58eAqTXb5DGWxCmH2vxGGuzG6KgBU5fgbzip"
+			]
+		},
+		"@openzeppelin/contracts/proxy/utils/Initializable.sol": {
+			"keccak256": "0x8b2abd85d0ece7e866e100e9d47ca9cbec93c87cf71a8d267b2b93eb81f7d5e9",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://fe9fa1beb63e4a09637701f783982ba80380d630d600c9cafe26b68bf58be1b2",
+				"dweb:/ipfs/QmRA3GXhTWys88joD9x8xYhdjzvGwmDGLMMzGw3LxbSEge"
+			]
+		},
+		"vaults-v1/contracts/VaultProxy.sol": {
+			"keccak256": "0x1682996e312b58530202105562ad64214c3b174a60c8a25843bf75a2ece85dd7",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://32ccd1271917d06b062e8a4acc789b56cba1ca97287d411f503b3fefbc6a7598",
+				"dweb:/ipfs/QmQqRrpZEw7KDAaeDL5774Foc6QF2amjWESFX52gbboXFc"
+			]
+		},
+		"vaults-v1/contracts/libs/IStrategy.sol": {
+			"keccak256": "0xdec3a5993a4972cc1702200aa9af50a0e520587dcab159141632c766816728c6",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://55f01e9d11b3b4b4af05682aa416bb19c4144e9a1c8bad3064f0d1af943cbafc",
+				"dweb:/ipfs/QmTcF5FtEM5tngHr69JMb9ugiS2uHEXiVc3SST77ktt6qE"
+			]
+		},
+		"vaults-v1/contracts/libs/IVaultHealer.sol": {
+			"keccak256": "0xa4c6a511e628cea6244dacbcb7d19e1e40070256b28c90a24a8fbc80cfb20895",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://9501077057922ebfdb06d1e23dbc4671c23b7ee98f84f2d74d5889c13a51a8ce",
+				"dweb:/ipfs/QmRwAEto471Vsxt4UMpjtQjSd9Syv7U1m2Fj7TRKa2Nss9"
+			]
+		}
+	},
+	"version": 1
+}

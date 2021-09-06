@@ -1,0 +1,141 @@
+{
+	"compiler": {
+		"version": "0.8.7+commit.e28d00a7"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [],
+				"name": "CRYSTL",
+				"outputs": [
+					{
+						"internalType": "contract IERC20",
+						"name": "",
+						"type": "IERC20"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "USDC",
+				"outputs": [
+					{
+						"internalType": "contract IERC20",
+						"name": "",
+						"type": "IERC20"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "WMATIC",
+				"outputs": [
+					{
+						"internalType": "contract IERC20",
+						"name": "",
+						"type": "IERC20"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"vaults-v1/contracts/libs/StrategyData.sol": "StrategyData"
+		},
+		"evmVersion": "london",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": true,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"@openzeppelin/contracts/token/ERC20/IERC20.sol": {
+			"keccak256": "0x027b891937d20ccf213fdb9c31531574256de774bda99d3a70ecef6e1913ed2a",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://087318b21c528119f649899f5b5580566dd8d7b0303d4904bd0e8580c3545f14",
+				"dweb:/ipfs/Qmbn5Mj7aUn8hJuQ8VrQjjEXRsXyJKykgnjR9p4C3nfLtL"
+			]
+		},
+		"vaults-v1/contracts/libs/IMasterchef.sol": {
+			"keccak256": "0x6a2b76a1f0a3ac61ebf4112c1a2915f6e03708f6d87f5403e9547f86bd6efd11",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://51ea6c4270ca3b41fa31d7d636b2778bdbbc7ab84d0fcecf7bc3849f91eaa44f",
+				"dweb:/ipfs/QmNMpqkBCVT3X7WuH2HwfA1nr6Bu6rVF9RTQpuLXpn9QjB"
+			]
+		},
+		"vaults-v1/contracts/libs/IStrategy.sol": {
+			"keccak256": "0xebd7f1874c0ce6ebf78a2d7dc585cd34743ec41f66d83a9ffb04b47c2e94ff02",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://d9d77bd10cf4a66435164a776643dc19ae17b8a381dbf73abf78ce06a7903fe9",
+				"dweb:/ipfs/QmeQacH8UdfeXgiprpRLwUZM2nC3riiydQoLbCFpYSMzHv"
+			]
+		},
+		"vaults-v1/contracts/libs/IUniPair.sol": {
+			"keccak256": "0x18db10c4956f8924791879b151319ae39b90cc2baf767a943b290317d39521d2",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://ddc063cbf21cb266d25084204e43124187fa5c0e944bb71ea37987e4cacd23d4",
+				"dweb:/ipfs/QmeeVLK61fSRYReupTpG2L9rwowrGP4egJfwoyVasrXvFy"
+			]
+		},
+		"vaults-v1/contracts/libs/IUniRouter01.sol": {
+			"keccak256": "0x450778b9c14a200deb06e415b7d66bae2a9d09ec94a45ebafdaf2cdb0945a910",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://ef637d6122da031f8149b65092412624170517f983b21fc124506b1e7864ed71",
+				"dweb:/ipfs/QmbgEtcysDJZLZRzKErso6hxTD5LGWRfQmReFLDNNC2eWa"
+			]
+		},
+		"vaults-v1/contracts/libs/IUniRouter02.sol": {
+			"keccak256": "0x9483f46667c7de038c6857f908a7d2d110fbbf9748876b6a9314191e24bc895d",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://1b825fb00fa27304eb84eb03521889517b84fa1d954965a801fa3e4de5d361bb",
+				"dweb:/ipfs/QmWvaWmPaBpL5TVSBLKJRnWE5GuFGWYA1i1tSKVQFLyPyS"
+			]
+		},
+		"vaults-v1/contracts/libs/IVaultHealer.sol": {
+			"keccak256": "0xa4c6a511e628cea6244dacbcb7d19e1e40070256b28c90a24a8fbc80cfb20895",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://9501077057922ebfdb06d1e23dbc4671c23b7ee98f84f2d74d5889c13a51a8ce",
+				"dweb:/ipfs/QmRwAEto471Vsxt4UMpjtQjSd9Syv7U1m2Fj7TRKa2Nss9"
+			]
+		},
+		"vaults-v1/contracts/libs/StrategyData.sol": {
+			"keccak256": "0xcbb5d705ef27ab2c8c67c540ec3d6b1026f953c6e050dc086f40d17714a6de7e",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://51f9cb5cee2c05bbe7ca6151fe2217122e443bbd67913471fbff2c9356fa6323",
+				"dweb:/ipfs/Qmbst5w2pgTTtNjNjnoXXnkgBz7z8dsycKor28pn34ogen"
+			]
+		}
+	},
+	"version": 1
+}

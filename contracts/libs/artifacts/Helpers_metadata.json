@@ -1,0 +1,45 @@
+{
+	"compiler": {
+		"version": "0.8.7+commit.e28d00a7"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"vaults-v1/contracts/libs/Helpers.sol": "Helpers"
+		},
+		"evmVersion": "london",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": true,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"vaults-v1/contracts/libs/Helpers.sol": {
+			"keccak256": "0x5f6f37e52b4b9f2d55505a01b4b5870f7862362c69f1887145898946c9076c03",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://7145484f3aaae798a2e1ba4f7445f912353256f1f7d68dda31cefae523bc40b1",
+				"dweb:/ipfs/QmQja27TSKn78H5Ecnk7UDFFZA9QV1YVezieT1Sf12vuFx"
+			]
+		}
+	},
+	"version": 1
+}

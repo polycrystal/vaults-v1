@@ -1,0 +1,53 @@
+{
+	"compiler": {
+		"version": "0.8.7+commit.e28d00a7"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"vaults-v1/contracts/libs/StrategySwapPaths.sol": "StrategySwapPaths"
+		},
+		"evmVersion": "london",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": true,
+			"runs": 999999
+		},
+		"remappings": []
+	},
+	"sources": {
+		"vaults-v1/contracts/libs/IUniPair.sol": {
+			"keccak256": "0x18db10c4956f8924791879b151319ae39b90cc2baf767a943b290317d39521d2",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://ddc063cbf21cb266d25084204e43124187fa5c0e944bb71ea37987e4cacd23d4",
+				"dweb:/ipfs/QmeeVLK61fSRYReupTpG2L9rwowrGP4egJfwoyVasrXvFy"
+			]
+		},
+		"vaults-v1/contracts/libs/StrategySwapPaths.sol": {
+			"keccak256": "0x4ae1f29b173aed8ce0d0f44d0b55c7a834e8b102d96847252db700ce5978a461",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://00c48a653b128a18a2ae6546105f4933c7cd9ddfda45c33370d79bb7c5d40f2e",
+				"dweb:/ipfs/QmPZhC2VHXTMxgLCGcxqSzxXLQo6dhAbFeusxMz2WgLw4a"
+			]
+		}
+	},
+	"version": 1
+}
