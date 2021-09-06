@@ -12,6 +12,7 @@ struct VaultInfo {
     mapping (uint => Vault) vaults; // "vid" is indices of this array
     uint vaultsLength;
     FeeConfig[] feeConfigs;
+    VaultConfig defaultConfig;
 }
 
 struct MCore {
@@ -25,12 +26,13 @@ struct MCore {
     mapping (address => int) userShares;
 //    mapping (uint => uint) maxiShares;
     
-    uint feeConfig;
+    uint8 feeConfig;
 }
 
 struct Vault {
     IERC20 want;   //deposited token
-    IStrategy strat; //logic contract
+    IStrategy stratProxy; //proxy address that holds the tokens
+    address stratLogic; //logic implementation for the strategy
     
     uint wantLocked; //last known wantLockedTotal
     uint cShares; //total compounding shares
@@ -41,6 +43,18 @@ struct Vault {
     uint maxiCoreShares; //shares of maximizer core owned by this vault
     
     uint feeConfig;
+    
+    VaultConfig config;
+}
+
+struct VaultConfig {
+    uint160 minEarn;
+    uint32 blocksBetweenEarns;
+    uint64 lastEarnBlock;
+    address uniRouterAddress;
+    uint8 paused;
+    uint8 tolerance;
+    uint64 panicTime;
 }
 
 struct UserBalance {
@@ -51,6 +65,7 @@ struct UserBalance {
 }
 
 enum FeeType { DEPOSIT, WITHDRAW, BUYBACK, CONTROL, REWARD, MISC }
+uint constant FEETYPE_LENGTH = 6;
 enum FeeMethod {
     PUSH, // transfer tokens to fee receiver
     PUSH_CALL // transfer tokens to fee receiver, then call function
@@ -201,7 +216,7 @@ library VaultData {
     function vaultFees(VaultInfo storage _vaultInfo, uint _vid) internal view returns (FeeConfig storage fees) {
         fees = _vaultInfo.feeConfigs[_vaultInfo.vaults[_vid].feeConfig];
     }
-    function transferFromWithFee(IERC20 _token, FeeConfig storage _feeConfig, FeeType _feeType, address _from, address _to, uint _amount) internal {
+    function transferFromWithFee(IERC20 _token, FeeConfig storage _feeConfig, FeeType _feeType, address _from, address _to, uint _amount) internal returns (uint amountAfterFee) {
         
         address receiver = _feeConfig.receiver[_feeType];
         uint feeRate = _feeConfig.feeRate[_feeType];
@@ -209,9 +224,12 @@ library VaultData {
         
         uint feeAmount = (_amount * feeRate).ceilDiv(BASIS_POINTS);
         
-        _token.safeTransferFrom(_from, _to, feeAmount);
-        if (method == FeeMethod.PUSH_CALL) IFeeReceiver(receiver).notifyFeePaid(address(_token), feeAmount, _feeType);
+        if (feeAmount > 0) {
+            _token.safeTransferFrom(_from, _to, feeAmount);
+            if (method == FeeMethod.PUSH_CALL) IFeeReceiver(receiver).notifyFeePaid(address(_token), feeAmount, _feeType);
+        }
         
-        _token.safeTransferFrom(_from, _to, _amount - feeAmount);
+        amountAfterFee = _amount - feeAmount;
+        _token.safeTransferFrom(_from, _to, amountAfterFee);
     }
 }

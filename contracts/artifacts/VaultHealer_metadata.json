@@ -149,6 +149,37 @@
 				"inputs": [
 					{
 						"indexed": true,
+						"internalType": "uint256",
+						"name": "config",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "address[]",
+						"name": "_receivers",
+						"type": "address[]"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint16[]",
+						"name": "_feeRates",
+						"type": "uint16[]"
+					},
+					{
+						"indexed": false,
+						"internalType": "enum FeeMethod[]",
+						"name": "_methods",
+						"type": "uint8[]"
+					}
+				],
+				"name": "SetFeeConfig",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
 						"internalType": "address",
 						"name": "user",
 						"type": "address"
@@ -168,6 +199,29 @@
 				],
 				"name": "Withdraw",
 				"type": "event"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address[]",
+						"name": "_receivers",
+						"type": "address[]"
+					},
+					{
+						"internalType": "uint16[]",
+						"name": "_feeRates",
+						"type": "uint16[]"
+					},
+					{
+						"internalType": "enum FeeMethod[]",
+						"name": "_methods",
+						"type": "uint8[]"
+					}
+				],
+				"name": "addFeeConfig",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
 			},
 			{
 				"inputs": [
@@ -230,47 +284,6 @@
 					{
 						"internalType": "uint256",
 						"name": "_maxiPercent",
-						"type": "uint256"
-					}
-				],
-				"name": "deposit",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "_vid",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "_wantAmt",
-						"type": "uint256"
-					},
-					{
-						"internalType": "address",
-						"name": "_to",
-						"type": "address"
-					}
-				],
-				"name": "deposit",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "_vid",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "_wantAmt",
 						"type": "uint256"
 					}
 				],
@@ -425,6 +438,34 @@
 				"inputs": [
 					{
 						"internalType": "uint256",
+						"name": "_configNum",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address[]",
+						"name": "_receivers",
+						"type": "address[]"
+					},
+					{
+						"internalType": "uint16[]",
+						"name": "_feeRates",
+						"type": "uint16[]"
+					},
+					{
+						"internalType": "enum FeeMethod[]",
+						"name": "_methods",
+						"type": "uint8[]"
+					}
+				],
+				"name": "setFeeConfig",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
 						"name": "_vid",
 						"type": "uint256"
 					},
@@ -472,47 +513,6 @@
 					}
 				],
 				"name": "updateOperator",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "_vid",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "_wantAmt",
-						"type": "uint256"
-					},
-					{
-						"internalType": "address",
-						"name": "_to",
-						"type": "address"
-					}
-				],
-				"name": "withdraw",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "_vid",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "_wantAmt",
-						"type": "uint256"
-					}
-				],
-				"name": "withdraw",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
@@ -616,8 +616,8 @@
 			"bytecodeHash": "ipfs"
 		},
 		"optimizer": {
-			"enabled": true,
-			"runs": 999999
+			"enabled": false,
+			"runs": 200
 		},
 		"remappings": []
 	},
@@ -687,11 +687,11 @@
 			]
 		},
 		"vaults-v1/contracts/VaultHealer.sol": {
-			"keccak256": "0x3f593bc6813167445f28597e425bf33a64f44988ef55a9840a5954eb1c7186c9",
+			"keccak256": "0xb2cb78deb7160319246445aacbec7584cf7d2119ae9f2c684308854ddcac7cc8",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://82fd9cfae8c292d47a0882a8fe660b7355915643960e2a2d65dcbe0faf056b7f",
-				"dweb:/ipfs/QmVdpkT86P8Q7VDZ9gcEniK7D2J3c5CVs9otU6nCLsYzp9"
+				"bzz-raw://a140c88a61d7f15ac60f1f165ca53476017c018f4ae90b16bff4c76d2324c241",
+				"dweb:/ipfs/QmcMxwGhWXdmKRgDRyKJMyVWt9QirhBJAo2dLUTidgspZn"
 			]
 		},
 		"vaults-v1/contracts/libs/IApePair.sol": {
@@ -711,11 +711,11 @@
 			]
 		},
 		"vaults-v1/contracts/libs/VaultData.sol": {
-			"keccak256": "0x8bb83e2637ec59b50c846a1099980b875e1c134c7218d8f5aed217fba476ebf7",
+			"keccak256": "0xfa0cbff1f382fa2544696bd32c947ce43909182d5fd89060d2de3ecd728303e5",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://46dabe7466d698b40fe82a59ad0f150b5229c364a006a9e624057902fbea45bb",
-				"dweb:/ipfs/QmbKohhra3uq2vW1DyV8PaCKyGFAYd6q3ouMJQKEwghqsx"
+				"bzz-raw://7bfa4993a63e2cdcce592da502279816173ec0d3e47cf52364c3089c48d420b8",
+				"dweb:/ipfs/QmZaC5W8ehHeLhuFXybTmNuwkGPdUTwHnAunKFfNbdGqos"
 			]
 		}
 	},

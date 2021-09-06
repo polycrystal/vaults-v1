@@ -26,8 +26,8 @@
 			"bytecodeHash": "ipfs"
 		},
 		"optimizer": {
-			"enabled": true,
-			"runs": 999999
+			"enabled": false,
+			"runs": 200
 		},
 		"remappings": []
 	},
@@ -81,11 +81,11 @@
 			]
 		},
 		"vaults-v1/contracts/libs/VaultData.sol": {
-			"keccak256": "0x561c8ab201f70780eff23f3c6ff27e8f9c6a47d29a33d232fd3c6d2268ed8c9e",
+			"keccak256": "0x89623abf37a1d522ebb1a1387b8cee8abd6d1d48791b99d79a4500059b54fcc8",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://14403c272402f7d4bdc7a09a767b564b122ea376612873fb9c02666ffe562b24",
-				"dweb:/ipfs/Qmb2NvRXzFZCJepHvqo4Xi3UYewMHBU12QPuk85zP4eW1w"
+				"bzz-raw://da603b61a025d1bdf14e9f4a87d88745772d3485a14b75fda9eeed68907f990b",
+				"dweb:/ipfs/QmPQ7P49no5BHBRU8HevgFBnHh99P274khGQWu7dBi2WXD"
 			]
 		}
 	},

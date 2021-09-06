@@ -78,6 +78,7 @@ abstract contract BaseStrategy is Ownable, ReentrancyGuard, Pausable {
 
     function _vaultDeposit(uint256 _amount) internal virtual;
     function _vaultWithdraw(uint256 _amount) internal virtual;
+    function _vaultHarvest() internal virtual;
     function earn() external virtual;
     function vaultSharesTotal() public virtual view returns (uint256);
     function wantLockedTotal() public virtual view returns (uint256);
@@ -96,7 +97,7 @@ abstract contract BaseStrategy is Ownable, ReentrancyGuard, Pausable {
         if (wantAmt > 0) _vaultDeposit(wantAmt);
     }
 
-    function withdraw(uint256 _wantLockedTotal, uint256 _wantAmt) external onlyOwner nonReentrant returns (uint256 tokensRemoved, uint256 tokensToTransfer) {
+    function withdraw(uint256 _wantLockedBefore, uint256 _wantAmt) external onlyOwner nonReentrant returns (uint256 tokensRemoved, uint256 tokensToTransfer) {
         require(_wantAmt > 0, "_wantAmt is 0");
         
         tokensToTransfer = IERC20(wantAddress).balanceOf(address(this));
@@ -106,10 +107,30 @@ abstract contract BaseStrategy is Ownable, ReentrancyGuard, Pausable {
             tokensToTransfer = IERC20(wantAddress).balanceOf(address(this));
         }
         tokensToTransfer = tokensToTransfer > _wantAmt ? _wantAmt : tokensToTransfer;
-        uint withdrawLoss = _wantLockedTotal > wantLockedTotal() ? _wantLockedTotal - wantLockedTotal() : 0;
+        uint wantLocked = wantLockedTotal();
+        uint withdrawLoss = _wantLockedBefore > wantLocked ? _wantLockedBefore - wantLocked : 0;
         tokensRemoved = tokensToTransfer + withdrawLoss;
     }
 
+
+    function earn(uint _mTokens, uint _minEarnAmount) external virtual nonReentrant whenNotPaused onlyOwner {
+        // Harvest farm tokens
+        _vaultHarvest();
+
+        // Converts farm tokens into want tokens
+        uint256 earnedAmt = IERC20(earnedAddress).balanceOf(address(this));
+
+        if (earnedAmt > minEarnAmount) {
+            earnedAmt = distributeFees(earnedAmt);
+            
+            CrystalZap.zipToLP(addresses.earned, earnedAmt, addresses.token0, addresses.token1);
+    
+            lastEarnBlock = block.number;
+    
+            _farm();
+        }
+    }
+    
     function resetAllowances() external onlyGov {
         _resetAllowances();
     }
