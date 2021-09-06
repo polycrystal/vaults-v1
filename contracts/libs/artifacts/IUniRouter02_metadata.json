@@ -979,7 +979,7 @@
 		},
 		"optimizer": {
 			"enabled": true,
-			"runs": 999999
+			"runs": 200
 		},
 		"remappings": []
 	},

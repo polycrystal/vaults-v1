@@ -1,31 +1,22 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity 0.6.12;
+pragma solidity ^0.8.7;
 
-import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
-import "@openzeppelin/contracts/utils/EnumerableSet.sol";
-import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+
 
 import "./libs/IStrategy.sol";
 import "./Operators.sol";
+import "./libs/VaultData.sol";
 
 contract VaultHealer is Ownable, ReentrancyGuard, Operators {
-    using SafeMath for uint256;
     using SafeERC20 for IERC20;
+    using VaultData for VaultInfo;
+    using VaultData for Vault;
 
-    // Info of each user.
-    struct UserInfo {
-        uint256 shares;
-    }
-
-    struct PoolInfo {
-        IERC20 want;
-        address strat;
-    }
-
-    PoolInfo[] public poolInfo;
-    mapping(uint256 => mapping(address => UserInfo)) public userInfo;
+    VaultInfo internal vaultInfo;
+    
     mapping(address => bool) private strats;
 
     // Compounding Variables
@@ -40,8 +31,12 @@ contract VaultHealer is Ownable, ReentrancyGuard, Operators {
     event SetCompoundMode(uint locked, bool automatic);
     event CompoundError(uint pid, bytes reason);
 
+    function poolInfo(uint _vid) external view returns (IERC20 want, IStrategy strat) {
+        return (vaultInfo.vaults[_vid].want, vaultInfo.vaults[_vid].strat);
+    }
+
     function poolLength() external view returns (uint256) {
-        return poolInfo.length;
+        return vaultInfo.vaultsLength;
     }
 
     /**
@@ -49,108 +44,103 @@ contract VaultHealer is Ownable, ReentrancyGuard, Operators {
      */
     function addPool(address _strat) external onlyOwner nonReentrant {
         require(!strats[_strat], "Existing strategy");
-        poolInfo.push(
-            PoolInfo({
-                want: IERC20(IStrategy(_strat).wantAddress()),
-                strat: _strat
-            })
-        );
+        vaultInfo.vaults[vaultInfo.vaultsLength].want = IERC20(IStrategy(_strat).wantAddress());
+        vaultInfo.vaults[vaultInfo.vaultsLength].strat = IStrategy(_strat);
         strats[_strat] = true;
-        resetSingleAllowance(poolInfo.length.sub(1));
+        resetSingleAllowance(vaultInfo.vaultsLength);
+        vaultInfo.vaultsLength++;
         emit AddPool(_strat);
     }
 
-    function stakedWantTokens(uint256 _pid, address _user) external view returns (uint256) {
-        PoolInfo storage pool = poolInfo[_pid];
-        UserInfo storage user = userInfo[_pid][_user];
-
-        uint256 sharesTotal = IStrategy(pool.strat).sharesTotal();
-        uint256 wantLockedTotal = IStrategy(poolInfo[_pid].strat).wantLockedTotal();
-        if (sharesTotal == 0) {
-            return 0;
-        }
-        return user.shares.mul(wantLockedTotal).div(sharesTotal);
+    function stakedWantTokens(uint256 _vid, address _user) external view returns (uint256) {
+        (uint cTokens, uint mTokens) = vaultInfo.balance(_vid, _user);
+        return cTokens + mTokens;
     }
 
-    function deposit(uint256 _pid, uint256 _wantAmt) external nonReentrant autoCompound {
-        _deposit(_pid, _wantAmt, msg.sender);
+//old style, agnostic to maximizers
+    function deposit(uint256 _vid, uint256 _wantAmt) external nonReentrant autoCompound {
+        _deposit(_vid, _wantAmt, type(uint256).max, msg.sender);
     }
-
     // For unique contract calls
-    function deposit(uint256 _pid, uint256 _wantAmt, address _to) external nonReentrant onlyOperator {
-        _deposit(_pid, _wantAmt, _to);
+    function deposit(uint256 _vid, uint256 _wantAmt, address _to) external nonReentrant onlyOperator {
+        _deposit(_vid, _wantAmt, type(uint256).max, _to);
     }
     
-    function _deposit(uint256 _pid, uint256 _wantAmt, address _to) internal {
-        PoolInfo storage pool = poolInfo[_pid];
-        UserInfo storage user = userInfo[_pid][_to];
-
-        if (_wantAmt > 0) {
-            pool.want.safeTransferFrom(msg.sender, address(this), _wantAmt);
-
-            uint256 sharesAdded = IStrategy(poolInfo[_pid].strat).deposit(_to, _wantAmt);
-            user.shares = user.shares.add(sharesAdded);
-        }
-        emit Deposit(_to, _pid, _wantAmt);
+//new functions
+    function deposit(uint256 _vid, uint256 _wantAmt, uint _maxiPercent) external nonReentrant autoCompound {
+        _deposit(_vid, _wantAmt, _maxiPercent, msg.sender);
     }
-
-    function withdraw(uint256 _pid, uint256 _wantAmt) external nonReentrant autoCompound {
-        _withdraw(_pid, _wantAmt, msg.sender);
-    }
-
     // For unique contract calls
-    function withdraw(uint256 _pid, uint256 _wantAmt, address _to) external nonReentrant onlyOperator {
-        _withdraw(_pid, _wantAmt, _to);
+    function deposit(uint256 _vid, uint256 _wantAmt, uint _maxiPercent, address _to) external nonReentrant onlyOperator {
+        _deposit(_vid, _wantAmt, _maxiPercent, _to);
     }
-
-    function _withdraw(uint256 _pid, uint256 _wantAmt, address _to) internal {
-        PoolInfo storage pool = poolInfo[_pid];
-        UserInfo storage user = userInfo[_pid][msg.sender];
-
-        uint256 wantLockedTotal = IStrategy(poolInfo[_pid].strat).wantLockedTotal();
-        uint256 sharesTotal = IStrategy(poolInfo[_pid].strat).sharesTotal();
-
-        require(user.shares > 0, "user.shares is 0");
-        require(sharesTotal > 0, "sharesTotal is 0");
-
-        uint256 amount = user.shares.mul(wantLockedTotal).div(sharesTotal);
-        if (_wantAmt > amount) {
-            _wantAmt = amount;
-        }
+    
+    //_maxiPercent: 1e18 == 100%
+    function _deposit(uint256 _vid, uint256 _wantAmt, uint _maxiPercent, address _to) internal {
+        Vault storage vault = vaultInfo.vaults[_vid];
+        //must update wantLocked before transfer
+        vault.wantLocked = vault.strat.wantLockedTotal();
+        
         if (_wantAmt > 0) {
-            uint256 sharesRemoved = IStrategy(poolInfo[_pid].strat).withdraw(msg.sender, _wantAmt);
-
-            if (sharesRemoved > user.shares) {
-                user.shares = 0;
-            } else {
-                user.shares = user.shares.sub(sharesRemoved);
-            }
-
-            uint256 wantBal = IERC20(pool.want).balanceOf(address(this));
-            if (wantBal < _wantAmt) {
-                _wantAmt = wantBal;
-            }
-            pool.want.safeTransfer(_to, _wantAmt);
+            (uint cTokens, uint mTokens) = vault.balance(msg.sender);
+            uint amount = cTokens + mTokens;
+            //collect fees!
+            vault.want.safeTransferFrom(msg.sender, address(vault.strat), _wantAmt);
+            uint256 tokensAdded = vault.strat.deposit(vault.wantLocked, _wantAmt);
+            require(tokensAdded == vault.strat.wantLockedTotal() - vault.wantLocked, "assert: deposit bug");
+            //If true, tokens are reallocated to match the desired percentage to maximizer
+            bool auth = _to == msg.sender && _maxiPercent != type(uint256).max;
+            if (_maxiPercent == type(uint256).max) _maxiPercent = 0;
+            vaultInfo.editTokens(_vid, _to, amount + tokensAdded, _maxiPercent, auth);
         }
-        emit Withdraw(msg.sender, _pid, _wantAmt);
+        emit Deposit(_to, _vid, _wantAmt);
     }
+    
+//old style, agnostic to maximizers
+    function withdraw(uint _vid, uint _wantAmt) external nonReentrant autoCompound {
+        _withdraw(_vid, _wantAmt, type(uint256).max, msg.sender);
+    }
+    // For unique contract calls
+    function withdraw(uint _vid, uint _wantAmt, address _to) external nonReentrant onlyOperator {
+        _withdraw(_vid, _wantAmt, type(uint256).max, _to);
+    }
+    function withdrawAll(uint256 _vid) external autoCompound {
+        _withdraw(_vid, type(uint256).max, type(uint256).max, msg.sender);
+    }
+// new functions
+    function withdraw(uint _vid, uint _wantAmt, uint _maxiPercent) external nonReentrant autoCompound {
+        _withdraw(_vid, _wantAmt, _maxiPercent, msg.sender);
+    }
+    // For unique contract calls
+    function withdraw(uint _vid, uint _wantAmt, uint _maxiPercent, address _to) external nonReentrant onlyOperator {
+        _withdraw(_vid, _wantAmt, _maxiPercent, _to);
+    }
+    function _withdraw(uint _vid, uint _wantAmt, uint _maxiPercent, address _to) internal {
+        Vault storage vault = vaultInfo.vaults[_vid];
+        vault.wantLocked = vault.strat.wantLockedTotal();
+        
+        (uint cTokens, uint mTokens) = vault.balance(msg.sender);
+        uint amount = cTokens + mTokens;
 
-    function withdrawAll(uint256 _pid) external autoCompound {
-        _withdraw(_pid, uint256(-1), msg.sender);
+        if (_wantAmt == 0 || amount == 0) {
+            vaultInfo.editTokens(_vid, msg.sender, amount, _maxiPercent, true);
+        } else {
+            if (_wantAmt > 0) {
+                if (_wantAmt > amount) _wantAmt = amount;
+                (uint256 tokensRemoved, uint tokensToTransfer) = vault.strat.withdraw(vault.wantLocked, _wantAmt);
+                vaultInfo.editTokens(_vid, msg.sender, amount - tokensRemoved, _maxiPercent, true);
+                vault.want.safeTransferFrom(address(vault.strat), _to, tokensToTransfer);
+                //fees!
+            }
+        }
+        emit Withdraw(msg.sender, _vid, _wantAmt);
     }
 
     function resetAllowances() external onlyOwner {
-        for (uint256 i=0; i<poolInfo.length; i++) {
-            PoolInfo storage pool = poolInfo[i];
-            pool.want.safeApprove(pool.strat, uint256(0));
-            pool.want.safeIncreaseAllowance(pool.strat, uint256(-1));
-        }
+
     }
 
     function resetSingleAllowance(uint256 _pid) public onlyOwner {
-        PoolInfo storage pool = poolInfo[_pid];
-        pool.want.safeApprove(pool.strat, uint256(0));
-        pool.want.safeIncreaseAllowance(pool.strat, uint256(-1));
     }
     
     // Compounding Functionality
@@ -173,9 +163,10 @@ contract VaultHealer is Ownable, ReentrancyGuard, Operators {
     }
     
     function _compoundAll() internal {
-        uint numPools = poolInfo.length;
-        for (uint i = 0; i < numPools; i++) {
-            try IStrategy(poolInfo[i].strat).earn() {}
+        mapping (uint => Vault) storage vaults = vaultInfo.vaults;
+        uint numPools = vaultInfo.vaultsLength;
+        for (uint i; i < numPools; i++) {
+            try vaults[i].strat.earn(vaults[i].mTokens) {}
             catch (bytes memory reason) {
                 emit CompoundError(i, reason);
             }

@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity 0.6.12;
+pragma solidity >=0.6.12;
 
 // For interacting with our own strategy
 interface IStrategy {
@@ -14,11 +14,11 @@ interface IStrategy {
     function sharesTotal() external view returns (uint256);
 
     // Main want token compounding function
-    function earn() external;
+    function earn(uint256 _mTokens) external;
 
     // Transfer want tokens autoFarm -> strategy
-    function deposit(address _userAddress, uint256 _wantAmt) external returns (uint256);
+    function deposit(uint256 _wantLockedBefore, uint256 _wantAmt) external returns (uint256 tokensAdded);
 
     // Transfer want tokens strategy -> vaultChef
-    function withdraw(address _userAddress, uint256 _wantAmt) external returns (uint256);
+    function withdraw(uint256 _wantLockedBefore, uint256 _wantAmt) external returns (uint256 tokensRemoved, uint256 tokensToTransfer);
 }

@@ -9,17 +9,23 @@
 				"inputs": [
 					{
 						"internalType": "uint256",
-						"name": "_pid",
+						"name": "_wantLockedBefore",
 						"type": "uint256"
 					},
 					{
 						"internalType": "uint256",
-						"name": "_amount",
+						"name": "_wantAmt",
 						"type": "uint256"
 					}
 				],
 				"name": "deposit",
-				"outputs": [],
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "tokensAdded",
+						"type": "uint256"
+					}
+				],
 				"stateMutability": "nonpayable",
 				"type": "function"
 			},
@@ -27,53 +33,45 @@
 				"inputs": [
 					{
 						"internalType": "uint256",
-						"name": "_pid",
+						"name": "_mTokens",
 						"type": "uint256"
 					}
 				],
-				"name": "emergencyWithdraw",
+				"name": "earn",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
 			},
 			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "_pid",
-						"type": "uint256"
-					},
-					{
-						"internalType": "address",
-						"name": "_to",
-						"type": "address"
-					}
-				],
-				"name": "harvest",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "_pid",
-						"type": "uint256"
-					},
-					{
-						"internalType": "address",
-						"name": "_address",
-						"type": "address"
-					}
-				],
-				"name": "userInfo",
+				"inputs": [],
+				"name": "sharesTotal",
 				"outputs": [
 					{
 						"internalType": "uint256",
 						"name": "",
 						"type": "uint256"
-					},
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "wantAddress",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "wantLockedTotal",
+				"outputs": [
 					{
 						"internalType": "uint256",
 						"name": "",
@@ -87,17 +85,28 @@
 				"inputs": [
 					{
 						"internalType": "uint256",
-						"name": "_pid",
+						"name": "_wantLockedBefore",
 						"type": "uint256"
 					},
 					{
 						"internalType": "uint256",
-						"name": "_amount",
+						"name": "_wantAmt",
 						"type": "uint256"
 					}
 				],
 				"name": "withdraw",
-				"outputs": [],
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "tokensRemoved",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "tokensToTransfer",
+						"type": "uint256"
+					}
+				],
 				"stateMutability": "nonpayable",
 				"type": "function"
 			}
@@ -115,7 +124,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"vaults-v1/contracts/libs/IMasterchef.sol": "IMasterchef"
+			"vaults-v1/contracts/libs/IStrategy.sol": "IStrategy"
 		},
 		"evmVersion": "london",
 		"libraries": {},
@@ -129,12 +138,12 @@
 		"remappings": []
 	},
 	"sources": {
-		"vaults-v1/contracts/libs/IMasterchef.sol": {
-			"keccak256": "0xedfb8d80370a4b1db2892cb16bc4a747f7a2c94f4db475493c2636a183bed83a",
+		"vaults-v1/contracts/libs/IStrategy.sol": {
+			"keccak256": "0xe364e5faeb58645f91e7a9b8b64be72412e0b548f72315637283dca289c05f14",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://63ecf8dcac499f94f66a8e4a00aea92f0724320515b9cdfa4fa7a8e297fede8a",
-				"dweb:/ipfs/QmcM324dif62qJLrgWotCCiwHfEu7h7QsG4GBtWEg4Rg2t"
+				"bzz-raw://610b5f7891fc03753cf88743a7ad184f340e1b2059a5e1ef6ca47ea3fbb9e1a0",
+				"dweb:/ipfs/QmPUw6pKEqXxZYN93no42xmzoQRbPDVQxB1gGH8Ed9bcQF"
 			]
 		}
 	},
