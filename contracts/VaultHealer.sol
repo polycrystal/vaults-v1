@@ -4,13 +4,13 @@ pragma solidity ^0.8.7;
 
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
-
+import "@openzeppelin/contracts/proxy/utils/Initializable.sol";
 
 import "./libs/IStrategy.sol";
 import "./Operators.sol";
 import "./libs/VaultData.sol";
 
-contract VaultHealer is Ownable, ReentrancyGuard, Operators {
+contract VaultHealer is Ownable, ReentrancyGuard, Operators, Initializable {
     using VaultData for IERC20;
     using VaultData for VaultInfo;
     using VaultData for Vault;

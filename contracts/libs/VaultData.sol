@@ -45,6 +45,7 @@ struct Vault {
     uint feeConfig;
     
     VaultConfig config;
+    
 }
 
 struct VaultConfig {
@@ -54,7 +55,7 @@ struct VaultConfig {
     address uniRouterAddress;
     uint8 paused;
     uint8 tolerance;
-    uint64 panicTime;
+    uint64 panicTimelock;
 }
 
 struct UserBalance {

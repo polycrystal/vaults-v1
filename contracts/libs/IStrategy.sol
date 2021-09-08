@@ -10,9 +10,6 @@ interface IStrategy {
     // Total want tokens managed by strategy
     function wantLockedTotal() external view returns (uint256);
 
-    // Sum of all shares of users to wantLockedTotal
-    function sharesTotal() external view returns (uint256);
-
     // Main want token compounding function
     function earn(uint256 _mTokens) external;
 
