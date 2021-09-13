@@ -1,15 +1,15 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity 0.6.12;
+pragma solidity ^0.8.7;
 
-import "@openzeppelin/contracts@3.4/token/ERC20/SafeERC20.sol";
-import "@openzeppelin/contracts@3.4/utils/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
 import "./libs/IStrategy.sol";
 import "./Operators.sol";
+import "./libs/VaultData.sol";
 
 contract VaultHealer is Ownable, ReentrancyGuard, Operators {
-    using SafeMath for uint256;
     using SafeERC20 for IERC20;
 
     // Info of each user.
@@ -54,7 +54,7 @@ contract VaultHealer is Ownable, ReentrancyGuard, Operators {
             })
         );
         strats[_strat] = true;
-        resetSingleAllowance(poolInfo.length.sub(1));
+        resetSingleAllowance(poolInfo.length - 1);
         emit AddPool(_strat);
     }
 
@@ -67,7 +67,7 @@ contract VaultHealer is Ownable, ReentrancyGuard, Operators {
         if (sharesTotal == 0) {
             return 0;
         }
-        return user.shares.mul(wantLockedTotal).div(sharesTotal);
+        return user.shares * wantLockedTotal / sharesTotal;
     }
 
     function deposit(uint256 _pid, uint256 _wantAmt) external nonReentrant autoCompound {
@@ -87,7 +87,7 @@ contract VaultHealer is Ownable, ReentrancyGuard, Operators {
             pool.want.safeTransferFrom(msg.sender, address(this), _wantAmt);
 
             uint256 sharesAdded = IStrategy(poolInfo[_pid].strat).deposit(_to, _wantAmt);
-            user.shares = user.shares.add(sharesAdded);
+            user.shares += sharesAdded;
         }
         emit Deposit(_to, _pid, _wantAmt);
     }
@@ -111,7 +111,7 @@ contract VaultHealer is Ownable, ReentrancyGuard, Operators {
         require(user.shares > 0, "user.shares is 0");
         require(sharesTotal > 0, "sharesTotal is 0");
 
-        uint256 amount = user.shares.mul(wantLockedTotal).div(sharesTotal);
+        uint256 amount = user.shares * wantLockedTotal / sharesTotal;
         if (_wantAmt > amount) {
             _wantAmt = amount;
         }
@@ -121,7 +121,7 @@ contract VaultHealer is Ownable, ReentrancyGuard, Operators {
             if (sharesRemoved > user.shares) {
                 user.shares = 0;
             } else {
-                user.shares = user.shares.sub(sharesRemoved);
+                user.shares -= sharesRemoved;
             }
 
             uint256 wantBal = IERC20(pool.want).balanceOf(address(this));
@@ -134,21 +134,21 @@ contract VaultHealer is Ownable, ReentrancyGuard, Operators {
     }
 
     function withdrawAll(uint256 _pid) external autoCompound {
-        _withdraw(_pid, uint256(-1), msg.sender);
+        _withdraw(_pid, type(uint256).max, msg.sender);
     }
 
     function resetAllowances() external onlyOwner {
         for (uint256 i=0; i<poolInfo.length; i++) {
             PoolInfo storage pool = poolInfo[i];
-            pool.want.safeApprove(pool.strat, uint256(0));
-            pool.want.safeIncreaseAllowance(pool.strat, uint256(-1));
+            pool.want.safeApprove(pool.strat, 0);
+            pool.want.safeIncreaseAllowance(pool.strat, type(uint256).max);
         }
     }
 
     function resetSingleAllowance(uint256 _pid) public onlyOwner {
         PoolInfo storage pool = poolInfo[_pid];
         pool.want.safeApprove(pool.strat, uint256(0));
-        pool.want.safeIncreaseAllowance(pool.strat, uint256(-1));
+        pool.want.safeIncreaseAllowance(pool.strat, type(uint256).max);
     }
     
     // Compounding Functionality

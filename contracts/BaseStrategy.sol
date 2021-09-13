@@ -85,7 +85,7 @@ abstract contract BaseStrategy is Ownable, ReentrancyGuard, Pausable {
     function _resetAllowances() internal virtual;
     function _emergencyVaultWithdraw() internal virtual;
     
-    function deposit(address _userAddress, uint256 _wantAmt) external onlyOwner nonReentrant whenNotPaused returns (uint256) {
+    function deposit(address, uint256 _wantAmt) external onlyOwner nonReentrant whenNotPaused returns (uint256) {
         // Call must happen before transfer
         uint256 wantLockedBefore = wantLockedTotal();
 
@@ -116,7 +116,7 @@ abstract contract BaseStrategy is Ownable, ReentrancyGuard, Pausable {
         return sharesAfter.sub(sharesBefore);
     }
 
-    function withdraw(address _userAddress, uint256 _wantAmt) external onlyOwner nonReentrant returns (uint256) {
+    function withdraw(address, uint256 _wantAmt) external onlyOwner nonReentrant returns (uint256) {
         require(_wantAmt > 0, "_wantAmt is 0");
         
         uint256 wantAmt = IERC20(wantAddress).balanceOf(address(this));
