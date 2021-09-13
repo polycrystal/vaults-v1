@@ -6,12 +6,6 @@ import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/utils/math/Math.sol";
 import "./IStrategy.sol";
 
-struct VaultInfo {
-    MCore mCore; //maximizer core data
-    mapping (uint => Vault) vaults; // "vid" is indices of this array
-    uint vaultsLength;
-}
-
 struct MCore {
     
     IERC20 want;
@@ -21,11 +15,11 @@ struct MCore {
     uint cShares;
     
     mapping (address => int) userShares;
-    
-    uint8 feeConfig;
+    mapping (uint => uint) maximizerShares; //shares owned by vaults
 }
 
 struct Vault {
+    IStrategy strat; //contract address
     IERC20 want;   //deposited token
     
     uint wantLocked; //last known wantLockedTotal
@@ -33,8 +27,6 @@ struct Vault {
     uint mTokens; //total locked tokens whose earnings are directed to the maximizer core
 
     mapping (address => UserBalance) users;
-
-    uint maxiCoreShares; //shares of maximizer core owned by this vault
     
 }
 struct UserBalance {
@@ -43,70 +35,68 @@ struct UserBalance {
     uint192 mPercent; // saved setting for allocation to maximiser; frontend can use this for a slider default
     uint64 lastEditBlock;
 }
+struct MaximizerSettings {
+    uint64 min;
+    uint64 _default;
+    uint64 max;
+}
 
 library VaultData {
     using SafeERC20 for IERC20;
     using Math for uint256;
     
     //user maximizer core token deposit, including maximizer shares
-    function coreBalance(VaultInfo storage _vaultInfo, address _user) internal view returns (uint amount) {
-        MCore storage mCore = _vaultInfo.mCore;
-        mapping (uint => Vault) storage vaults = _vaultInfo.vaults;
+    function balance(MCore storage _mCore, Vault[] storage _vaults, address _user) internal view returns (uint amount) {
         
-        for (uint i; i < _vaultInfo.vaultsLength; i++) {
-            uint mTokens = vaults[i].users[_user].mTokens;
+        for (uint i; i < _vaults.length; i++) {
+            uint mTokens = _vaults[i].users[_user].mTokens;
             if (mTokens == 0) continue;
-            amount += mTokens * vaults[i].maxiCoreShares * mCore.wantLocked / vaults[i].mTokens;
+            amount += mTokens * _mCore.maximizerShares[i] * _mCore.wantLocked / _vaults[i].mTokens;
         }
-        amount /= mCore.cShares;
+        amount /= _mCore.cShares;
         
-        if (mCore.cShares > 0) {
-            int _amount = int(amount) + mCore.userShares[_user] * int(mCore.wantLocked) / int(mCore.cShares);
+        if (_mCore.cShares > 0) {
+            int _amount = int(amount) + _mCore.userShares[_user] * int(_mCore.wantLocked) / int(_mCore.cShares);
             assert(_amount >= 0);
             amount = uint(_amount);
         }
     }
     //for maximizer deposits to core
-    function coreDeposit(VaultInfo storage _vaultInfo, uint _vid, uint _amount) internal {
-        MCore storage mCore = _vaultInfo.mCore;
-        if (mCore.cShares > 0) _amount = _amount * mCore.cShares / mCore.wantLocked;
-        _vaultInfo.vaults[_vid].maxiCoreShares += _amount;
-        mCore.cShares += _amount;
+    function deposit(MCore storage _mCore, uint _vid, uint _amount) internal {
+        if (_mCore.wantLocked > 0) _amount = _amount * _mCore.cShares / _mCore.wantLocked;
+        _mCore.maximizerShares[_vid] += _amount;
+        _mCore.cShares += _amount;
     }
     //for user deposits to core
-    function coreDeposit(VaultInfo storage _vaultInfo, address _user, uint _amount) internal {
-        MCore storage mCore = _vaultInfo.mCore;
-        if (mCore.cShares > 0) _amount = _amount * mCore.cShares / mCore.wantLocked;
-        mCore.userShares[_user] += int(_amount);
-        mCore.cShares += _amount;
+    function deeposit(MCore storage _mCore, address _user, uint _amount) internal {
+        if (_mCore.wantLocked > 0) _amount = _amount * _mCore.cShares / _mCore.wantLocked;
+        _mCore.userShares[_user] += int(_amount);
+        _mCore.cShares += _amount;
     }
     //for user withdrawals from core
-    function coreWithdraw(VaultInfo storage _vaultInfo, address _user, uint _amount) internal {
-        require(coreBalance(_vaultInfo, _user) >= _amount, "Insufficient core balance for withdrawal");
-        MCore storage mCore = _vaultInfo.mCore;
-        _amount = (_amount * mCore.cShares).ceilDiv(mCore.wantLocked);
-        mCore.userShares[_user] -= int(_amount);
-        mCore.cShares -= _amount;
+    function withdraw(MCore storage _mCore, Vault[] storage _vaults, address _user, uint _amount) internal {
+        require(balance(_mCore, _vaults, _user) >= _amount, "Insufficient core balance for withdrawal");
+        _amount = (_amount * _mCore.cShares).ceilDiv(_mCore.wantLocked);
+        _mCore.userShares[_user] -= int(_amount);
+        _mCore.cShares -= _amount;
     }
     
     function balance(Vault storage _vault, address _user) internal view returns (uint cTokens, uint mTokens) {
         if (_vault.cShares > 0) cTokens = _vault.wantLocked * _vault.users[_user].cShares / _vault.cShares;
         mTokens = _vault.users[_user].mTokens;
     }
-    function balance(VaultInfo storage _vaultInfo, uint _vid, address _user) internal view returns (uint cTokens, uint mTokens) {
-        return balance(_vaultInfo.vaults[_vid], _user);
-    }
     
     
     function editTokens(
-        VaultInfo storage _vaultInfo,
+        MCore storage _mCore,
+        Vault[] storage _vaults,
         uint _vid,
         address _user,
         uint _userTokensAfter,
         uint _mPercent, // ratio/1e18 allocated to mTokens
         bool _auth // allowed to allocate user cShares/mTokens below current values?
     ) internal {
-        Vault storage vault = _vaultInfo.vaults[_vid];
+        Vault storage vault = _vaults[_vid];
         UserBalance storage user = vault.users[_user];
         if (_mPercent == type(uint).max) _mPercent = user.mPercent;
         require(_mPercent <= 1e18, "1e18 = max/100%"); // 1e18 = 100%
@@ -117,7 +107,6 @@ library VaultData {
         }
         //token totals before deposit
         uint mTokensBefore = vault.mTokens;
-        //uint cTokensBefore = vault.wantLocked - mTokensBefore 
 
         //user token balances before deposit
         uint cUserTokensBefore = vault.cShares == 0 ? 0 : vault.wantLocked * vault.users[_user].cShares / vault.cShares;
@@ -153,11 +142,11 @@ library VaultData {
         
         //balance shares of core owned by user/maximizer vault
         if (mTokensBefore > 0 && mTokensBefore != vault.mTokens) {
-            uint maxiCoreSharesBefore = vault.maxiCoreShares;
+            uint maxiCoreSharesBefore = _mCore.maximizerShares[_vid];
             //shares per token remain the same in the vault
-            vault.maxiCoreShares = (vault.mTokens * maxiCoreSharesBefore).ceilDiv(mTokensBefore);
+            _mCore.maximizerShares[_vid] = (vault.mTokens * maxiCoreSharesBefore).ceilDiv(mTokensBefore);
             //assign the difference to the user's balance
-            _vaultInfo.mCore.userShares[_user] += int(maxiCoreSharesBefore) - int(vault.maxiCoreShares);
+            _mCore.userShares[_user] += int(maxiCoreSharesBefore) - int(_mCore.maximizerShares[_vid]);
         }
         
     }

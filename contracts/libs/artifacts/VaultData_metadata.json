@@ -73,11 +73,11 @@
 			]
 		},
 		"vaults-v1/contracts/libs/VaultData.sol": {
-			"keccak256": "0x9bc04666f577fa7887a7e6f397f452e7810de7bf03fc728614c734c73ec8b3b3",
+			"keccak256": "0x9d3786d12edb6f8dcda0ee6c85ed40360c7bf9240fdddeeb766127f0c3fd26a8",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://092d0f6c77d7c4565d0e497425e3ce6b73126a5efa683f7920ef967b79d14ef4",
-				"dweb:/ipfs/QmdGTXKFhWLAoaLnwAmrgxuqfxHSGDjyH8S6bGmD3DWHNa"
+				"bzz-raw://b676edf35e375da85382e256b2795900785d39ce34582d37608a9151d9fd978b",
+				"dweb:/ipfs/QmbGtFwv6TabzGbPMxvY3gVdUuLDtF98NcYBfPa2WNuYcv"
 			]
 		}
 	},
