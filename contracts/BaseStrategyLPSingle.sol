@@ -1,6 +1,5 @@
 // SPDX-License-Identifier: MIT
-
-pragma solidity 0.6.12;
+pragma solidity ^0.8.6;
 
 import "./BaseStrategyLP.sol";
 
@@ -8,9 +7,15 @@ abstract contract BaseStrategyLPSingle is BaseStrategyLP {
     using SafeMath for uint256;
     using SafeERC20 for IERC20;
     
-    function _vaultHarvest() internal virtual;
+    function earn() external override nonReentrant whenNotPaused { 
+        _earn(_msgSender());
+    }
 
-    function earn() external override nonReentrant whenNotPaused onlyOwner {
+    function earn(address _to) external override nonReentrant whenNotPaused {
+        _earn(_to);
+    }
+
+    function _earn(address _to) internal {
         // Harvest farm tokens
         _vaultHarvest();
 
@@ -18,7 +23,7 @@ abstract contract BaseStrategyLPSingle is BaseStrategyLP {
         uint256 earnedAmt = IERC20(earnedAddress).balanceOf(address(this));
 
         if (earnedAmt > 0) {
-            earnedAmt = distributeFees(earnedAmt);
+            earnedAmt = distributeFees(earnedAmt, _to);
             earnedAmt = distributeRewards(earnedAmt);
             earnedAmt = buyBack(earnedAmt);
     
@@ -52,7 +57,7 @@ abstract contract BaseStrategyLPSingle is BaseStrategyLP {
                     0,
                     0,
                     address(this),
-                    now.add(600)
+                    block.timestamp.add(600)
                 );
             }
     

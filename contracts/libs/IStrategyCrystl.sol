@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: MIT
+pragma solidity 0.8.6;
 
-pragma solidity 0.6.12;
-
-interface IStrategyFish {
+interface IStrategyCrystl {
     function depositReward(uint256 _depositAmt) external returns (bool);
 }

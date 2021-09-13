@@ -1,0 +1,148 @@
+{
+	"compiler": {
+		"version": "0.8.7+commit.e28d00a7"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_sharesTotal",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_wantAmt",
+						"type": "uint256"
+					}
+				],
+				"name": "deposit",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "earn",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "sharesTotal",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "wantAddress",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "wantLockedTotal",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_sharesTotal",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_wantAmt",
+						"type": "uint256"
+					}
+				],
+				"name": "withdraw",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"vaults-v1/contracts/libs/IStrategyCore.sol": "IStrategyCore"
+		},
+		"evmVersion": "london",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": true,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"vaults-v1/contracts/libs/IStrategy.sol": {
+			"keccak256": "0x4484fb23fb1d72c4fb114b99b1160544238d6c98c56cc4f4114db90487a12c21",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://057ab55ee200bd4518578c3f4921f371e8080c8bece453df7d297ac605bd785e",
+				"dweb:/ipfs/QmPv9yNfjcn7M7iGtPfRmV2JBHDuy4t7u3LKGEN42E3Upv"
+			]
+		},
+		"vaults-v1/contracts/libs/IStrategyCore.sol": {
+			"keccak256": "0x8b18b1c1ef7716e0e3f5d0447c72016702d5db9bddc57e55b78a45ad00c2427b",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://10d0156070ec8b8b6d782454b929b7b9ad689ab2b6bd3016ab694d6cbe115091",
+				"dweb:/ipfs/QmQUK6dW8ML54Huy1uz1D41i5CPu9N2x1P4iaMwoQa1JQX"
+			]
+		}
+	},
+	"version": 1
+}

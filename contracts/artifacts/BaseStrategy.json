@@ -50,7 +50,7 @@
 			"buyBackAddress()": "783478ad",
 			"buyBackRate()": "178a8d07",
 			"controllerFee()": "85f02dd6",
-			"deposit(address,uint256)": "47e7ef24",
+			"deposit(uint256,uint256)": "e2bbb158",
 			"earn()": "d389800f",
 			"earnedAddress()": "e7198474",
 			"earnedToFishPath(uint256)": "8811dad0",
@@ -74,7 +74,6 @@
 			"rewardRate()": "7b0a47ee",
 			"setGov(address)": "cfad57a2",
 			"setSettings(uint256,uint256,uint256,uint256,uint256,uint256,address,bool)": "98fec385",
-			"sharesTotal()": "44a3955e",
 			"slippageFactor()": "ffbd3b1f",
 			"slippageFactorUL()": "b74cd242",
 			"token0Address()": "7ff36fbe",
@@ -91,7 +90,7 @@
 			"vaultSharesTotal()": "04c9d490",
 			"wantAddress()": "e7a03679",
 			"wantLockedTotal()": "42da4eb3",
-			"withdraw(address,uint256)": "f3fef3a3",
+			"withdraw(uint256,uint256)": "441a3e70",
 			"withdrawFeeAddress()": "784def8c",
 			"withdrawFeeFactor()": "68f54162",
 			"withdrawFeeFactorLL()": "866b2018",
@@ -267,9 +266,9 @@
 		{
 			"inputs": [
 				{
-					"internalType": "address",
-					"name": "_userAddress",
-					"type": "address"
+					"internalType": "uint256",
+					"name": "_sharesTotal",
+					"type": "uint256"
 				},
 				{
 					"internalType": "uint256",
@@ -624,19 +623,6 @@
 		},
 		{
 			"inputs": [],
-			"name": "sharesTotal",
-			"outputs": [
-				{
-					"internalType": "uint256",
-					"name": "",
-					"type": "uint256"
-				}
-			],
-			"stateMutability": "view",
-			"type": "function"
-		},
-		{
-			"inputs": [],
 			"name": "slippageFactor",
 			"outputs": [
 				{
@@ -846,9 +832,9 @@
 		{
 			"inputs": [
 				{
-					"internalType": "address",
-					"name": "_userAddress",
-					"type": "address"
+					"internalType": "uint256",
+					"name": "_sharesTotal",
+					"type": "uint256"
 				},
 				{
 					"internalType": "uint256",

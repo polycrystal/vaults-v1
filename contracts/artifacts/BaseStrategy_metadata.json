@@ -173,9 +173,9 @@
 			{
 				"inputs": [
 					{
-						"internalType": "address",
-						"name": "_userAddress",
-						"type": "address"
+						"internalType": "uint256",
+						"name": "_sharesTotal",
+						"type": "uint256"
 					},
 					{
 						"internalType": "uint256",
@@ -530,19 +530,6 @@
 			},
 			{
 				"inputs": [],
-				"name": "sharesTotal",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
 				"name": "slippageFactor",
 				"outputs": [
 					{
@@ -752,9 +739,9 @@
 			{
 				"inputs": [
 					{
-						"internalType": "address",
-						"name": "_userAddress",
-						"type": "address"
+						"internalType": "uint256",
+						"name": "_sharesTotal",
+						"type": "uint256"
 					},
 					{
 						"internalType": "uint256",
@@ -931,11 +918,11 @@
 			]
 		},
 		"vaults-v1/contracts/BaseStrategy.sol": {
-			"keccak256": "0xc810e782a34525fb40a911f6b0b1ad8af9bc5825b6d4824d8bc7ee6baaf46012",
+			"keccak256": "0xaa981e1ceee06d7890c0da501b19566d47ced5b16c4cc74a07b74970fc3309d9",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://fedbaf4c0202945d5d98e98c919251d333b5404a3774e79bcea29b8978c8f237",
-				"dweb:/ipfs/QmPLNzLrNTAyR21KtPBzLbtPX41LeqFfSYf36uicnaZf9E"
+				"bzz-raw://cf8775cb347a6d8bfb724c5a45c284901dd6894a37ae7263cb8682b79d485be3",
+				"dweb:/ipfs/QmRTSCxujYTRfsbWzwN1A6Tkqg3npznnDXx3yTNjUNwEBQ"
 			]
 		},
 		"vaults-v1/contracts/libs/CeilDiv.sol": {

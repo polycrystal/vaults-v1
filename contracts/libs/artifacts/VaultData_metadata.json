@@ -65,19 +65,27 @@
 			]
 		},
 		"vaults-v1/contracts/libs/IStrategy.sol": {
-			"keccak256": "0xe9138aff32fd138be540c2e4bd14a7a1fcf4ef073841e6a08d3eeb33e97048f2",
+			"keccak256": "0x4484fb23fb1d72c4fb114b99b1160544238d6c98c56cc4f4114db90487a12c21",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://116739b64b2cf0d8190eebec559c205089708b5cf3f9914fcb55149e756ee542",
-				"dweb:/ipfs/QmX6tgrbTNCpT5ADt2rsWN4ab9ruDvFLRyxcpVUMbgKDMa"
+				"bzz-raw://057ab55ee200bd4518578c3f4921f371e8080c8bece453df7d297ac605bd785e",
+				"dweb:/ipfs/QmPv9yNfjcn7M7iGtPfRmV2JBHDuy4t7u3LKGEN42E3Upv"
+			]
+		},
+		"vaults-v1/contracts/libs/IStrategyCore.sol": {
+			"keccak256": "0x8b18b1c1ef7716e0e3f5d0447c72016702d5db9bddc57e55b78a45ad00c2427b",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://10d0156070ec8b8b6d782454b929b7b9ad689ab2b6bd3016ab694d6cbe115091",
+				"dweb:/ipfs/QmQUK6dW8ML54Huy1uz1D41i5CPu9N2x1P4iaMwoQa1JQX"
 			]
 		},
 		"vaults-v1/contracts/libs/VaultData.sol": {
-			"keccak256": "0x9d3786d12edb6f8dcda0ee6c85ed40360c7bf9240fdddeeb766127f0c3fd26a8",
+			"keccak256": "0x0285c465bb87d4b53f4c85c68d5b884f7bfb0816a941c13515b8c2ff3759aaa2",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://b676edf35e375da85382e256b2795900785d39ce34582d37608a9151d9fd978b",
-				"dweb:/ipfs/QmbGtFwv6TabzGbPMxvY3gVdUuLDtF98NcYBfPa2WNuYcv"
+				"bzz-raw://623504aac065591111eb613b0e733d0edd66b65f3aee3b8e37ef51c90406f58b",
+				"dweb:/ipfs/QmVE6X8veKUzA4GdRuqMk2j9TFSMos4qwaFeC8jE6VEEBy"
 			]
 		}
 	},
