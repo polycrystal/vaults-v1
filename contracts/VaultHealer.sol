@@ -2,10 +2,8 @@
 
 pragma solidity 0.6.12;
 
-import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
-import "@openzeppelin/contracts/utils/EnumerableSet.sol";
-import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+import "@openzeppelin/contracts@3.4/token/ERC20/SafeERC20.sol";
+import "@openzeppelin/contracts@3.4/utils/ReentrancyGuard.sol";
 
 import "./libs/IStrategy.sol";
 import "./Operators.sol";
